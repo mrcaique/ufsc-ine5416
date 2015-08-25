@@ -18,7 +18,7 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								FATOS 									%
+%				FATOS 					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 /* Primeira fase */
 disciplina(ine5401, 'introdução à computaçao', 1).
@@ -102,7 +102,7 @@ requisito(ine5430, ine5416).
 requisito(ine5430, ine5408).
 requisito(ine5453, ine5419).
 
-/* Setima fase */
+/* Sétima fase */
 disciplina(ine5428, 'informática e sociedade', 7).
 disciplina(ine5429, 'segurança em computação', 7).
 disciplina(ine5431, 'sistemas multimídia', 7).
@@ -195,7 +195,7 @@ requisito(ine5653, ine5419).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%								REGRAS 									%
+%				REGRAS 					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 /* Árvore de dependências */
 requisito(X, Z) :- requisito(X, Y), requisito(Y, Z).
