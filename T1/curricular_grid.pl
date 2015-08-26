@@ -13,15 +13,15 @@
 % NOTAS: 
 % 1) A grade curricular se baseia no currículo
 % de 2007/1;
-% 2) As disciplinas optativas é tal que fase = 0.
+% 2) As disciplinas optativas são tais que fase = 0;
+% 3) Há disciplinas optativas que podem não estar presen-
+% tes em um semestre.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				FATOS 					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 /* Lista de disciplinas */
-
 /* Primeira fase */
 disciplina(ine5401, 'introdução à computaçao', 1).
 disciplina(ine5402, 'programação orientada a objetos I', 1).
@@ -39,7 +39,7 @@ disciplina(mtm5512, 'geometria analítica', 2).
 
 /* Terceira fase */
 disciplina(ine5408, 'estutura de dados', 3).
-disciplina(ine5409, 'cálculo numérico', 3).
+disciplina(ine5409, 'cálculo numérico para computação', 3).
 disciplina(ine5410, 'programação concorrente', 3).
 disciplina(ine5411, 'arquitetura e organização de computadores', 3).
 disciplina(mtm5245, 'álgebra linear', 3).
@@ -116,19 +116,19 @@ disciplina(ine5656, 'introdução à lógica simbólica I', 0).
 disciplina(ine5458, 'introdução à lógica simbólica II', 0).
 
 /* Lista de dependências */
-depende(ine5404, ine5402). %Dependências da segunda fase
+depende(ine5404, ine5402). % Dependências da segunda fase
 depende(ine5405, mtm5161).
 depende(ine5406, eel5405).
 depende(mtm7174, mtm5161).
 
-depende(ine5408, ine5404). %Dependências da terceira fase
+depende(ine5408, ine5404). % Dependências da terceira fase
 depende(ine5409, mtm7174).
 depende(ine5409, mtm5512).
 depende(ine5410, ine5404).
 depende(ine5411, ine5406).
 depende(mtm5245, mtm5512).
 
-depende(ine5412, ine5410). %Dependências da quarta fase
+depende(ine5412, ine5410). % Dependências da quarta fase
 depende(ine5412, ine5411).
 depende(ine5413, ine5408).
 depende(ine5413, ine5403).
@@ -138,7 +138,7 @@ depende(ine5415, ine5403).
 depende(ine5416, ine5408).
 depende(ine5417, ine5408).
 
-depende(ine5418, ine5412). %Dependências da quinta fase
+depende(ine5418, ine5412). % Dependências da quinta fase
 depende(ine5418, ine5414).
 depende(ine5419, ine5417).
 depende(ine5420, mtm7174).
@@ -148,7 +148,7 @@ depende(ine5421, ine5415).
 depende(ine5422, ine5414).
 depende(ine5423, ine5408).
 
-depende(ine5424, ine5412). %Dependências da sexta fase
+depende(ine5424, ine5412). % Dependências da sexta fase
 depende(ine5425, ine5405).
 depende(ine5426, ine5421).
 depende(ine5427, ine5419).
@@ -156,7 +156,7 @@ depende(ine5430, ine5416).
 depende(ine5430, ine5408).
 depende(ine5453, ine5417).
 
-depende(ine5428, ine5407). %Dependências da setima fase
+depende(ine5428, ine5407). % Dependências da sétima fase
 depende(ine5429, ine5403).
 depende(ine5429, ine5415).
 depende(ine5431, ine5414).
@@ -164,9 +164,9 @@ depende(ine5432, ine5423).
 depende(ine5433, ine5427).
 depende(ine5433, ine5453).
 
-depende(ine5434, ine5433). %Dependência da oitava fase
+depende(ine5434, ine5433). % Dependência da oitava fase
 
-depende(ine5462, ine5461). %Dependências das optativas
+depende(ine5462, ine5461). % Dependências das optativas
 depende(ine5463, ine5462).
 depende(ine5435, ine5411).
 depende(ine5436, ine5411).
