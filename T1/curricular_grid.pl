@@ -7,6 +7,7 @@
 %
 % As cláusulas são definidas em disciplinas e dependên-
 % cias, onde cada uma é composta da seguinte forma:
+%	- fase(f[número da fase]);
 %	- disciplina(código, nome, fase);
 %	- depende(disciplina escolhida, dependência).
 %
@@ -21,99 +22,110 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				FATOS 					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+/* Lista de fases */
+fase(f0).
+fase(f1).
+fase(f2).
+fase(f3).
+fase(f4).
+fase(f5).
+fase(f6).
+fase(f7).
+fase(f8).
+
 /* Lista de disciplinas */
 /* Primeira fase */
-disciplina(ine5401, 'introdução à computaçao', 1).
-disciplina(ine5402, 'programação orientada a objetos I', 1).
-disciplina(ine5403, 'fundamentos da matemática discreta para a computação', 1).
-disciplina(mtm5161, 'cálculo A', 1).
-disciplina(eel5405, 'circuitos e técnicas digitais', 1).
+disciplina(ine5401, 'introdução à computaçao', f1).
+disciplina(ine5402, 'programação orientada a objetos I', f1).
+disciplina(ine5403, 'fundamentos da matemática discreta para a computação', f1).
+disciplina(mtm5161, 'cálculo A', f1).
+disciplina(eel5405, 'circuitos e técnicas digitais', f1).
 
 /* Segunda fase */
-disciplina(ine5404, 'programação orientada a objetos II', 2).
-disciplina(ine5405, 'probabilidade e estatística', 2).
-disciplina(ine5406, 'sistemas digitais', 2).
-disciplina(ine5407, 'ciência, tecnologia e sociedade', 2).
-disciplina(mtm7174, 'cálculo B para computação', 2).
-disciplina(mtm5512, 'geometria analítica', 2).
+disciplina(ine5404, 'programação orientada a objetos II', f2).
+disciplina(ine5405, 'probabilidade e estatística', f2).
+disciplina(ine5406, 'sistemas digitais', f2).
+disciplina(ine5407, 'ciência, tecnologia e sociedade', f2).
+disciplina(mtm7174, 'cálculo B para computação', f2).
+disciplina(mtm5512, 'geometria analítica', f2).
 
 /* Terceira fase */
-disciplina(ine5408, 'estutura de dados', 3).
-disciplina(ine5409, 'cálculo numérico para computação', 3).
-disciplina(ine5410, 'programação concorrente', 3).
-disciplina(ine5411, 'arquitetura e organização de computadores', 3).
-disciplina(mtm5245, 'álgebra linear', 3).
+disciplina(ine5408, 'estutura de dados', f3).
+disciplina(ine5409, 'cálculo numérico para computação', f3).
+disciplina(ine5410, 'programação concorrente', f3).
+disciplina(ine5411, 'arquitetura e organização de computadores', f3).
+disciplina(mtm5245, 'álgebra linear', f3).
 
 /* Quarta fase */
-disciplina(ine5412, 'sistemas operacionais I', 4).
-disciplina(ine5413, 'grafos', 4).
-disciplina(ine5414, 'redes de computadores I', 4).
-disciplina(ine5415, 'teoria da computação', 4).
-disciplina(ine5416, 'paradigmas da programação', 4).
-disciplina(ine5417, 'engenharia de software I', 4).
+disciplina(ine5412, 'sistemas operacionais I', f4).
+disciplina(ine5413, 'grafos', f4).
+disciplina(ine5414, 'redes de computadores I', f4).
+disciplina(ine5415, 'teoria da computação', f4).
+disciplina(ine5416, 'paradigmas da programação', f4).
+disciplina(ine5417, 'engenharia de software I', f4).
 
 /* Quinta fase */
-disciplina(ine5418, 'computaçao distribuída', 5).
-disciplina(ine5419, 'engenharia de software II', 5).
-disciplina(ine5420, 'computação gráfica', 5).
-disciplina(ine5421, 'linguagens formais e compiladores', 5).
-disciplina(ine5422, 'redes de computadores II', 5).
-disciplina(ine5423, 'banco de dados I', 5).
+disciplina(ine5418, 'computaçao distribuída', f5).
+disciplina(ine5419, 'engenharia de software II', f5).
+disciplina(ine5420, 'computação gráfica', f5).
+disciplina(ine5421, 'linguagens formais e compiladores', f5).
+disciplina(ine5422, 'redes de computadores II', f5).
+disciplina(ine5423, 'banco de dados I', f5).
 
 /* Sexta fase */
-disciplina(ine5424, 'sistemas operacionais II', 6).
-disciplina(ine5425, 'modelagem e simulaçao', 6).
-disciplina(ine5426, 'construção de compiladores', 6).
-disciplina(ine5427, 'planejamento e gestão de projetos', 6).
-disciplina(ine5430, 'inteligência artificial', 6).
-disciplina(ine5453, 'introdução ao tcc', 6).
+disciplina(ine5424, 'sistemas operacionais II', f6).
+disciplina(ine5425, 'modelagem e simulaçao', f6).
+disciplina(ine5426, 'construção de compiladores', f6).
+disciplina(ine5427, 'planejamento e gestão de projetos', f6).
+disciplina(ine5430, 'inteligência artificial', f6).
+disciplina(ine5453, 'introdução ao tcc', f6).
 
 /* Sétima fase */
-disciplina(ine5428, 'informática e sociedade', 7).
-disciplina(ine5429, 'segurança em computação', 7).
-disciplina(ine5431, 'sistemas multimídia', 7).
-disciplina(ine5432, 'banco de dados II', 7).
-disciplina(ine5433, 'tcc I', 7).
+disciplina(ine5428, 'informática e sociedade', f7).
+disciplina(ine5429, 'segurança em computação', f7).
+disciplina(ine5431, 'sistemas multimídia', f7).
+disciplina(ine5432, 'banco de dados II', f7).
+disciplina(ine5433, 'tcc I', f7).
 
 /* Oitava fase */
-disciplina(ine5434, 'tcc II', 8).
+disciplina(ine5434, 'tcc II', f8).
 
 /* Optativas */
-disciplina(ine5461, 'programa de intercâmbio I', 0).
-disciplina(ine5462, 'programa de intercâmbio II', 0).
-disciplina(ine5463, 'programa de intercâmbio III', 0).
-disciplina(cad5146, 'marketing pessoal em informática', 0).
-disciplina(cad5240, 'aspectos comportamentais do empreendedor', 0).
-disciplina(cad5241, 'recursos humanos em informática', 0).
-disciplina(ine5435, 'integração software/hardware', 0).
-disciplina(ine5436, 'arquitetura de computadores I', 0).
-disciplina(ine5437, 'arquitetura de computadores II', 0).
-disciplina(ine5438, 'laboratório de microprocessadores e lógica programável', 0).
-disciplina(ine5439, 'sistemas embarcados', 0).
-disciplina(ine5440, 'tópicos especiais em arquitetura de computadores', 0).
-disciplina(ine5441, 'sistemas de tempo real', 0).
-disciplina(ine5442, 'circuitos e sistemas integrados', 0).
-disciplina(ine5443, 'reconhecimento de padrões', 0).
-disciplina(ine5444, 'estágio supervisionado I', 0).
-disciplina(ine5445, 'estágio supervisionado II', 0).
-disciplina(ine5446, 'tópicos especiais em sistemas de infraestrutura I', 0).
-disciplina(ine5447, 'tópicos especiais em sistemas de infraestrutura II', 0).
-disciplina(ine5448, 'tópicos especiais em aplicaçoes tecnológicas I', 0).
-disciplina(ine5449, 'tópicos especiais em aplicaçoes tecnológicas II', 0).
-disciplina(ine5450, 'tópicos especiais em aplicaçoes tecnológicas III', 0).
-disciplina(ine5451, 'tópicos especiais em algoritmos I', 0).
-disciplina(ine5452, 'tópicos especiais em algoritmos II', 0).
-disciplina(ine5454, 'tópicos especiais em gerencia de dados', 0).
-disciplina(ine5619, 'administraçao e gerência de redes de computadores', 0).
-disciplina(ine5624, 'engenharia de usabilidade', 0).
-disciplina(ine5628, 'sistemas multiagentes', 0).
-disciplina(ine5640, 'computação móvel', 0).
-disciplina(ine5643, 'data warehouse', 0).
-disciplina(ine5644, 'data mining', 0).
-disciplina(ine5646, 'programação para web', 0).
-disciplina(ine5653, 'introdução à internacionalização e localização de software', 0).
-disciplina(ine5656, 'introdução à lógica simbólica I', 0).
-disciplina(ine5458, 'introdução à lógica simbólica II', 0).
+disciplina(ine5461, 'programa de intercâmbio I', f0).
+disciplina(ine5462, 'programa de intercâmbio II', f0).
+disciplina(ine5463, 'programa de intercâmbio III', f0).
+disciplina(cad5146, 'marketing pessoal em informática', f0).
+disciplina(cad5240, 'aspectos comportamentais do empreendedor', f0).
+disciplina(cad5241, 'recursos humanos em informática', f0).
+disciplina(ine5435, 'integração software/hardware', f0).
+disciplina(ine5436, 'arquitetura de computadores I', f0).
+disciplina(ine5437, 'arquitetura de computadores II', f0).
+disciplina(ine5438, 'laboratório de microprocessadores e lógica programável', f0).
+disciplina(ine5439, 'sistemas embarcados', f0).
+disciplina(ine5440, 'tópicos especiais em arquitetura de computadores', f0).
+disciplina(ine5441, 'sistemas de tempo real', f0).
+disciplina(ine5442, 'circuitos e sistemas integrados', f0).
+disciplina(ine5443, 'reconhecimento de padrões', f0).
+disciplina(ine5444, 'estágio supervisionado I', f0).
+disciplina(ine5445, 'estágio supervisionado II', f0).
+disciplina(ine5446, 'tópicos especiais em sistemas de infraestrutura I', f0).
+disciplina(ine5447, 'tópicos especiais em sistemas de infraestrutura II', f0).
+disciplina(ine5448, 'tópicos especiais em aplicaçoes tecnológicas I', f0).
+disciplina(ine5449, 'tópicos especiais em aplicaçoes tecnológicas II', f0).
+disciplina(ine5450, 'tópicos especiais em aplicaçoes tecnológicas III', f0).
+disciplina(ine5451, 'tópicos especiais em algoritmos I', f0).
+disciplina(ine5452, 'tópicos especiais em algoritmos II', f0).
+disciplina(ine5454, 'tópicos especiais em gerencia de dados', f0).
+disciplina(ine5619, 'administraçao e gerência de redes de computadores', f0).
+disciplina(ine5624, 'engenharia de usabilidade', f0).
+disciplina(ine5628, 'sistemas multiagentes', f0).
+disciplina(ine5640, 'computação móvel', f0).
+disciplina(ine5643, 'data warehouse', f0).
+disciplina(ine5644, 'data mining', f0).
+disciplina(ine5646, 'programação para web', f0).
+disciplina(ine5653, 'introdução à internacionalização e localização de software', f0).
+disciplina(ine5656, 'introdução à lógica simbólica I', f0).
+disciplina(ine5458, 'introdução à lógica simbólica II', f0).
 
 /* Lista de dependências */
 depende(ine5404, ine5402). % Dependências da segunda fase
