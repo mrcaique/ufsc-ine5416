@@ -1,5 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Copyright (c) 2015 Caique Rodrigues Marques
+% Copyright (c) 2015 Caique Rodrigues Marques,
+%			Gustavo José Carpeggiani,
+%			Vinícius Couto Biermann
 %
 % A seguinte base de dados representa a grade curricular 
 % do curso de bacharelado em ciências da computação da
@@ -216,19 +218,74 @@ depende(ine5653, ine5419).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				REGRAS 					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-/* Árvore de dependências */
+% 1) Determinar a fase de uma disciplina:
+%		Para verificar a fase de uma disciplina,
+%		basta usar a cláusula "disciplina", es-
+%		pecificar o código, o nome e usar um
+%		operador como fase e o terminal do pro-
+%		log o mostrará.
+%		
+%	Exemplo:
+%	?- disciplina(ine5433, 'tcc I', F).
+%	F = f7.
+
+% 2) Determinar o nome de uma disciplina:
+%		Para verificar o nome de uma disciplina,
+%		basta usar a cláusula "disciplina", es-
+%		pecificar o código, a fase e usar um
+%		operador como nome e o terminal do pro-
+%		log o mostrará.
+%		
+%	Exemplo:
+%	?- disciplina(ine5408, N, f3).
+%	N = 'estutura de dados'.
+
+% 3) Determinar as disciplinas de uma fase:
+%		Para verificar as disciplinas de uma fase,
+%		basta usar a cláusula "disciplina", es-
+%		pecificar a fase e usar operadores no nome
+%		e no codigo. O terminal do prolog mostrará
+%		uma opçao. Pressione ';' para ver as opçoes
+%		restantes. 
+%		
+%	Exemplo:
+%	?- disciplina(C, N, f2).
+%	C = ine5404,
+%	N = 'programação orientada a objetos II' ;
+%	C = ine5405,
+%	N = 'probabilidade e estatística' ;
+%	C = ine5406,
+%	N = 'sistemas digitais' ;
+%	C = ine5407,
+%	N = 'ciência, tecnologia e sociedade' ;
+%	C = mtm7174,
+%	N = 'cálculo B para computação' ;
+%	C = mtm5512,
+%	N = 'geometria analítica'.
+
+% 4) Disciplinas que têm pré-requisito (imediatamente
+% anterior) em comum
+%
+% Z = Disciplina em comum;
+% X, Y = Disciplinas.
+requisito_em_comum(Z, X, Y) :- depende(X, Z), depende(Y, Z).
+
+% 5) Disciplinas que são pré-requisitos de pré-
+% requisitos (árvore de dependências)
+%
+% X, Y, Z = Disciplinas.
 depende(X, Z) :- depende(X, Y), depende(Y, Z).
 
-% Lista de dependências de uma disciplina
-%
-% X = código da disciplina;
-% N = Nome da(s) disciplina(s) dependentes;
-% F = Fase da(s) respectiva(s) disciplina(s) dependente(s).
-lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
-
-% Lista de disciplinas subsequentes
+% 6) Lista de disciplinas subsequentes
 %
 % X = código da disciplina;
 % N = Nome da(s) disciplina(s) subsequente(s);
 % F = Fase da(s) respectiva(s) disciplina(s) subsequente(s).
 lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
+
+% 7) Lista de dependências de uma disciplina
+%
+% X = código da disciplina;
+% N = Nome da(s) disciplina(s) dependentes;
+% F = Fase da(s) respectiva(s) disciplina(s) dependente(s).
+lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
