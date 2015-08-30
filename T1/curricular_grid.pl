@@ -268,7 +268,7 @@ depende(ine5653, ine5419).
 %
 % Z = Disciplina em comum;
 % X, Y = Disciplinas.
-requisito_em_comum(Z, X, Y) :- depende(X, Z), depende(Y, Z).
+requisito_anterior_em_comum(Z, X, Y) :- depende(X, Z), depende(Y, Z).
 
 % 5) Disciplinas que são pré-requisitos de pré-
 % requisitos (árvore de dependências)
@@ -276,16 +276,35 @@ requisito_em_comum(Z, X, Y) :- depende(X, Z), depende(Y, Z).
 % X, Y, Z = Disciplinas.
 depende(X, Z) :- depende(X, Y), depende(Y, Z).
 
-% 6) Lista de disciplinas subsequentes
+% 6) Disciplinas que estão em uma determinada fase 
+% e são pré-requisitos de outras disciplinas.
+%		No terminal do prolog, basta digitar
+%		"lista_sups(X, N, F)", onde:
 %
 % X = código da disciplina;
 % N = Nome da(s) disciplina(s) subsequente(s);
 % F = Fase da(s) respectiva(s) disciplina(s) subsequente(s).
+%
+% 10) Lista de disciplinas subsequentes
 lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 
-% 7) Lista de dependências de uma disciplina
+% 7) Disciplinas que estão em uma determinada fase
+% e têm pré-requisitos para serem cursadas.
+%		No terminal do prolog, basta digitar
+%		"lista_depssss(X, N, F)", onde:
 %
 % X = código da disciplina;
 % N = Nome da(s) disciplina(s) dependentes;
 % F = Fase da(s) respectiva(s) disciplina(s) dependente(s).
+%
+% 9) Lista de dependências de uma disciplina
 lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
+
+% 8) Disciplinas que estão em uma determinada fase, 
+% têm pré-requisitos em comum e são pré-requisitos 
+% de outras disciplinas.
+requisito_em_comum(F, C, K, A, B, Z, Y) :- fase(F),
+				depende(C, A),
+				depende(K, B),
+				depende(Z, C),
+				depende(Y, K).
