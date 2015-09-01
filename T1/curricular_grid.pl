@@ -1,9 +1,9 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+﻿%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Copyright (c) 2015 Caique Rodrigues Marques,
 %			Gustavo José Carpeggiani,
 %			Vinícius Couto Biermann
 %
-% A seguinte base de dados representa a grade curricular 
+% A seguinte base de dados representa a grade curricular
 % do curso de bacharelado em ciências da computação da
 % Universidade Federal de Santa Catarina (ufsc.br).
 %
@@ -13,7 +13,7 @@
 %	- disciplina(código, nome, fase);
 %	- depende(disciplina escolhida, dependência).
 %
-% NOTAS: 
+% NOTAS:
 % 1) A grade curricular se baseia no currículo
 % de 2007/1;
 % 2) As disciplinas optativas são tais que fase = 0;
@@ -22,7 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				FATOS 					%
+%				FATOS					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 /* Lista de fases */
 fase(f0).
@@ -167,7 +167,8 @@ depende(ine5425, ine5405).
 depende(ine5426, ine5421).
 depende(ine5427, ine5419).
 depende(ine5430, ine5416).
-depende(ine5430, ine5408).
+depende(ine5430, ine5405).
+depende(ine5430, ine5413).
 depende(ine5453, ine5417).
 
 depende(ine5428, ine5407). % Dependências da sétima fase
@@ -216,7 +217,7 @@ depende(ine5653, ine5419).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				REGRAS 					%
+%				REGRAS					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1) Determinar a fase de uma disciplina:
 %		Para verificar a fase de uma disciplina,
@@ -224,7 +225,7 @@ depende(ine5653, ine5419).
 %		pecificar o código, o nome e usar um
 %		operador como fase e o terminal do pro-
 %		log o mostrará.
-%		
+%
 %	Exemplo:
 %	?- disciplina(ine5433, 'tcc I', F).
 %	F = f7.
@@ -235,7 +236,7 @@ depende(ine5653, ine5419).
 %		pecificar o código, a fase e usar um
 %		operador como nome e o terminal do pro-
 %		log o mostrará.
-%		
+%
 %	Exemplo:
 %	?- disciplina(ine5408, N, f3).
 %	N = 'estutura de dados'.
@@ -246,8 +247,8 @@ depende(ine5653, ine5419).
 %		pecificar a fase e usar operadores no nome
 %		e no codigo. O terminal do prolog mostrará
 %		uma opçao. Pressione ';' para ver as opçoes
-%		restantes. 
-%		
+%		restantes.
+%
 %	Exemplo:
 %	?- disciplina(C, N, f2).
 %	C = ine5404,
@@ -270,41 +271,56 @@ depende(ine5653, ine5419).
 % X, Y = Disciplinas.
 requisito_anterior_em_comum(Z, X, Y) :- depende(X, Z), depende(Y, Z).
 
+:- discontiguous depende/2.
+
 % 5) Disciplinas que são pré-requisitos de pré-
 % requisitos (árvore de dependências)
 %
 % X, Y, Z = Disciplinas.
 depende(X, Z) :- depende(X, Y), depende(Y, Z).
 
-% 6) Disciplinas que estão em uma determinada fase 
+% 6) Disciplinas que estão em uma determinada fase
 % e são pré-requisitos de outras disciplinas.
 %		No terminal do prolog, basta digitar
-%		"lista_sups(X, N, F)", onde:
+%		"e_requisito(N, F)", onde:
 %
-% X = código da disciplina;
-% N = Nome da(s) disciplina(s) subsequente(s);
-% F = Fase da(s) respectiva(s) disciplina(s) subsequente(s).
+% N = Nome da(s) disciplina(s) da fase que é um pré-requisito;
+% F = Fase da(s) respectiva(s) disciplina(s).
 %
-% 10) Lista de disciplinas subsequentes
-lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
+e_requisito(N, F) :- depende(_, Y), disciplina(Y, N, F).
 
 % 7) Disciplinas que estão em uma determinada fase
 % e têm pré-requisitos para serem cursadas.
 %		No terminal do prolog, basta digitar
-%		"lista_depssss(X, N, F)", onde:
+%		"tem_pre_requisito(N, F)", onde:
 %
-% X = código da disciplina;
-% N = Nome da(s) disciplina(s) dependentes;
-% F = Fase da(s) respectiva(s) disciplina(s) dependente(s).
-%
-% 9) Lista de dependências de uma disciplina
-lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
+% N = Nome da(s) disciplina(s) da fase que possuem pré-requisitos;
+% F = Fase da(s) respectiva(s) disciplina(s).
+tem_pre_requisito(N, F) :- depende(Y, _), disciplina(Y, N, F).
 
-% 8) Disciplinas que estão em uma determinada fase, 
-% têm pré-requisitos em comum e são pré-requisitos 
+% 8) Disciplinas que estão em uma determinada fase,
+% têm pré-requisitos em comum e são pré-requisitos
 % de outras disciplinas.
 requisito_em_comum(F, C, K, A, B, Z, Y) :- fase(F),
 				depende(C, A),
 				depende(K, B),
 				depende(Z, C),
 				depende(Y, K).
+
+% 9) Lista de dependências de uma disciplina
+%	No terminal do prolog, basta digitar
+%		"lista_deps(X, N, F)", onde:
+%
+% X = código da disciplina;
+% N = Nome da(s) disciplina(s) dependentes;
+% F = Fase da(s) respectiva(s) disciplina(s) dependente(s).
+lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
+
+% 10) Lista de disciplinas subsequentes
+%	No terminal do prolog, basta digitar
+%		"lista_sups(X, N, F)", onde:
+%
+% X = código da disciplina;
+% N = Nome da(s) disciplina(s) subsequente(s);
+% F = Fase da(s) respectiva(s) disciplina(s) subsequente(s).
+lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
