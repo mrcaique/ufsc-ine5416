@@ -37,7 +37,7 @@ fase(f8).
 
 /* Lista de disciplinas */
 /* Primeira fase */
-disciplina(ine5401, 'introdução à computaçao', f1).
+disciplina(ine5401, 'introdução à computação', f1).
 disciplina(ine5402, 'programação orientada a objetos I', f1).
 disciplina(ine5403, 'fundamentos da matemática discreta para a computação', f1).
 disciplina(mtm5161, 'cálculo A', f1).
@@ -128,6 +128,16 @@ disciplina(ine5646, 'programação para web', f0).
 disciplina(ine5653, 'introdução à internacionalização e localização de software', f0).
 disciplina(ine5656, 'introdução à lógica simbólica I', f0).
 disciplina(ine5458, 'introdução à lógica simbólica II', f0).
+
+/* TESTE PARA A REGRA 8
+disciplina(ine0000, 'disciplina A', f10).
+disciplina(ine0002, 'disciplina Z', f11).
+disciplina(ine0003, 'disciplina X', f12).
+
+depende(ine0003, ine0001).
+depende(ine0003, ine0002).
+depende(ine0001, ine0000).
+depende(ine0002, ine0000). */
 
 /* Lista de dependências */
 depende(ine5404, ine5402). % Dependências da segunda fase
@@ -285,7 +295,6 @@ rec_depende(X, Z) :- depende(X, Y), rec_depende(Y, Z).
 %
 % N = Nome da(s) disciplina(s) da fase que é um pré-requisito;
 % F = Fase da(s) respectiva(s) disciplina(s).
-%
 e_requisito(N, F) :- depende(_, Y), disciplina(Y, N, F).
 
 % 7) Disciplinas que estão em uma determinada fase
@@ -300,13 +309,19 @@ tem_pre_requisito(N, F) :- depende(Y, _), disciplina(Y, N, F).
 % 8) Disciplinas que estão em uma determinada fase,
 % têm pré-requisitos em comum e são pré-requisitos
 % de outras disciplinas.
-requisito_em_comum(X, Y, Z) :- depende(X, Y),
-					depende(X, Z),
-					depende(Z, _),
-					depende(Y, _).
+%		Supondo um grafo de quatro vétices X,
+%		Y, Z e A e as areastas não direcionadas 
+%		ligando-os da seguinte forma: (X,Y), 
+%		(X,Z), (Y,A) e (Z, A), onde:
+%
+% X, Y, Z e A = Disciplinas.
+requisito_em_comum(X, Y, Z, A) :- depende(X, Y),
+			depende(X, Z),
+			depende(Z, A),
+			depende(Y, A).
 
 % 9) Lista de dependências de uma disciplina
-%	No terminal do prolog, basta digitar
+%		No terminal do prolog, basta digitar
 %		"lista_deps(X, N, F)", onde:
 %
 % X = código da disciplina;
@@ -315,7 +330,7 @@ requisito_em_comum(X, Y, Z) :- depende(X, Y),
 lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
 
 % 10) Lista de disciplinas subsequentes
-%	No terminal do prolog, basta digitar
+%		No terminal do prolog, basta digitar
 %		"lista_sups(X, N, F)", onde:
 %
 % X = código da disciplina;
