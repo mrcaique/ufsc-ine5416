@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{indentfirst} %Indentar primeiro parágrafo (desativado por padrão)
 \usepackage{listings}
+\usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry}
 
 \begin{document}
 \lstset{language=C}
@@ -26,7 +27,8 @@
 
     \item \textit{\textbf{GNU Bison}}: É um gerador de analisador sintático (parser) no estilo do Yacc. Ele é compatível com arquivos designados ao Yacc, portanto, os arquivos possuem a extensão .y. No entanto, o arquivo gerado não possui nomes fixos (como yyparse no Yacc), usa prefixos do arquivo de entrada. Bison foi escrito por Robert Corbett em 1988 e ganhou a compatibilidade com o Yacc graças a Richard Stallman.
 \end{itemize}
-    
+
+\newpage
 \section*{Parte 2}
 \subsection*{y.tab.h}
     O arquivo é gerado pelo analisador sintático Yacc/Bison, ele contém as definições de cada tipo correspondendo a um valor decimal (o primeiro valor é 257, número após o último elemento da tabela ASCII).
@@ -72,7 +74,7 @@ loop:
 
     if (c != 0)
         putchar(c1);
-    }
+}
     
 int column = 0;
 
