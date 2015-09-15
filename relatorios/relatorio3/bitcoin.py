@@ -22,7 +22,7 @@ def get_country(currency):
 	except ValueError as e:
 		print "\t" + "Currency " + currency + " not found." 
 		print "\t" + "Type 'python bitcoin.py help' to view the list of currencies."
-		sys.exit(1)
+		return
 	price = data['bpi'][currency]
 	print "[" + price['code'] + "]" + " $" + price['rate'] + " - " + price['description']
 
