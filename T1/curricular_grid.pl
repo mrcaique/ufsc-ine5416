@@ -24,16 +24,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				FATOS					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-/* Lista de fases */
-fase(f0).
-fase(f1).
-fase(f2).
-fase(f3).
-fase(f4).
-fase(f5).
-fase(f6).
-fase(f7).
-fase(f8).
+/*Listas de fases e suas disciplinas*/
+fase(f0, []).
+fase(f1,[ine5401, ine5402, ine5403, mtm5161, eel5405]).
+fase(f2,[ine5404, ine5405, ine5406, ine5407, mtm7174, mtm5512]).
+fase(f3,[ine5408, ine5409, ine5410, ine5411, mtm5245]).
+fase(f4,[ine5412, ine5413, ine5414, ine5415, ine5416, ine5417]).
+fase(f5,[ine5418, ine5419, ine5420, ine5421, ine5422, ine5423]).
+fase(f6,[ine5424, ine5425, ine5426, ine5427, ine5430, ine5453]).
+fase(f7,[ine5428, ine5429, ine5431, ine5432, ine5433]).
+fase(f8,[ine5434]).
 
 /* Lista de disciplinas */
 /* Primeira fase */
@@ -225,16 +225,6 @@ depende(ine5644, ine5423).
 depende(ine5646, ine5417).
 depende(ine5653, ine5419).
 
-/*Listas de disciplinas por fase*/
-lista(f1,[ine5401, ine5402, ine5403, mtm5161, eel5405]).
-lista(f2,[ine5404, ine5405, ine5406, ine5407, mtm7174, mtm5512]).
-lista(f3,[ine5408, ine5409, ine5410, ine5411, mtm5245]).
-lista(f4,[ine5412, ine5413, ine5414, ine5415, ine5416, ine5417]).
-lista(f5,[ine5418, ine5419, ine5420, ine5421, ine5422, ine5423]).
-lista(f6,[ine5424, ine5425, ine5426, ine5427, ine5430, ine5453]).
-lista(f7,[ine5428, ine5429, ine5431, ine5432, ine5433]).
-lista(f8,[ine5434]).
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -359,7 +349,7 @@ lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 %
 % F = Fase desejada.
 % N = Número de disciplinas da fase F.
-num_disciplinas_fase(F, N):- lista(F, X), length(X, N).
+num_disciplinas_fase(F, N):- fase(F, X), length(X, N).
 
 % 2)Quantas disciplinas há no curso
 
