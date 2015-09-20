@@ -26,14 +26,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 /*Listas de fases e suas disciplinas*/
 fase(f0, []).
-fase(f1,[ine5401, ine5402, ine5403, mtm5161, eel5405]).
-fase(f2,[ine5404, ine5405, ine5406, ine5407, mtm7174, mtm5512]).
-fase(f3,[ine5408, ine5409, ine5410, ine5411, mtm5245]).
-fase(f4,[ine5412, ine5413, ine5414, ine5415, ine5416, ine5417]).
-fase(f5,[ine5418, ine5419, ine5420, ine5421, ine5422, ine5423]).
-fase(f6,[ine5424, ine5425, ine5426, ine5427, ine5430, ine5453]).
-fase(f7,[ine5428, ine5429, ine5431, ine5432, ine5433]).
-fase(f8,[ine5434]).
+fase(f1, [ine5401, ine5402, ine5403, mtm5161, eel5405]).
+fase(f2, [ine5404, ine5405, ine5406, ine5407, mtm7174, mtm5512]).
+fase(f3, [ine5408, ine5409, ine5410, ine5411, mtm5245]).
+fase(f4, [ine5412, ine5413, ine5414, ine5415, ine5416, ine5417]).
+fase(f5, [ine5418, ine5419, ine5420, ine5421, ine5422, ine5423]).
+fase(f6, [ine5424, ine5425, ine5426, ine5427, ine5430, ine5453]).
+fase(f7, [ine5428, ine5429, ine5431, ine5432, ine5433]).
+fase(f8, [ine5434]).
 
 /* Lista de disciplinas */
 /* Primeira fase */
@@ -339,27 +339,35 @@ lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 %
 % F = Fase desejada.
 % N = Número de disciplinas da fase F.
-num_disciplinas_fase(F, N):- fase(F, X), length(X, N).
+num_disciplinas_fase(F, N) :- fase(F, X), length(X, N).
 
 % 2)Quantas disciplinas há no curso
 num_disciplinas_curso(N) :- bagof(Z, C^(num_disciplinas_fase(C, Z)), X), sum_list(X, N).
 
 % 3)Quantas disciplinas têm pré-requisitos
-num_pos_req(A) :- setof(Z, Disciplinas^(depende(Z, Disciplinas)), SetPosReq), length(SetPosReq, A).
+num_pos_req(A) :- setof(Z, Disciplinas^(depende(Z, Disciplinas)), ListReq), length(ListReq, A).
 
 % 4)Quantas disciplinas são pré-requisitos
-num_pre_req(A) :- setof(Z, Disciplinas^(depende(Disciplinas, Z)), SetPreReq), length(SetPreReq, A).
+num_pre_req(A) :- setof(Z, Disciplinas^(depende(Disciplinas, Z)), ListPreReq), length(ListPreReq, A).
 
 % 5)Quantos pré-requisitos há para uma dada disciplina
-num_disc_pre_req(Z, L) :- bagof(Z, Disciplinas^(depende(Z, Disciplinas)), SetPreReq), length(SetPreReq, L).
+num_disc_pre_req(D, L) :- setof(Z, depende(D, Z), PreReqSet), length(PreReqSet, L).
 
 % 6)Qual a disciplina com a maior quantidade de pré-requisitos
+maior_pre_req(Disciplina) :- findall(Tamanho, num_disc_pre_req(_, Tamanho), ListNumPreReq), 
+			max_list(ListNumPreReq, N),
+			num_disc_pre_req(Disciplina, N).
 
 % 7)Quantas disciplinas têm como pré-requisito uma dada disciplina
-pre_req(Z, L) :- bagof(Z, Disciplinas^(depende(Disciplinas, Z)), SetPosReq), length(SetPosReq, L).
+pre_req(Z, L) :- bagof(Z, Disciplinas^(depende(Disciplinas, Z)), PosReqList), length(PosReqList, L).
 
 % 8)Qual a disciplina é pré-requisito da maior quantidade de disciplinas (mais importante)
+num_disc_pos_req(D, L) :- setof(Z, depende(Z, D), PosReqList), length(PosReqList, L).
+mais_importante(D) :- findall(Tamanho, num_disc_pos_req(_, Tamanho), ListNumReq),
+			max_list(ListNumReq, Max),
+			num_disc_pos_req(D, Max).
 
 % 9)Dado o encadeamento de pré-requisitos (implementado, por exemplo, pelo 'seq' abaixo), qual o maior encadeamento identificado na matriz
+
 
 % 10)Crie e implemente uma questão que envolva quantidade ou máximo/mínimo
