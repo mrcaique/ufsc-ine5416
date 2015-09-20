@@ -342,15 +342,7 @@ lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 num_disciplinas_fase(F, N):- fase(F, X), length(X, N).
 
 % 2)Quantas disciplinas há no curso
-num_disciplinas_curso(Z) :- num_disciplinas_fase(f1, A), 
-						num_disciplinas_fase(f2, B),
-						num_disciplinas_fase(f3, C),
-						num_disciplinas_fase(f4, D),
-						num_disciplinas_fase(f5, E),
-						num_disciplinas_fase(f6, F),
-						num_disciplinas_fase(f7, G), 
-						num_disciplinas_fase(f8, H),
-						Z is A+B+C+D+E+F+G+H.
+num_disciplinas_curso(N) :- bagof(Z, C^(num_disciplinas_fase(C, Z)), X), sum_list(X, N).
 
 % 3)Quantas disciplinas têm pré-requisitos
 num_pos_req(A) :- setof(Z, Disciplinas^(depende(Z, Disciplinas)), SetPosReq), length(SetPosReq, A).
