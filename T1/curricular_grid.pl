@@ -129,16 +129,6 @@ disciplina(ine5653, 'introdução à internacionalização e localização de so
 disciplina(ine5656, 'introdução à lógica simbólica I', f0).
 disciplina(ine5458, 'introdução à lógica simbólica II', f0).
 
-/* TESTE PARA A REGRA 8
-disciplina(ine0000, 'disciplina A', f10).
-disciplina(ine0002, 'disciplina Z', f11).
-disciplina(ine0003, 'disciplina X', f12).
-
-depende(ine0003, ine0001).
-depende(ine0003, ine0002).
-depende(ine0001, ine0000).
-depende(ine0002, ine0000). */
-
 /* Lista de dependências */
 depende(ine5404, ine5402). % Dependências da segunda fase
 depende(ine5405, mtm5161).
@@ -352,16 +342,29 @@ lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 num_disciplinas_fase(F, N):- fase(F, X), length(X, N).
 
 % 2)Quantas disciplinas há no curso
+num_disciplinas_curso(Z) :- num_disciplinas_fase(f1, A), 
+						num_disciplinas_fase(f2, B),
+						num_disciplinas_fase(f3, C),
+						num_disciplinas_fase(f4, D),
+						num_disciplinas_fase(f5, E),
+						num_disciplinas_fase(f6, F),
+						num_disciplinas_fase(f7, G), 
+						num_disciplinas_fase(f8, H),
+						Z is A+B+C+D+E+F+G+H.
 
 % 3)Quantas disciplinas têm pré-requisitos
+num_pos_req(A) :- setof(Z, Disciplinas^(depende(Z, Disciplinas)), SetPosReq), length(SetPosReq, A).
 
 % 4)Quantas disciplinas são pré-requisitos
+num_pre_req(A) :- setof(Z, Disciplinas^(depende(Disciplinas, Z)), SetPreReq), length(SetPreReq, A).
 
 % 5)Quantos pré-requisitos há para uma dada disciplina
+num_disc_pre_req(Z, L) :- bagof(Z, Disciplinas^(depende(Z, Disciplinas)), SetPreReq), length(SetPreReq, L).
 
 % 6)Qual a disciplina com a maior quantidade de pré-requisitos
 
 % 7)Quantas disciplinas têm como pré-requisito uma dada disciplina
+pre_req(Z, L) :- bagof(Z, Disciplinas^(depende(Disciplinas, Z)), SetPosReq), length(SetPosReq, L).
 
 % 8)Qual a disciplina é pré-requisito da maior quantidade de disciplinas (mais importante)
 
