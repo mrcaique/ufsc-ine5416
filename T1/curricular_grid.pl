@@ -341,19 +341,19 @@ lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 % N = Número de disciplinas da fase F.
 num_disciplinas_fase(F, N) :- fase(F, X), length(X, N).
 
-% 2) Número de disciplinas no curso
+% 2) Número de disciplinas no curso (excluindo optativas)
 %	Funções: 
 %	1) bagof(Template, Meta do template, Lista instanciada)
 %		Cria listas com instâncias das metas cumpridas, ao usar
 %		o operador "^" (ou "**") a função mostra uma lista comple-
 %		ta com todas as soluções das metas do template.
-%	2) sum_list(lista, soma)
-%		"Soma" é o resultado da adição de todos os membros da lista.
+%	2) sum_list(L, S)
+%		Soma S é o resultado da adição de todos os membros da lista L.
 %	3) expressão1^expressão2
 %		Realiza um operação de potência, neste caso, mostra
 %		todas as os número de opções em que C possui pré-
 %		requisito. 
-num_disciplinas_curso(N) :- 
+num_disciplinas_curso(N) :-
 		bagof(Z, C^(num_disciplinas_fase(C, Z)), X), 
 		sum_list(X, N).
 
@@ -376,6 +376,12 @@ num_pre_req(A) :-
 		length(ListPreReq, A).
 
 % 5) Número de pré-requisitos para uma dada disciplina D
+%		Dada uma disciplina D, a função conta todas as disciplinas
+%		em que D é pré-requisito, sem contar encadeamentos. Por
+%		exemplo, dadas disciplinas D, E e F sendo que depende(D, E) 
+%		e depende(E, F):
+%						D <---- E <---- F
+%		A função contabiliza apenas E.
 %
 % D = Disciplina.
 % L = Número de pré-requisitos de D.
@@ -407,20 +413,29 @@ pre_req(D, L) :-
 
 % 8) Disciplina que é pré-requisito da maior quantidade de disciplinas 
 %	(mais importante)
-%
+%		num_disc_pos_req(D, L)
+%		Dado o código de uma disciplina D, a função retorna o número
+%		de disciplinas em que D é pré-requisito (o número fica armazenado em L), 
+%		ou seja, quantas disicplinas D acaba trancando. O contrário também
+%		pode ser aplicado, ou seja, aplicando a quantidade L primeiro.
 % D = Disciplina
 % L = Número de disciplinas que dependem de D
 num_disc_pos_req(D, L) :- 
 		setof(Z, depende(Z, D), PosReqList), 
 		length(PosReqList, L).
 
-mais_importante(Disciplina) :- findall(Tamanho, num_disc_pos_req(_, Tamanho), ListNumReq),
+mais_importante(Disciplina) :-
+		findall(Tamanho, num_disc_pos_req(_, Tamanho), ListNumReq),
 		max_list(ListNumReq, Max),
 		num_disc_pos_req(Disciplina, Max).
 
 % 9) O maior encadeamento de pré-requisitos
-% 
-% num_disc_pre_req_enc(D, L)
+% 		num_disc_pre_req_enc(D, L)
+%		Dado o código de uma disciplina D, a função retorna o número de dis-
+%		ciplinas em que D depende, incluindo encadeamentos. Por exemplo, dadas
+%		as disciplinas D, E e F, onde depende(D, E), depende(E, F):
+%						D <---- E <---- F
+%		Se aplicar D em num_disc_pre_req_enc(), a função contabiliza E e F.
 % D = Disciplina
 % L = Número de disciplinas em que D depende
 %
