@@ -3,9 +3,9 @@
 %			Gustavo José Carpeggiani,
 %			Vinícius Couto Biermann
 %
-% A seguinte base de dados, em SWI-Prolog, representa a 
+% A seguinte base de dados, em SWI-Prolog, representa a
 % grade curricular do curso de bacharelado em ciências da
-% computação da Universidade Federal de Santa Catarina 
+% computação da Universidade Federal de Santa Catarina
 % (ufsc.br).
 %
 % As cláusulas são definidas em disciplinas e dependên-
@@ -342,7 +342,7 @@ lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 num_disciplinas_fase(F, N) :- fase(F, X), length(X, N).
 
 % 2) Número de disciplinas no curso (excluindo optativas)
-%	Funções: 
+%	Funções:
 %	1) bagof(Template, Meta do template, Lista instanciada)
 %		Cria listas com instâncias das metas cumpridas, ao usar
 %		o operador "^" (ou "**") a função mostra uma lista comple-
@@ -352,9 +352,9 @@ num_disciplinas_fase(F, N) :- fase(F, X), length(X, N).
 %	3) expressão1^expressão2
 %		Realiza um operação de potência, neste caso, mostra
 %		todas as os número de opções em que C possui pré-
-%		requisito. 
+%		requisito.
 num_disciplinas_curso(N) :-
-		bagof(Z, C^(num_disciplinas_fase(C, Z)), X), 
+		bagof(Z, C^(num_disciplinas_fase(C, Z)), X),
 		sum_list(X, N).
 
 % 3) Número de disciplinas que têm pré-requisitos
@@ -364,29 +364,29 @@ num_disciplinas_curso(N) :-
 %		entanto, a lista instanciada é ordenada e sem repetições.
 %	2) length(lista, tamanho)
 %		Retorna o tamanho de uma lista
-num_pos_req(A) :- 
-		setof(Z, Disciplinas^(depende(Z, Disciplinas)), ListReq), 
+num_pos_req(A) :-
+		setof(Z, Disciplinas^(depende(Z, Disciplinas)), ListReq),
 		length(ListReq, A).
 
 % 4) Número disciplinas que são pré-requisitos
 %
 % A = Número de disciplinas que são pré-requisitos
-num_pre_req(A) :- 
-		setof(Z, Disciplinas^(depende(Disciplinas, Z)), ListPreReq), 
+num_pre_req(A) :-
+		setof(Z, Disciplinas^(depende(Disciplinas, Z)), ListPreReq),
 		length(ListPreReq, A).
 
 % 5) Número de pré-requisitos para uma dada disciplina D
 %		Dada uma disciplina D, a função conta todas as disciplinas
 %		em que D é pré-requisito, sem contar encadeamentos. Por
-%		exemplo, dadas disciplinas D, E e F sendo que depende(D, E) 
+%		exemplo, dadas disciplinas D, E e F sendo que depende(D, E)
 %		e depende(E, F):
 %						D <---- E <---- F
 %		A função contabiliza apenas E.
 %
 % D = Disciplina.
 % L = Número de pré-requisitos de D.
-num_disc_pre_req(D, L) :- 
-		setof(Z, depende(D, Z), ListPreReq), 
+num_disc_pre_req(D, L) :-
+		setof(Z, depende(D, Z), ListPreReq),
 		length(ListPreReq, L).
 
 % 6) Disciplina com a maior quantidade de pré-requisitos
@@ -398,8 +398,8 @@ num_disc_pre_req(D, L) :-
 %	2) max_list(lista, elemento)
 %		Retorna o maior elemento de uma lista (fica armazenado
 %		em "elemento").
-maior_pre_req(Disciplina) :- 
-		findall(Tamanho, num_disc_pre_req(_, Tamanho), ListNumPreReq), 
+maior_pre_req(Disciplina) :-
+		findall(Tamanho, num_disc_pre_req(_, Tamanho), ListNumPreReq),
 		max_list(ListNumPreReq, N),
 		num_disc_pre_req(Disciplina, N).
 
@@ -408,20 +408,20 @@ maior_pre_req(Disciplina) :-
 % D = Disciplina.
 % L = Número de disciplinas que tem como pré-requisito D
 pre_req(D, L) :-
-		bagof(D, Disciplinas^(depende(Disciplinas, D)), PosReqList), 
+		bagof(D, Disciplinas^(depende(Disciplinas, D)), PosReqList),
 		length(PosReqList, L).
 
-% 8) Disciplina que é pré-requisito da maior quantidade de disciplinas 
+% 8) Disciplina que é pré-requisito da maior quantidade de disciplinas
 %	(mais importante)
 %		num_disc_pos_req(D, L)
 %		Dado o código de uma disciplina D, a função retorna o número
-%		de disciplinas em que D é pré-requisito (o número fica armazenado em L), 
+%		de disciplinas em que D é pré-requisito (o número fica armazenado em L),
 %		ou seja, quantas disicplinas D acaba trancando. O contrário também
 %		pode ser aplicado, ou seja, aplicando a quantidade L primeiro.
 % D = Disciplina
 % L = Número de disciplinas que dependem de D
-num_disc_pos_req(D, L) :- 
-		setof(Z, depende(Z, D), PosReqList), 
+num_disc_pos_req(D, L) :-
+		setof(Z, depende(Z, D), PosReqList),
 		length(PosReqList, L).
 
 mais_importante(Disciplina) :-
@@ -430,7 +430,7 @@ mais_importante(Disciplina) :-
 		num_disc_pos_req(Disciplina, Max).
 
 % 9) O maior encadeamento de pré-requisitos
-% 		num_disc_pre_req_enc(D, L)
+%		num_disc_pre_req_enc(D, L)
 %		Dado o código de uma disciplina D, a função retorna o número de dis-
 %		ciplinas em que D depende, incluindo encadeamentos. Por exemplo, dadas
 %		as disciplinas D, E e F, onde depende(D, E), depende(E, F):
@@ -443,7 +443,7 @@ mais_importante(Disciplina) :-
 % Max = Número de disciplinas do encadeamento.
 % Disciplina = Disciplina que possui o maior encadeamento.
 num_disc_pre_req_enc(D, L) :-
-		setof(Z, rec_depende(D, Z), PreReqSet), 
+		setof(Z, rec_depende(D, Z), PreReqSet),
 		length(PreReqSet, L).
 
 maior_encadeamento(Max, Disciplina) :-
@@ -452,3 +452,14 @@ maior_encadeamento(Max, Disciplina) :-
 		num_disc_pre_req_enc(Disciplina, Max).
 
 % 10)Crie e implemente uma questão que envolva quantidade ou máximo/mínimo
+% 10)Dada uma lista de disciplinas, retornar a quantidade total e quais
+% são os seus pré-requisitos
+
+pre_rec_lista([L], N, X):- setof(Z, L^(depende(L, Z)), X), length(X, N).
+
+% 10B)Encontrar o menor encadeamento de pré-requisitos
+
+menor_encadeamento(Min, Disciplina) :-
+		findall(Tamanho, num_disc_pre_req_enc(_, Tamanho), List),
+		min_list(List, Min),
+		num_disc_pre_req_enc(Disciplina, Min).
