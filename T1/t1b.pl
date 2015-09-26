@@ -3,31 +3,37 @@
 %			Gustavo José Carpeggiani,
 %			Vinícius Couto Biermann
 %
-% A seguinte base de dados, em SWI-Prolog, representa a
-% grade curricular do curso de bacharelado em ciências da
-% computação da Universidade Federal de Santa Catarina
-% (ufsc.br).
+% As seguintes regras correspondem à primeira imple-
+% mentação baseada na base de dados e a motivação é
+% começar a explorar a base de dados, formulando re-
+% gras para que consultas sejam realizadas.
 %
-% As cláusulas são definidas em disciplinas e dependên-
-% cias, onde cada uma é composta da seguinte forma:
-%	- fase(f[número da fase]);
-%	- disciplina(código, nome, fase);
-%	- depende(disciplina escolhida, dependência).
+% As regras são definidas assim:
+% 		Cabeça :- Corpo
+% Correspondendo a uma fórmula baseada na lógica de 
+% predicados: Se "p" então "q". A condição é satis-
+% feita se o conteúdo em Corpo for verdade, então o
+% conteúdo de Cabeça também é verdade. Inclusive,
+% baseando-se nos fatos defimidos na base de dados,
+% é possível achar possíveis soluções para uma dada
+% entrada definida em "Cabeça". 
 %
 % NOTAS:
-% 1) A grade curricular se baseia no currículo
-% de 2007/1;
-% 2) As disciplinas optativas são tais que fase = 0;
-% 3) Há disciplinas optativas que podem não estar presen-
-% tes em um semestre.
+% 1) Este arquivo contém a dependência da base de dados.
+% Todas as regras fomuladas aqui são baseadas no arquivo
+% "database.pl".
+% 2) Veja o arquivo "curriculum_grid.pl" que contém as três
+% partes do projeto (database.pl, t1b.pl e t1c.pl) na íntegra.
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				DEPÊNDENCIAS			%
+%				DEPÊNDENCIAS				%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 	database.pl
-% 	No terminal do swi-prolog, digite:
-%		?-[database, t1b, t1c]
+% 	* database.pl
+% 	--
+%	No terminal do swi-prolog, digite:
+%		?-[database, t1b, t1c].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				REGRAS					%

@@ -3,31 +3,30 @@
 %			Gustavo José Carpeggiani,
 %			Vinícius Couto Biermann
 %
-% A seguinte base de dados, em SWI-Prolog, representa a
-% grade curricular do curso de bacharelado em ciências da
-% computação da Universidade Federal de Santa Catarina
-% (ufsc.br).
+% As regras a seguir correspondem à segunda implementação
+% baseada na base de dados, onde se faz o uso de listas e
+% de funções nativas do SWI-Prolog, cada uma está especifi-
+% cada com um pouco quando é referenciada pela primeira vez.
 %
-% As cláusulas são definidas em disciplinas e dependên-
-% cias, onde cada uma é composta da seguinte forma:
-%	- fase(f[número da fase]);
-%	- disciplina(código, nome, fase);
-%	- depende(disciplina escolhida, dependência).
+% Mais detalhes das funções na documentação do SWI-Prolog,
+% disponível em: http://www.swi-prolog.org/
 %
 % NOTAS:
-% 1) A grade curricular se baseia no currículo
-% de 2007/1;
-% 2) As disciplinas optativas são tais que fase = 0;
-% 3) Há disciplinas optativas que podem não estar presen-
-% tes em um semestre.
+% 1) Este arquivo contém a dependência da base de dados.
+% Todas as regras fomuladas aqui são baseadas no arquivo
+% "database.pl".
+% 2) Veja o arquivo "curriculum_grid.pl" que contém as três
+% partes do projeto (database.pl, t1b.pl e t1c.pl) na íntegra.
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				DEPÊNDENCIAS			%
+%				DEPÊNDENCIAS				%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 	database.pl
-% 	No terminal do swi-prolog, digite:
-%		?-[database, t1b, t1c]
+% 	* database.pl
+% 	--
+%	No terminal do swi-prolog, digite:
+%		?-[database, t1b, t1c].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				REGRAS					%
@@ -79,7 +78,7 @@ num_pre_req(A) :-
 %		em que D é pré-requisito, sem contar encadeamentos. Por
 %		exemplo, dadas disciplinas D, E e F sendo que depende(D, E)
 %		e depende(E, F):
-%						D <---- E <---- F
+%				D <---- E <---- F
 %		A função contabiliza apenas E.
 %
 % D = Disciplina.
@@ -133,7 +132,7 @@ mais_importante(Disciplina) :-
 %		Dado o código de uma disciplina D, a função retorna o número de dis-
 %		ciplinas em que D depende, incluindo encadeamentos. Por exemplo, dadas
 %		as disciplinas D, E e F, onde depende(D, E), depende(E, F):
-%						D <---- E <---- F
+%				D <---- E <---- F
 %		Se aplicar D em num_disc_pre_req_enc(), a função contabiliza E e F.
 % D = Disciplina
 % L = Número de disciplinas em que D depende
@@ -150,10 +149,15 @@ maior_encadeamento(Max, Disciplina) :-
 		max_list(List, Max),
 		num_disc_pre_req_enc(Disciplina, Max).
 
-% 10)Dada uma lista de disciplinas, retornar a quantidade total e quais
+% 10) Dada uma lista de disciplinas, retornar a quantidade total e quais
 % são os seus pré-requisitos
 %		Para cada disciplina em uma dada lista, retornará uma lista com
 %		suas dependências diretas e sua quantidade.
+%
+%	Funções:
+%	1) nl - Adiciona uma nova linha.
+%	2) write('String') - Imprime na tela o conteúdo em 'String'
+%	3) print(Z) - Imprime o conteúdo de 'Z'.
 pre_req_lista([]) :- !.
 pre_req_lista([H|T]) :- 
 		setof(Z, H^(depende(H, Z)), X), 
@@ -170,8 +174,13 @@ pre_req_lista([H|T]) :-
 		nl,
 		pre_req_lista(T).
 
-% 11)Encontrar o menor encadeamento de pré-requisitos
+% 11) Encontrar o menor encadeamento de pré-requisitos
 % menor_encadeamento(Min, Disciplina)
+%	Funções:
+%		min_list(Lista, Elemento)
+%		Retorna o menor elemento de uma lista (fica armazenado
+%		em "elemento").
+%
 % Min = Número de disciplinas do encadeamento.
 % Disciplina = Disciplina que possui o menor encadeamento.
 menor_encadeamento(Min, Disciplina) :-

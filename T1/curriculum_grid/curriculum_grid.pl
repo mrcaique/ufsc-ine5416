@@ -219,8 +219,25 @@ depende(ine5653, ine5419).*/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				REGRAS					%
+%			REGRAS T1B					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% As seguintes regras correspondem à primeira imple-
+% mentação baseada na base de dados e a motivação é
+% começar a explorar a base de dados, formulando re-
+% gras para que consultas sejam realizadas.
+%
+% As regras são definidas assim:
+% 		Cabeça :- Corpo
+% Correspondendo a uma fórmula baseada na lógica de 
+% predicados: Se "p" então "q". A condição é satis-
+% feita se o conteúdo em Corpo for verdade, então o
+% conteúdo de Cabeça também é verdade. Inclusive,
+% baseando-se nos fatos defimidos na base de dados,
+% é possível achar possíveis soluções para uma dada
+% entrada definida em "Cabeça".
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % 1) Determinar a fase de uma disciplina:
 %		Para verificar a fase de uma disciplina,
 %		basta usar a cláusula "disciplina", es-
@@ -331,7 +348,19 @@ lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
 lista_sups(X, N, F) :- depende(Y, X), disciplina(Y, N, F).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%			REGRAS T1C					%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% As regras a seguir correspondem à segunda implementação
+% baseada na base de dados, onde se faz o uso de listas e
+% de funções nativas do SWI-Prolog, cada uma está especifi-
+% cada com um pouco quando é referenciada pela primeira vez.
 %
+% Mais detalhes das funções na documentação do SWI-Prolog,
+% disponível em: http://www.swi-prolog.org/
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % 1) Número de disciplinas em uma dada fase
 %           No terminal do swi-prolog, basta digitar
@@ -380,7 +409,7 @@ num_pre_req(A) :-
 %		em que D é pré-requisito, sem contar encadeamentos. Por
 %		exemplo, dadas disciplinas D, E e F sendo que depende(D, E)
 %		e depende(E, F):
-%						D <---- E <---- F
+%				D <---- E <---- F
 %		A função contabiliza apenas E.
 %
 % D = Disciplina.
@@ -434,7 +463,7 @@ mais_importante(Disciplina) :-
 %		Dado o código de uma disciplina D, a função retorna o número de dis-
 %		ciplinas em que D depende, incluindo encadeamentos. Por exemplo, dadas
 %		as disciplinas D, E e F, onde depende(D, E), depende(E, F):
-%						D <---- E <---- F
+%				D <---- E <---- F
 %		Se aplicar D em num_disc_pre_req_enc(), a função contabiliza E e F.
 % D = Disciplina
 % L = Número de disciplinas em que D depende
@@ -451,10 +480,15 @@ maior_encadeamento(Max, Disciplina) :-
 		max_list(List, Max),
 		num_disc_pre_req_enc(Disciplina, Max).
 
-% 10)Dada uma lista de disciplinas, retornar a quantidade total e quais
+% 10) Dada uma lista de disciplinas, retornar a quantidade total e quais
 % são os seus pré-requisitos
 %		Para cada disciplina em uma dada lista, retornará uma lista com
 %		suas dependências diretas e sua quantidade.
+%
+%	Funções:
+%	1) nl - Adiciona uma nova linha.
+%	2) write('String') - Imprime na tela o conteúdo em 'String'
+%	3) print(Z) - Imprime o conteúdo de 'Z'.
 pre_req_lista([]) :- !.
 pre_req_lista([H|T]) :- 
 		setof(Z, H^(depende(H, Z)), X), 
@@ -471,8 +505,13 @@ pre_req_lista([H|T]) :-
 		nl,
 		pre_req_lista(T).
 
-% 11)Encontrar o menor encadeamento de pré-requisitos
+% 11) Encontrar o menor encadeamento de pré-requisitos
 % menor_encadeamento(Min, Disciplina)
+%	Funções:
+%		min_list(Lista, Elemento)
+%		Retorna o menor elemento de uma lista (fica armazenado
+%		em "elemento").
+%
 % Min = Número de disciplinas do encadeamento.
 % Disciplina = Disciplina que possui o menor encadeamento.
 menor_encadeamento(Min, Disciplina) :-
