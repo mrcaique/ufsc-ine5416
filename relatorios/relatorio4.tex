@@ -3,17 +3,21 @@
 \usepackage{indentfirst}
 \usepackage{listings}
 \usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
 
 \begin{document}
 \lstset{language=Python}
 \begin{center}
     \section*{INE5416 - Paradigmas da Programação (2015/2)}
-    \textbf{\textit{Relatório 4: Cálculo Lambda - Parte 1} \\
+    \textbf{\textit{Relatório 4: Cálculo Lambda} \\
     Caique Rodrigues Marques 13204303}
 \end{center}
 O cálculo lambda é um formalismo algébrico para representar a abstração de funções e argumentos na lógica matemática descrito por Alonzo Church com base na lógica combinatória de Schönfinkel e na teoria da recursividade de Stephen Kleene. Este relatório contém as informações coletadas através de estudos sugeridos, dentre eles, o artigo original de Church: \textit{An unsolvable problem of elementary number theory}.
 
-\section*{Definições}
+\section*{Parte 1}
+\subsection*{Definições}
 O cálculo lambda foi desenvolvido por Alonzo Church como solução para o problema da computabilidade proposto por David Hilbert em 1928 que, assim como o artigo de Alan Turing, define as bases para a nova área da matemática, a Ciência da Computação. A solução de Church foi formulada para dar bases formais ao conceito de computação efetiva. O cálculo lambda é formado por uma expressão definida recursivamente.
 
 Uma expressão lambda é composta por:
@@ -43,14 +47,123 @@ Uma \textbf{abstração} é definida de forma que, usando o primeiro exemplo, $\
 A implementação acima, é o mesmo que $\lambda n. n^{2}$ $(n)$, onde "n" corresponde a um número qualquer. Nota-se que o valor de $\lambda n$ corresponde à \textbf{variável} considerada na questão, enquanto $(n)$ corresponde ao \textbf{argumento} que será usado na função, mesmo nome usado em linguagens ao definir a assinatura de uma função (assinatura corresponde a "def sqrt(n)", onde (n) é o argumento).
 
 \newpage
-\section*{Reduções}
-Expressões em cálculo lambda também podem sofrer mundaças de comportamento, isto é chamado de redução e há três tipos:
-\begin{itemize}
-    \item $\alpha-$conversão, onde se altera o limite das variáveis. Geralmente pode ser usada para alterar o nome da variável, embora as regras precisas não sejam triviais. \\
-    Exemplo: $\lambda x.x$ $(y)$
-    \item $\beta-$redução, onde se aplica funções nos argumentos de uma expressão lambda. \\ 
-    Exemplo: $\lambda y.y +2$ $(3x+2y+7z)$
-    \item $\eta-$conversão, onde captura a noção de extensionalidade. Isto siginifica que, dada duas funções, elas só serão iguais se, e somente se, elas dão o mesmo resultado para todos os argumentos definidos. \\
-    Exemplo: $\lambda x.(f x)$
-\end{itemize}
+\subsection*{Reduções}
+Expressões em cálculo lambda também podem sofrer mudanças de comportamento, isto é chamado de redução e há três tipos:
+    \begin{itemize}
+        \item $\alpha-$conversão, onde se altera o limite das variáveis. Geralmente pode ser usada para alterar o nome da variável, embora as regras precisas não sejam triviais. \\
+        Exemplo: $\lambda x.x$ $(y)$
+        \item $\beta-$redução, onde se aplica funções nos argumentos de uma expressão lambda. \\ 
+        Exemplo: $\lambda y.y +2$ $(3x+2y+7z)$
+        \item $\eta-$conversão, significa que, dada duas funções, elas só serão iguais se, e somente se, elas dão o mesmo resultado para todos os argumentos definidos. \\
+        Exemplo: $\lambda x.(f x)$
+    \end{itemize}
+    
+\section*{Parte 2}
+Como dito anteriormente, o cálculo lambda é a base das linguagens de programação funcional. Um exemplo a citar é Haskell, onde o $\lambda$ é substituído por "\textbackslash" e o ponto "." por "$->$"
+\begin{enumerate}
+    \item Realizando uma operação modular básica, é possível remover o primeiro elemento divisível por três na lista.
+    \begin{verbatim}
+    Prelude> List.deleteBy(\x y->y `mod` x == 0)3[5..10]
+    [5,7,8,9,10]
+    \end{verbatim}
+    \item De forma semelhante, para filtrar os elementos não divisíveis por quatro na lista.
+    \begin{verbatim}
+    Prelude> List.filter(\x ->x `mod` 4 == 0)[4..19]
+    [4,8,12,16]
+    \end{verbatim}
+    \item O valor da expressão:
+    \begin{verbatim}
+    Prelude> [ x | x <- [1..4], y <- [x..5], (x+y) `mod` 2 == 0 ]
+    [1,1,1,2,2,3,3,4]
+    \end{verbatim}
+\end{enumerate}
+
+\section*{Lista de exercícios 1: Funções}
+\begin{enumerate}
+    \item Inversa de $f(x) = \frac{x+1}{x^{2}}$
+        \begin{gather*}
+            f(x) = y = \frac{x+1}{x^{2}} \\
+            yx^{2} = x+1 \\
+            yx^{2}-x-1 = 0 \\
+            - \\
+            \delta = 1^{2} + 4y1 \\
+            \delta = 1 + 4y \\
+            - \\
+            \mathbf{f^{-1}(x) = \frac{1\pm \sqrt{1+4y}}{2y}}
+        \end{gather*}
+    \item $f(x-1) = (x^{2}-1)$, $f(x)?$
+        \begin{gather*}
+            x = x+1: \\
+            f((x+1)-1) = ((x+1)^{2}-1) \\
+            \mathbf{f(x) = x^{2} + 2x}
+        \end{gather*}
+    \item Seja $f(x) = x+\frac{1}{x}$, prove que $(f(x))^{3} = f(x^{3})+3f\left(\frac{1}{x}\right).$
+        \begin{gather*}
+            f(x^{3}) = x^{3}+\frac{1}{x^{3}} = \frac{x^{6}+1}{x^{3}} \\
+            f\left(\frac{1}{x}\right) = \frac{1}{x}+x = f(x) \\
+            ----- \\
+            f(x) = x+\frac{1}{x} \\
+            (f(x))^{3} = \left(x+\frac{1}{x}\right)^{3} \\
+            (f(x))^{3} = \left(x^{2}+2+\frac{1}{x^{2}}\right).\left(x+\frac{1}{x}\right) \\
+            (f(x))^{3} = x^{3}+2x+\frac{x}{x}+\frac{x^{2}}{x}+\frac{2}{x}+\frac{1}{x^{3}} \\
+            (f(x))^{3} = x^{3}+\frac{1}{x^{3}}+2x+\frac{1}{x}+x+\frac{2}{x} \\
+            (f(x))^{3} = x^{3}+\frac{1}{x^{3}}+3x+\frac{3}{x} \\
+            (f(x))^{3} = \left(x^{3}+\frac{1}{x^{3}}\right)+3\left(x+\frac{1}{x}\right) \\
+            \mathbf{(f(x))^{3} = f(x^{3})+3f\left(\frac{1}{x}\right)}
+        \end{gather*}
+    \item Seja $f(x) = \frac{|a|}{a}, x \neq 0$ ache $|f(a)-f(-a)|$.
+        \begin{gather*}
+            f(a) = \frac{|a|}{a} = \frac{a}{a} = 1 \\
+            f(-a) = \frac{|-a|}{-a} = \frac{a}{-a} = -1 \\
+            ----\\
+            |f(a)-f(-a)| = |1-(-1)| = |2| = 2
+        \end{gather*}
+    \item Dadas $f(x) = x^{4}$, $g(x) = \sqrt{1+x^{3}}$, $h(x) = \frac{x^{2}+1}{2x+1}$, todos cujo domínio é $\mathbb{R} \to [0, \infty) $, ache cada composição e seus respectivos domínios e contradomínios:
+        \begin{enumerate}
+        \item[a.] $f \circ g(x)$
+            \begin{gather*}
+                f \circ g(x) = f(g(x)) \\
+                f(g(x)) = f(\sqrt{1+x^{3}}) \\
+                f(\sqrt{1+x^{3}}) = (\sqrt{1+x^{3}})^{4} \\
+                (\sqrt{1+x^{3}})^{4} = \mathbf{1+2x^{3}+x^{6}} \\
+                \text{Domínio} = \mathbb{R} \\
+                \text{Contradomínio} = \mathbb{R}
+            \end{gather*}
+        \end{enumerate}
+        \item[b.] $f \circ g \circ h(x)$
+            \begin{gather*}
+                f \circ g \circ h(x) = f(g(h(x))) \\
+                f(g(h(x))) = f\left(g\left(\frac{x^{2}+1}{2x+1}\right)\right) \\
+                f\left(g\left(\frac{x^{2}+1}{2x+1}\right)\right) = f\left(\frac{(\sqrt{1+x^{3}})^{2}+1}{2.(\sqrt{1+x^{3}})+1}\right) \\
+                f\left(\frac{(\sqrt{1+x^{3}})^{2}+1}{2.(\sqrt{1+x^{3}})+1}\right) = \frac{(\sqrt{1+x^{12}})^{2}+1}{2.(\sqrt{1+x^{12}})+1} \\
+                \frac{(\sqrt{1+x^{12}})^{2}+1}{2.(\sqrt{1+x^{12}})+1} = \frac{1+x^{12}+1}{2.(\sqrt{1+x^{12}}+1)} \\
+                \frac{1+x^{12}+1}{2.(\sqrt{1+x^{12}}+1)} = \mathbf{\frac{2+x^{12}}{2.(\sqrt{1+x^{2}})+1}} \\
+                \text{Domínio} = \mathbb{R} \\
+                \text{Contradomínio} = \mathbb{R}
+            \end{gather*}
+\end{enumerate}
+
+\section*{Lista de exercícios 2: Cálculo Lambda}
+\begin{enumerate}
+    \item Transforme as funções em expressões lambda. \\
+    (a) $f(x)=x^{2}+4 : \mathbf{\lambda x.x^{2}+4 (x)}$ \\
+    (b) $f(x)=\sum{x=1}^{x=10}x : \mathbf{\lambda x.x[1...10] (x)}$ \\
+    (c) $f(a, b)=a+b : \mathbf{\lambda ab.a+b (a)(b)}$ \\
+    (d) $f(x) = x.x^{-1} : \mathbf{\lambda x.1 (x)}$ \\
+    
+    \item Calcule as expressões lambda. \\
+    (a) $\lambda x.(\lambda y.y^{2} - (\lambda z.(z+x)4)3)2$ \\
+    $\lambda x.(\lambda y.y^{2} - (4+x)3)2$ \\
+    $\lambda x.(3^{2} - (4+x))2$ \\
+    $9 - 4 - 2 = \mathbf{3}$ \\ \\
+    (b) $\lambda x.x + (\lambda y.y^{2}(b))(a)$ \\
+    $\lambda x.x + (b^{2})(a)$ \\
+    $a + (b^{2}) = \mathbf{a+b^{2}}$ \\ \\
+    (c) $\lambda x.(\lambda y.(x+(\lambda x.8)-y)6)5$ \\
+    $\lambda x.(\lambda y.(x+8-y)6)5$ \\
+    $\lambda x.(x+8-6)5$ \\
+    $5+8-6 = \mathbf{7}$ \\ \\
+    (d) $\lambda xy.x+y (3)(7)$ \\
+    $3+7 = \mathbf{10}$
+\end{enumerate}
 \end{document}
