@@ -23,7 +23,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				DEPÊNDENCIAS					%
+%				DEPÊNDENCIAS			%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 	database.pl
 % 	No terminal do swi-prolog, digite:
@@ -152,8 +152,10 @@ maior_encadeamento(Max, Disciplina) :-
 
 % 10)Dada uma lista de disciplinas, retornar a quantidade total e quais
 % são os seus pré-requisitos
-pre_rec_lista([]) :- !.
-pre_rec_lista([H|T]) :- 
+%		Para cada disciplina em uma dada lista, retornará uma lista com
+%		suas dependências diretas e sua quantidade.
+pre_req_lista([]) :- !.
+pre_req_lista([H|T]) :- 
 		setof(Z, H^(depende(H, Z)), X), 
 		length(X, N),
 		nl,
@@ -166,9 +168,12 @@ pre_rec_lista([H|T]) :-
 		write('Número de dependências: '),
 		print(N),
 		nl,
-		pre_rec_lista(T).
+		pre_req_lista(T).
 
 % 11)Encontrar o menor encadeamento de pré-requisitos
+% menor_encadeamento(Min, Disciplina)
+% Min = Número de disciplinas do encadeamento.
+% Disciplina = Disciplina que possui o menor encadeamento.
 menor_encadeamento(Min, Disciplina) :-
 		findall(Tamanho, num_disc_pre_req_enc(_, Tamanho), List),
 		min_list(List, Min),
