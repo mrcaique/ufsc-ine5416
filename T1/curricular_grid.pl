@@ -451,14 +451,30 @@ maior_encadeamento(Max, Disciplina) :-
 		max_list(List, Max),
 		num_disc_pre_req_enc(Disciplina, Max).
 
-% 10)Crie e implemente uma questão que envolva quantidade ou máximo/mínimo
 % 10)Dada uma lista de disciplinas, retornar a quantidade total e quais
 % são os seus pré-requisitos
+%		Para cada disciplina em uma dada lista, retornará uma lista com
+%		suas dependências diretas e sua quantidade.
+pre_req_lista([]) :- !.
+pre_req_lista([H|T]) :- 
+		setof(Z, H^(depende(H, Z)), X), 
+		length(X, N),
+		nl,
+		write('Disciplina: '),
+		print(H),
+		nl,
+		write('Lista de dependências: '),
+		print(X),
+		nl,
+		write('Número de dependências: '),
+		print(N),
+		nl,
+		pre_req_lista(T).
 
-pre_rec_lista([L], N, X):- setof(Z, L^(depende(L, Z)), X), length(X, N).
-
-% 10B)Encontrar o menor encadeamento de pré-requisitos
-
+% 11)Encontrar o menor encadeamento de pré-requisitos
+% menor_encadeamento(Min, Disciplina)
+% Min = Número de disciplinas do encadeamento.
+% Disciplina = Disciplina que possui o menor encadeamento.
 menor_encadeamento(Min, Disciplina) :-
 		findall(Tamanho, num_disc_pre_req_enc(_, Tamanho), List),
 		min_list(List, Min),
