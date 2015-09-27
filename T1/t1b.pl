@@ -14,7 +14,7 @@
 % predicados: Se "p" então "q". A condição é satis-
 % feita se o conteúdo em Corpo for verdade, então o
 % conteúdo de Cabeça também é verdade. Inclusive,
-% baseando-se nos fatos defimidos na base de dados,
+% baseando-se nos fatos definidos na base de dados,
 % é possível achar possíveis soluções para uma dada
 % entrada definida em "Cabeça". 
 %

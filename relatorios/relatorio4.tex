@@ -1,11 +1,11 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage{indentfirst}
-\usepackage{listings}
-\usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry}
+\usepackage{indentfirst} % identar primeiro parágrafo (desativado por padrão)
+\usepackage{listings} % Uso de trechos de código no texto
 \usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{mathtools}
+\usepackage{mathtools} % Permite o uso do gather, alinhar equações matemáticas sem referenciar "$"
+\usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry}
 
 \begin{document}
 \lstset{language=Python}
@@ -153,17 +153,28 @@ Como dito anteriormente, o cálculo lambda é a base das linguagens de programa�
     
     \item Calcule as expressões lambda. \\
     (a) $\lambda x.(\lambda y.y^{2} - (\lambda z.(z+x)4)3)2$ \\
-    $\lambda x.(\lambda y.y^{2} - (4+x)3)2$ \\
-    $\lambda x.(3^{2} - (4+x))2$ \\
-    $9 - 4 - 2 = \mathbf{3}$ \\ \\
+        $\lambda x.(\lambda y.y^{2} - (4+x)3)2$ \\
+        $\lambda x.(3^{2} - (4+x))2$ \\
+        $9 - 4 - 2 = \mathbf{3}$ \\ \\
     (b) $\lambda x.x + (\lambda y.y^{2}(b))(a)$ \\
-    $\lambda x.x + (b^{2})(a)$ \\
-    $a + (b^{2}) = \mathbf{a+b^{2}}$ \\ \\
+        $\lambda x.x + (b^{2})(a)$ \\
+        $a + (b^{2}) = \mathbf{a+b^{2}}$ \\ \\
     (c) $\lambda x.(\lambda y.(x+(\lambda x.8)-y)6)5$ \\
-    $\lambda x.(\lambda y.(x+8-y)6)5$ \\
-    $\lambda x.(x+8-6)5$ \\
-    $5+8-6 = \mathbf{7}$ \\ \\
+        $\lambda x.(\lambda y.(x+8-y)6)5$ \\
+        $\lambda x.(x+8-6)5$ \\
+        $5+8-6 = \mathbf{7}$ \\ \\
     (d) $\lambda xy.x+y (3)(7)$ \\
-    $3+7 = \mathbf{10}$
+        $3+7 = \mathbf{10}$
+    
+    \item Reduzir as expressões na forma normal, quando possível. \\
+    (a) $\lambda x.x(xy)(\lambda u.u)$ \\
+        $(xy)(\lambda u.u)$ = $\mathbf{xy}$ \\ \\
+    (b) $\lambda y.(\lambda x.y^{2}+x)(z)$ \\
+        $\mathbf{\lambda x.z^{2}+x}$ \\ \\ 
+    (c) $\mathbf{\lambda x.(\lambda y.(yx)\lambda i.i)\lambda p.\lambda q.p}$ \\ \\
+    (d) $\lambda x.x(\lambda y.(\lambda x.xy)x)$ \\
+        $\lambda x.x(\lambda y.(\lambda t.ty)x)$ \\
+        $\mathbf{\lambda x.x(\lambda t.tx)}$ \\ \\
+    (e) $\mathbf{(\lambda x.xx)(\lambda y.y)}$
 \end{enumerate}
 \end{document}
