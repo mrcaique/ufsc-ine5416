@@ -15,7 +15,7 @@
 
 A linguagem Python é uma linguagem interpretada, mas com algumas características bem interessantes. Primeiro, porque tem interface com muitas linguagens como C e Haskell e, em segundo lugar, porque suporta o paradigma procedimental e o paradigma procedural.
 
-Neste relatório há a apresentação de dois programas escritos na linguagem Python: bitcoin.py que possui os paradigmas funcional e procedural e apod.py que possui o paradigma procedural.
+Neste relatório há a apresentação de três programas escritos na linguagem Python: bitcoin.py que possui os paradigmas funcional e procedural, apod.py que possui o paradigma procedural e eratosthenes.py que possui o paradigma funcional.
 
 \section*{bitcoin.py}
 O programa bitcoin.py foi descrito apenas para fornecer o preço de um Bitcoin nas mais variadas moedas disponíveis pelo mundo. A Bitcoin Price Index API, que foi usada para fornecer os valores, é provinda pelo \href{http://www.coindesk.com/api/}{CoinDesk}. Mais informações podem ser encontradas no link.
@@ -25,7 +25,7 @@ Rapidamente apresentando, o Bitcoin é uma criptomoeda baseada na rede \textit{p
 Há três funções que definem o programa: help(), get\_country() e default(), além do main, onde acontece a execução do programa:
 \begin{itemize}
     \item A função default() apenas retorna o preço de um Bitcoin nas três moedas definidas na API padrão do Bitcoin Price Index: o Dólar estadunidense, a Libra inglesa e o Euro.
-\begin{verbatim}caique@marvin:~$ python bitcoin.py 
+\begin{verbatim}caique@marvin:~$ python3 bitcoin.py 
 Bitcoin price in Sep 13, 2015 20:08:00 UTC
 [USD] $229.3037 - United States Dollar
 [GBP] £148.6140 - British Pound Sterling
@@ -33,7 +33,7 @@ Bitcoin price in Sep 13, 2015 20:08:00 UTC
 \end{verbatim}
     
     \item A função get\_country() retorna o preço do Bitcoin em outras moedas definidas como argumento na compilação do programa, incluindo as três usadas no padrão default.
-\begin{verbatim}caique@marvin:~$ python bitcoin.py brl jpy cny
+\begin{verbatim}caique@marvin:~$ python3 bitcoin.py brl jpy cny
 Bitcoin price in Sep 13, 2015 20:22:00 UTC
 [BRL] $888.6172 - Brazilian Real
 [JPY] $27,664.6011 - Japanese Yen
@@ -41,7 +41,7 @@ Bitcoin price in Sep 13, 2015 20:22:00 UTC
     \end{verbatim}
     
     \item A função help() retorna a lista de moedas disponíveis onde o preço de um Bitcoin pode ser visto. Esta função é o que define o paradigma funcional do programa, pois, usando o argumento "help" na compilação do programa, ela retornará a lista com as moedas e os respectivos países que a adotam.
-\begin{verbatim}caique@marvin:~$ python bitcoin.py help
+\begin{verbatim}caique@marvin:~$ python3 bitcoin.py help
 AED - United Arab Emirates Dirham
 AFN - Afghan Afghani
 ALL - Albanian Lek
@@ -55,13 +55,13 @@ AUD - Australian Dollar
 
 \newpage
 \section*{apod.py}
-O programa apod.py é baseado na iniciativa da NASA, \href{http://apod.nasa.gov/apod/astropix.html}{Astronomy Picture of the Day}, onde cada dia é mostrada uma imagem retirada por um astrônomo e ele a descreve. A API usada para o programa pode ser encontrada no \href{https://data.nasa.gov/developer}{Portal de Dados da NASA}.
+O programa apod.py é baseado na iniciativa \href{http://apod.nasa.gov/apod/astropix.html}{Astronomy Picture of the Day} da NASA, onde cada dia é mostrada uma imagem retirada por um astrônomo e ele a descreve. A API usada para o programa pode ser encontrada no \href{https://data.nasa.gov/developer}{Portal de Dados da NASA}.
 
 \sloppy
-O programa tem a mesma funcionalidade da ferramenta provinda pela NASA, mostrar uma imagem de astronomia a cada dia. Isto faz com que o programa seja totalmente procedural, pois, a cada entrada num dia, pode retornar uma resposta diferente e, inclusive, o algoritmo foi montado de forma em que ele siga uma sequência de passos (procedures), sem o uso de funções.
+O programa tem a mesma funcionalidade da ferramenta provinda pela agência espacial, mostrar uma imagem de astronomia a cada dia. Isto faz com que o programa seja totalmente procedural, pois, a cada entrada num dia, pode retornar uma resposta diferente e, inclusive, o algoritmo foi montado de forma em que ele siga uma sequência de passos (procedures), sem o uso de funções.
 
 \begin{verbatim}
-caique@marvin:~$ python apod.py 
+caique@marvin:~$ python3 apod.py 
 
 ASTRONOMY PICTURE OF THE DAY
 A Partial Solar Eclipse over Texas
@@ -74,5 +74,22 @@ The image was taken about 20 miles west of Sundown, Texas, USA, just after the r
 effect was broken by the Moon moving away from the center of the Sun. Today a new partial 
 solar eclipse of the Sun will be visible from Earth. Unfortunately for people who live in
 Texas, today's eclipse can only be seen from southern Africa and Antarctica.
+\end{verbatim}
+
+\section*{eratosthenes.py}
+O programa é um algoritmo simples para achar todos os primos até um dado número máximo. Para determinar se um número é primo, divide-o por todos os números a partir de dois até a sua raiz quadrada, se esse número não for divisível por todos os números do intervalo, ele é primo.
+
+Esta técnica é chamada de Crivo de Eratóstenes e foi criada pelo matemático grego Eratóstenes de Cirene, que viveu entre 285-194 a.C.. O programa possui o paradigma procedural porque, sempre que um número máximo qualquer for especificado, ele sempre vai retornar a mesma sequência referente ao número.
+\sloppy
+\begin{verbatim}caique@marvin:~$ python3 eratosthenes.py 1000
+
+2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 101 103 107 109 
+113127 131 137 139 149 151 157 163 167 173 179 181 191 193 197 199 211 223 227 229 233 
+239 241 251 257 263 269 271 277 281 283 293 307 311 313 317 331 337 347 349 353 359 367 
+373 379 383 389 397 401 409 419 421 431 433 439 443 449 457 461 463 467 479 487 491 499
+503 509 521 523 541 547 557 563 569 571 577 587 593 599 601 607 613 617 619 631 641 643
+647 653 659 661 673 677 683 691 701 709 719 727 733 739 743 751 757 761 769 773 787 797
+809 811 821 823 827 829 839 853 857 859 863 877 881 883 887 907 911 919 929 937 941 947 
+953 967 971 977 983 991 997 
 \end{verbatim}
 \end{document}
