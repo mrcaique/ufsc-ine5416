@@ -56,7 +56,7 @@ disciplina(mtm5512, 'geometria analítica', f2).
 disciplina(ine5408, 'estutura de dados', f3).
 disciplina(ine5409, 'cálculo numérico para computação', f3).
 disciplina(ine5410, 'programação concorrente', f3).
-disciplina(ine5411, 'arquitetura e organização de computadores', f3).
+disciplina(ine5411, 'organização de computadores', f3).
 disciplina(mtm5245, 'álgebra linear', f3).
 
 /* Quarta fase */
@@ -68,7 +68,7 @@ disciplina(ine5416, 'paradigmas da programação', f4).
 disciplina(ine5417, 'engenharia de software I', f4).
 
 /* Quinta fase */
-disciplina(ine5418, 'computaçao distribuída', f5).
+disciplina(ine5418, 'computação distribuída', f5).
 disciplina(ine5419, 'engenharia de software II', f5).
 disciplina(ine5420, 'computação gráfica', f5).
 disciplina(ine5421, 'linguagens formais e compiladores', f5).
@@ -77,7 +77,7 @@ disciplina(ine5423, 'banco de dados I', f5).
 
 /* Sexta fase */
 disciplina(ine5424, 'sistemas operacionais II', f6).
-disciplina(ine5425, 'modelagem e simulaçao', f6).
+disciplina(ine5425, 'modelagem e simulação', f6).
 disciplina(ine5426, 'construção de compiladores', f6).
 disciplina(ine5427, 'planejamento e gestão de projetos', f6).
 disciplina(ine5430, 'inteligência artificial', f6).
@@ -113,13 +113,13 @@ disciplina(ine5444, 'estágio supervisionado I', f0).
 disciplina(ine5445, 'estágio supervisionado II', f0).
 disciplina(ine5446, 'tópicos especiais em sistemas de infraestrutura I', f0).
 disciplina(ine5447, 'tópicos especiais em sistemas de infraestrutura II', f0).
-disciplina(ine5448, 'tópicos especiais em aplicaçoes tecnológicas I', f0).
-disciplina(ine5449, 'tópicos especiais em aplicaçoes tecnológicas II', f0).
-disciplina(ine5450, 'tópicos especiais em aplicaçoes tecnológicas III', f0).
+disciplina(ine5448, 'tópicos especiais em aplicações tecnológicas I', f0).
+disciplina(ine5449, 'tópicos especiais em aplicações tecnológicas II', f0).
+disciplina(ine5450, 'tópicos especiais em aplicações tecnológicas III', f0).
 disciplina(ine5451, 'tópicos especiais em algoritmos I', f0).
 disciplina(ine5452, 'tópicos especiais em algoritmos II', f0).
-disciplina(ine5454, 'tópicos especiais em gerencia de dados', f0).
-disciplina(ine5619, 'administraçao e gerência de redes de computadores', f0).
+disciplina(ine5454, 'tópicos especiais em gerência de dados', f0).
+disciplina(ine5619, 'administração e gerência de redes de computadores', f0).
 disciplina(ine5624, 'engenharia de usabilidade', f0).
 disciplina(ine5628, 'sistemas multiagentes', f0).
 disciplina(ine5640, 'computação móvel', f0).
