@@ -1,4 +1,4 @@
-from sys import argv
+from sys import argv, exit
 from urllib.request import urlopen
 from json import loads
 from urllib.error import URLError
@@ -51,7 +51,7 @@ def default():
 country = argv
 if len(country) > 1 and country[1].upper() == "HELP":
 	help()
-	sys.exit(0)
+	exit(0)
 url = 'https://api.coindesk.com/v1/bpi/currentprice.json'
 string_request = str(urlopen(url).read(), encoding='utf-8')
 data = loads(string_request)
