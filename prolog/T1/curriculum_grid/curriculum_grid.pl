@@ -288,7 +288,7 @@ depende(ine5653, ine5419).*/
 %
 % Z = Disciplina em comum;
 % X, Y = Disciplinas.
-requisito_anterior_em_comum(Z, X, Y) :- depende(X, Z), depende(Y, Z).
+requisito_anterior_em_comum(Z, X, Y) :- depende(X, Z), depende(Y, Z), not(X=Y).
 
 % 5) Disciplinas que são pré-requisitos de pré-
 % requisitos (árvore de dependências)
@@ -336,7 +336,7 @@ requisito_em_comum(X, Y, Z, A) :- depende(X, Y),
 % X = código da disciplina;
 % N = Nome da(s) disciplina(s) dependente(s);
 % F = Fase da(s) respectiva(s) disciplina(s) dependente(s).
-lista_deps(X, N, F) :- depende(X, Y), disciplina(Y, N, F).
+lista_deps(X, N, F) :- rec_depende(X, Y), disciplina(Y, N, F).
 
 % 10) Lista de disciplinas subsequentes
 %		No terminal do swi-prolog, basta digitar
