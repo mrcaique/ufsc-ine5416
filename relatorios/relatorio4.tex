@@ -1,14 +1,13 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage{indentfirst} % identar primeiro parágrafo (desativado por padrão)
+\usepackage{indentfirst} % indentar primeiro parágrafo (desativado por padrão)
 \usepackage{listings} % Uso de trechos de código no texto
-\usepackage{amsmath}
-\usepackage{amsfonts}
+\usepackage{amsfonts} % Uso de fontes para conjuntos como R (reais), Z (inteiros), etc.
 \usepackage{mathtools} % Permite o uso do gather, alinhar equações matemáticas sem referenciar "$"
-\usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry}
+\usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry} % Formatação da página
 
 \begin{document}
-\lstset{language=Python}
+\lstset{language=Python} % Definindo o uso de trechos de código Python no texto
 \begin{center}
     \section*{INE5416 - Paradigmas da Programação (2015/2)}
     \textbf{\textit{Relatório 4: Cálculo Lambda} \\
@@ -127,7 +126,7 @@ Como dito anteriormente, o cálculo lambda é a base das linguagens de programa�
                 f(\sqrt{1+x^{3}}) = (\sqrt{1+x^{3}})^{4} \\
                 (\sqrt{1+x^{3}})^{4} = \mathbf{1+2x^{3}+x^{6}} \\
                 \text{Domínio} = \mathbb{R} \\
-                \text{Contradomínio} = \mathbb{R}
+                \text{Contradomínio} = [0, \infty)
             \end{gather*}
         \end{enumerate}
         \item[b.] $f \circ g \circ h(x)$
@@ -139,7 +138,7 @@ Como dito anteriormente, o cálculo lambda é a base das linguagens de programa�
                 \frac{(\sqrt{1+x^{12}})^{2}+1}{2.(\sqrt{1+x^{12}})+1} = \frac{1+x^{12}+1}{2.(\sqrt{1+x^{12}}+1)} \\
                 \frac{1+x^{12}+1}{2.(\sqrt{1+x^{12}}+1)} = \mathbf{\frac{2+x^{12}}{2.(\sqrt{1+x^{2}})+1}} \\
                 \text{Domínio} = \mathbb{R} \\
-                \text{Contradomínio} = \mathbb{R}
+                \text{Contradomínio} = [0, \infty)
             \end{gather*}
 \end{enumerate}
 
@@ -168,13 +167,13 @@ Como dito anteriormente, o cálculo lambda é a base das linguagens de programa�
     
     \item Reduzir as expressões na forma normal, quando possível. \\
     (a) $\lambda x.x(xy)(\lambda u.u)$ \\
-        $(xy)(\lambda u.u)$ = $\mathbf{xy}$ \\ \\
-    (b) $\lambda y.(\lambda x.y^{2}+x)(z)$ \\
-        $\mathbf{\lambda x.z^{2}+x}$ \\ \\ 
-    (c) $\mathbf{\lambda x.(\lambda y.(yx)\lambda i.i)\lambda p.\lambda q.p}$ \\ \\
+        $\lambda u.u(\lambda u.uy)$ = $\mathbf{\lambda u.uy}$ \\ \\
+    (b) $\lambda y.(\lambda x.y^{2}+x)(z)$ = $\mathbf{\lambda x.z^{2}+x}$ \\ \\
+    (c) $\lambda x.(\lambda y.(yx)\lambda i.i)\lambda p.\lambda q.p$ \\
+        $\lambda x. (\lambda i.ix)\lambda p.\lambda q.p$ \\
+        $\lambda i.i(\lambda p.\lambda q.p)$  = $\mathbf{\lambda p.\lambda q.p}$ \\ \\
     (d) $\lambda x.x(\lambda y.(\lambda x.xy)x)$ \\
-        $\lambda x.x(\lambda y.(\lambda t.ty)x)$ \\
-        $\mathbf{\lambda x.x(\lambda t.tx)}$ \\ \\
-    (e) $\mathbf{(\lambda x.xx)(\lambda y.y)}$
+        $\lambda x.x(\lambda x.xx)$ = $\mathbf{\lambda x.xx}$ \\ \\
+    (e) $(\lambda x.xx)(\lambda y.y)$  = $\lambda y.y(\lambda y.y)$ = $\mathbf{\lambda y.y}$
 \end{enumerate}
 \end{document}
