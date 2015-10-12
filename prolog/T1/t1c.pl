@@ -1,5 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Copyright (c) 2015 Caique Rodrigues Marques,
+% Créditos: 
+%			Caique Rodrigues Marques,
 %			Gustavo José Carpeggiani,
 %			Vinícius Couto Biermann
 %
