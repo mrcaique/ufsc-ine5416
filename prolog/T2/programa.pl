@@ -54,6 +54,18 @@ change :-
     write('changeFirst(Id,Xnew,Ynew). -> Altera o ponto inicial de <Id>'), nl,
     write('changeLast(Id,Xnew,Ynew).  -> Altera o deslocamento final de <Id>').
 
+change(Id, X, Y, Xnew, Ynew) :-
+    remove(Id, X, Y),
+    asserta(xy(Id, Xnew, Ynew)), !.
+
+% Remove um deslocamento ou ponto
+remove(Id, X, Y) :-
+    retract(xy(Id, X, Y)), !.
+
+% Remove todos os pontos e deslocamentos de um Id
+removeAll(Id) :-
+    retractall(xy(Id, _, _)), !.
+
 % Grava os desenhos da memoria em arquivo
 commit :-
     open('desenhos.pl', write, Stream),
@@ -63,6 +75,13 @@ commit :-
     tell(Screen),
     close(Stream).
 
+% Cria um ponto inicial e os deslocamentos necessários para desenhar um quadrado
+quadrado(Id, X, Y, Lado) :-
+    new(Id, X, Y),
+    new(Id, Lado, 0),
+    new(Id, 0, Lado),
+    new(Id, -Lado, 0).
+
 % Exibe menu principal
 menu :-
     write('load.        -> Carrega todos os desenhos do banco de dados para a memoria'), nl,
@@ -71,5 +90,7 @@ menu :-
     write('search.      -> Consulta pontos dos desenhos'), nl,
     write('change.      -> Modifica um deslocamento existente do desenho'), nl,
     write('remove.      -> Remove um determinado deslocamento existente do desenho'), nl,
+    write('removeAll.   -> Remove todos os pontos e deslocamentos de um Id'), nl,
+    write('quadrado.    -> Insere os pontos e deslocamentos para um quadrado.'), nl,
     write('undo.        -> Remove o deslocamento inserido mais recentemente'), nl,
     write('commit.      -> Grava alteracoes de todos dos desenhos no banco de dados').
