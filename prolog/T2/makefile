@@ -1,6 +1,6 @@
 # Compile the program
 compile:
-	swipl -f db2svg.pl > desenhos.svg  2> stderr.txt
+	swipl -c db2svg.pl && ./a.out > desenhos.svg
 
 # Compile the files and run the interpreter
 prolog:
@@ -10,7 +10,7 @@ prolog:
 run:
 	display desenhos.svg
 
-# Remove the desenhos.svg and stderr.txt files
+# Remove the desenhos.svg file and a.out executable
 remove:
-	rm desenhos.svg 
-	rm stderr.txt
+	rm desenhos.svg
+	rm a.out

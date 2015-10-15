@@ -1,10 +1,8 @@
-/*
+/*  Caique Rodrigues Marques
+    Gustavo José Carpeggiani
+    Vinícius Couto Biermann
+
    Programação Lógica - Prof. Alexandre G. Silva - 30set2015
-   
-    Adições sugeridas implementadas por:
-            Caique Rodrigues Marques
-            Gustavo José Carpeggiani
-            Vinícius Couto Biermann
 
    RECOMENDAÇÕES:
    - O nome deste arquivo deve ser 'programa.pl'
@@ -113,7 +111,7 @@ changeLast(Id, Xnew, Ynew) :-
 
 % Remove um deslocamento ou ponto
 remove(Id, X, Y) :-
-    retract(xy(Id, X, Y)), !.
+    retract(xy(Id, X, Y)).
 
 % Remove todos os pontos e deslocamentos de um Id
 removeAll(Id) :-
@@ -136,22 +134,25 @@ commit :-
 
 % Cria um ponto inicial e os deslocamentos necessários para desenhar um quadrado
 quadrado(Id, X, Y, Lado) :-
+    Negative is Lado*(-1),
     new(Id, X, Y),
     new(Id, Lado, 0),
     new(Id, 0, Lado),
-    new(Id, -Lado, 0).
+    new(Id, Negative, 0).
 
 % Cria um ponto inicial e os deslocamentos necessários para desenhar um octógono
 figura(Id, X, Y, Lado) :-
     K is ((Lado * sqrt(2)) / 2),
+    Negative_K is K*(-1),
+    Negative_Lado is Lado*(-1),
     new(Id, X, Y),
     new(Id, Lado, 0),
     new(Id, K, K),
     new(Id, 0, Lado),
-    new(Id, -K, K),
-    new(Id, -Lado, 0),
-    new(Id, -K, -K),
-    new(Id, 0, -Lado).
+    new(Id, Negative_K, K),
+    new(Id, Negative_Lado, 0),
+    new(Id, Negative_K, Negative_K),
+    new(Id, 0, Negative_Lado).
 
 % Replica a figura do Id N vezes com deslocamento Dx e Dy
 replica(Id, N, Dx, Dy) :-
