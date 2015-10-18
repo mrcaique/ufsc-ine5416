@@ -6,3 +6,4 @@ Each report corresponds to a class, is a list of topics presented:
 * **Report 3:** Structure of the Languages (Python implementations)
 * **Report 4:** Lambda Calculus
 * **Report 5:** Lexical Analysis: Syntax
+* **Report 6:** Classes and Types
