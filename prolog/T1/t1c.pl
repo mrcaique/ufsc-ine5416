@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Créditos: 
-%			Caique Rodrigues Marques,
-%			Gustavo José Carpeggiani,
-%			Vinícius Couto Biermann
+%	Caique Rodrigues Marques,
+%	Gustavo José Carpeggiani,
+%	Vinícius Couto Biermann
 %
 % As regras a seguir correspondem à segunda implementação
 % baseada na base de dados, onde se faz o uso de listas e

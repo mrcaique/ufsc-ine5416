@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Créditos:
-%			Caique Rodrigues Marques,
-%			Gustavo José Carpeggiani,
-%			Vinícius Couto Biermann
+%	Caique Rodrigues Marques,
+%	Gustavo José Carpeggiani,
+%	Vinícius Couto Biermann
 %
 % As seguintes regras correspondem à primeira imple-
 % mentação baseada na base de dados e a motivação é

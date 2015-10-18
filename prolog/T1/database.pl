@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Créditos:
-%			Caique Rodrigues Marques,
-%			Gustavo José Carpeggiani,
-%			Vinícius Couto Biermann
+%	Caique Rodrigues Marques,
+%	Gustavo José Carpeggiani,
+%	Vinícius Couto Biermann
 %
 % A seguinte base de dados, em SWI-Prolog, representa a
 % grade curricular do curso de bacharelado em ciências da
@@ -27,7 +27,13 @@
 %				FATOS					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 /*Listas de fases e suas disciplinas*/
-fase(f0, []).
+/*fase(f0, [ine5461, ine5462, ine5463, cad5146, cad5240,
+	  cad5241, ine5435, ine5436, ine5437, ine5438,
+	  ine5439, ine5440, ine5441, ine5442, ine5443,
+	  ine5444, ine5445, ine5446, ine5447, ine5448,
+	  ine5449, ine5450, ine5451, ine5452, ine5454,
+	  ine5619, ine5624, ine5628, ine5640, ine5643,
+	  ine5644, ine5646, ine5653, ine5656, ine5458]).*/
 fase(f1, [ine5401, ine5402, ine5403, mtm5161, eel5405]).
 fase(f2, [ine5404, ine5405, ine5406, ine5407, mtm7174, mtm5512]).
 fase(f3, [ine5408, ine5409, ine5410, ine5411, mtm5245]).
