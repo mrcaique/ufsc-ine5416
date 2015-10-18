@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from json import loads
 from urllib.request import urlopen
 
