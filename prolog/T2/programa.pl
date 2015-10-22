@@ -82,14 +82,25 @@ searchLast(Id, N) :-
 
 % Exibe opcões de alteração
 change :-
-    write('change(Id,X,Y,Xnew,Ynew).  -> Altera o ponto inicial de <Id>'), nl,
+    write('change(Id,X,Y,Xnew,Ynew).  -> Altera um ponto de <Id>'), nl,
     write('changeFirst(Id,Xnew,Ynew). -> Altera o ponto inicial de <Id>'), nl,
     write('changeLast(Id,Xnew,Ynew).  -> Altera o deslocamento final de <Id>').
 
-% Altera o primeiro elemento da lista.
+% Altera o elemento da lista.
+% (if (condição) -> cláusula_then; cláusula_else)
 change(Id, X, Y, Xnew, Ynew) :-
-    remove(Id, X, Y),
-    asserta(xy(Id, Xnew, Ynew)), !.
+    (findall(Points, (xy(Idgeneric, Xgeneric, Ygeneric), append([Idgeneric], [Xgeneric], ListX), append(ListX, [Ygeneric], Points)), All),
+    length(All, Size),
+    retractall(xy(_,_,_)),
+    retractall(log(_,_,_)),
+    between(0, Size, Middle),
+    nth0(Middle, All, Element),
+    nth0(0, Element, NewId),
+    nth0(1, Element, ElemX),
+    nth0(2, Element, ElemY),
+    (Id = NewId, X = ElemX , Y = ElemY ->  new(Id, Xnew, Ynew);
+                                           new(NewId, ElemX, ElemY)), false);
+    true.
 
 % Altera o primeiro elemento da lista.
 changeFirst(Id, Xnew, Ynew) :-
