@@ -11,7 +11,7 @@
 %
 % As cláusulas são definidas em disciplinas e dependên-
 % cias, onde cada uma é composta da seguinte forma:
-%	- fase(f[número da fase]);
+%	- fase(f[número da fase], [lista de disciplinas]);
 %	- disciplina(código, nome, fase);
 %	- depende(disciplina escolhida, dependência).
 %

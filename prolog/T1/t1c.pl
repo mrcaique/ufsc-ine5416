@@ -107,7 +107,7 @@ maior_pre_req(Disciplina) :-
 % D = Disciplina.
 % L = Número de disciplinas que tem como pré-requisito D
 pre_req(D, L) :-
-		bagof(D, Disciplinas^(depende(Disciplinas, D)), PosReqList),
+		bagof(Disciplinas, D^(depende(Disciplinas, D)), PosReqList),
 		length(PosReqList, L).
 
 % 8) Disciplina que é pré-requisito da maior quantidade de disciplinas
