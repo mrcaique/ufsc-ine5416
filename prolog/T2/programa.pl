@@ -58,13 +58,30 @@ searchAll(Id) :-
 %       between(Low, High, Value)
 %       Low e High são inteiros, então Low <= High.
 %       Se Value é um inteiro, então a sentença é
-%       verdadeira se Low <= Value <= High.
+%       verdadeira se Low <= Value <= High. Nesta
+%       regra, between é usado como um while loop,
+%       que em C++ seria algo como: 
+%           unsigned int Value = Low;
+%           while (Value <= High) {
+%               Value++;
+%           }
 searchFirst(Id, N) :-
-    findall(Points, (xy(Id, X, Y), append([Id], [X], ListX), append(ListX, [Y], Points)), All),
-    between(1, N, Middle),
-    nth1(Middle, All, Element),
-    print(Element), nl,
-    false.
+    findall(
+                Points,
+                (
+                    xy(Id, X, Y),
+                    append([Id], [X], ListX),
+                    append(ListX, [Y], Points)
+                ), 
+                All
+            ),
+    between(1, N, Middle), % Primeira iteração: Middle = 1.
+    nth1(Middle, All, Element), % Pega o primeiro elemento de All.
+    print(Element), nl, % Imprime o elemento coletado.
+    false.  % Condição não satisfeita, volta para between
+            % onde Middle passa a valer 2, o segundo elemento é
+            % coletado e impresso e assim sucessivamente 
+            % até Middle = N.
 
 % Lista os N últimos deslocamentos de Id.
 % Função:
@@ -72,7 +89,15 @@ searchFirst(Id, N) :-
 %       Supondo uma lista cuja primeira posição é em zero.
 %       Mesmo funcionamento de nth1().
 searchLast(Id, N) :-
-    findall(Points, (xy(Id, X, Y), append([Id], [X], ListX), append(ListX, [Y], Points)), All),
+    findall(
+                Points, 
+                (
+                    xy(Id, X, Y),
+                    append([Id], [X], ListX),
+                    append(ListX, [Y], Points)
+                ),
+                All
+            ),
     length(All, Size),
     Start is Size-N,
     between(Start, Size, Middle),
@@ -87,9 +112,22 @@ change :-
     write('changeLast(Id,Xnew,Ynew).  -> Altera o deslocamento final de <Id>').
 
 % Altera o elemento da lista.
-% (if (condição) -> cláusula_then; cláusula_else)
+%   Operação:
+%       condições (if)
+%       Em SWI-Prolog o funcionamento de uma clásula de
+%       condição é definido da seguinte forma:
+%           (condição_if -> cláusula_then; cláusula_else)
+%
 change(Id, X, Y, Xnew, Ynew) :-
-    (findall(Points, (xy(Idgeneric, Xgeneric, Ygeneric), append([Idgeneric], [Xgeneric], ListX), append(ListX, [Ygeneric], Points)), All),
+    (findall(
+                Points, % busca por todos os pontos do banco de dados
+                (
+                    xy(Idgeneric, Xgeneric, Ygeneric), 
+                    append([Idgeneric], [Xgeneric], ListX), 
+                    append(ListX, [Ygeneric], Points)
+                ), % coletando todos os pontos do banco de dados
+                All % lista com todos os pontos
+            ),
     length(All, Size),
     retractall(xy(_,_,_)),
     retractall(log(_,_,_)),
@@ -112,7 +150,15 @@ changeFirst(Id, Xnew, Ynew) :-
 %       last(List, Elem)
 %       Armazena em Elem o último elemento da lista List.
 changeLast(Id, Xnew, Ynew) :-
-    findall(Points, (xy(Id, X, Y), append([Id], [X], ListX), append(ListX, [Y], Points)), All),
+    findall(
+                Points, 
+                (
+                    xy(Id, X, Y),
+                    append([Id], [X], ListX),
+                    append(ListX, [Y], Points)
+                ), 
+                All
+            ),
     last(All, Elem),
     nth0(0, Elem, K), % Id
     nth0(1, Elem, J), % X
@@ -176,7 +222,15 @@ replica(Id, N, Dx, Dy) :-
 %       atom_concat(Atom1, Atom2, Atom3)
 %       A concatenação de Atom1 e Atom2 é armazenada em Atom3.
 replicaAux(Id, K, Dx, Dy) :-
-    findall(Points, (xy(Id, X, Y), append([Id], [X], ListX), append(ListX, [Y], Points) ), All),
+    findall(
+                Points,
+                (
+                    xy(Id, X, Y),
+                    append([Id], [X], ListX),
+                    append(ListX, [Y], Points)
+                ), 
+                All
+            ),
     length(All, Size),
     between(0, Size, Middle),
     nth0(Middle, All, J),
