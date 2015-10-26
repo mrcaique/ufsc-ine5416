@@ -2,18 +2,170 @@
     Gustavo José Carpeggiani
     Vinícius Couto Biermann
 
-   Programação Lógica - Prof. Alexandre G. Silva - 30set2015
-
-   RECOMENDAÇÕES:
+   Programacao Logica - Prof. Alexandre G. Silva - UFSC
+     Versao inicial     : 30set2015
+     Adicao de gramatica: 15out2015
+   
+   RECOMENDACOES:
+   
    - O nome deste arquivo deve ser 'programa.pl'
    - O nome do banco de dados deve ser 'desenhos.pl'
-   - Dicas de uso podem ser obtidas na execução: 
+   - O nome do arquivo de gramatica deve ser 'gramatica.pl'
+   
+   - Dicas de uso podem ser obtidas na execucação: 
      ?- menu.
      
    - Exemplo de uso:
      ?- load.
      ?- searchAll(id1).
+
+   - Exemplo de uso da gramatica:
+     ?- comando([repita, '8', '[', pf, '50', gd, '45', ']'], []).
+     Ou simplesmente:
+     ?- cmd("repita 8[pf 50 gd 45]").
+     
+   - Colocar o nome e matricula de cada integrante do grupo
+     nestes comentarios iniciais do programa
 */
+
+:- initialization(new0(id1)).
+
+% Coloca tartaruga no centro da tela (de 1000x1000)
+% Implementacao incompleta:
+%   - Considera apenas id1 e efetua new sem verificar sua existencia
+%   - Supoe que ha' o xylast em 'desenhos.pl'
+new0(Id) :-
+    consult('gramatica.pl'),
+    load,
+    uselapis,
+    (check_xy(Id) -> xylast(X, Y),
+                    new(Id, X, Y),
+                    retractall(xylast(Id, _, _)),
+                    asserta(xylast(Id, X, Y));
+            new_angle(Id, 90),
+            new(Id, 500, 500),
+            asserta(xylast(Id, 500, 500)),
+            true).
+
+% Checa se há xy no banco de dados.
+check_xy(Id) :-
+    xy(Id, _, _), !.
+
+% Cria uma nova posição com o ângulo em relação a X.
+% A medição considerada do ângulo é em graus.
+new_angle(Id, Angle) :-
+    retractall(angle(Id, _)),
+    asserta(angle(Id, Angle)).
+
+% Limpa os desenhos e reinicia no centro da tela (de 1000x1000)
+% Implementacao incompleta:
+%   - Considera apenas id1
+tartaruga(Id) :-
+    retractall(xy(_,_,_)),
+    new(Id, 500, 500),
+    retractall(xylast(_,_)),
+    retractall(angle(_, _)),
+    asserta(xylast(500, 500)).
+
+% Para frente N passos
+%   Funções:
+%       cos(Value)
+%       Calcula o cosseno de Value, sendo Value o ângulo
+%       em radianos.
+%
+%       sin(Value)
+%       Calcula o seno de Value, sendo Value o ângulo
+%       em radianos.
+%
+%       nb_getval(Value, Var)
+%       Armazena o valor de Value em Var.
+%
+% Implementacao incompleta:
+%   - Considera apenas id1
+%   - Somando apenas em X, ou seja, nao considera a inclinacao da tartaruga
+parafrente(Id, N) :-
+    xylast(X, Y),
+    angle(Id, Degree),
+    Radian is ((Degree*pi)/(180)),
+    Destination_X is N*sin(Radian),
+    Destination_Y is N*cos(Radian),
+    nb_getval(pencil, Pencil),
+        write('MOVIMENTAÇÃO PARA FRENTE'), nl,
+        write('Posição do lápis: '), print(Pencil), nl,
+        write('Posição atual (X, Y): '), print(xylast(X, Y)), nl,
+        write('Ângulo atual (em graus): '), print(Degree), nl,
+        write('Ângulo atual (em radianos): '), print(Radian), nl,
+        write('Destino (ponto X): '), print(Destination_X), nl,
+        write('Destino (ponto Y): '), print(Destination_Y), nl,
+    (
+        Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
+                        retractall(xylast(_, _)),
+                        asserta(xylast(Destination_X, Destination_Y)), !;
+                retractall(xylast(_, _)),
+                asserta(xylast(Destination_X, Destination_Y)), !
+    ).
+    %write('Revisar: pf '), writeln(N),
+    %xylast(X, Y),
+    %Xnovo is X + N,
+    %new(Id, Xnovo, Y),
+    %retractall(xylast(_,_)),
+    %asserta(xylast(Xnovo, Y)).
+
+% Para tras N passos
+paratras(Id, N) :-
+    xylast(X, Y),
+    angle(Id, Degree),
+    Radian is ((Degree*pi)/(180)),
+    Destination_X is (N*sin(Radian))*(-1),
+    Destination_Y is (N*cos(Radian))*(-1),
+    nb_getval(pencil, Pencil),
+        write('MOVIMENTAÇÃO PARA TRÁS'), nl,
+        write('Posição do lápis: '), print(Pencil), nl,
+        write('Posição atual (X, Y): '), print(xylast(X, Y)), nl,
+        write('Ângulo atual (em graus): '), print(Degree), nl,
+        write('Ângulo atual (em radianos): '), print(Radian), nl,
+        write('Destino (ponto X): '), print(Destination_X), nl,
+        write('Destino (ponto Y): '), print(Destination_Y), nl,
+    (
+        Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
+                        retractall(xylast(_, _)),
+                        asserta(xylast(Destination_X, Destination_Y)), !;
+                retractall(xylast(_, _)),
+                asserta(xylast(Destination_X, Destination_Y)), !
+    ).
+    %write('Implementar: pt '), writeln(N).
+
+% Gira a direita G graus
+giradireita(G) :-
+    angle(_, Degree),
+    New_degree is Degree - G,
+    write('GIRANDO À DIREITA'), nl,
+    write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
+    write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
+    new_angle(_, New_degree).
+    %write('Implementar: gd '), writeln(G).
+
+% Gira a esquerda G graus
+giraesquerda(G) :-
+    angle(_, Degree),
+    New_degree is Degree + G,
+    write('GIRANDO À ESQUERDA'), nl,
+    write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
+    write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
+    new_angle(_, New_degree).
+    %write('Implementar: ge '), writeln(G).
+
+% Use nada (levanta lapis)
+usenada :-
+    nb_setval(pencil, 0).
+    %write('Implementar: un ').
+
+% Use lapis
+uselapis :-
+    nb_setval(pencil, 1).
+    %write('Implementar: un ').
+
+%---------------------------------------------------
 
 % Apaga os predicados 'xy' da memória e carrega os desenhos a partir de um arquivo de banco de dados
 load :-
@@ -175,7 +327,7 @@ removeAll(Id) :-
     retractall(xy(Id, _, _)), !.
 
 % Remove a adição mais recente feita na database.
-undo:-
+undo :-
   log(E, P, K),
   retract(log(E, P, K)),
   remove(E, P, K), !.
