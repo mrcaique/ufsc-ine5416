@@ -23,9 +23,6 @@
      ?- comando([repita, '8', '[', pf, '50', gd, '45', ']'], []).
      Ou simplesmente:
      ?- cmd("repita 8[pf 50 gd 45]").
-     
-   - Colocar o nome e matricula de cada integrante do grupo
-     nestes comentarios iniciais do programa
 */
 
 :- consult('../T2A/programa.pl').
@@ -88,8 +85,8 @@ parafrente(Id, N) :-
     xylast(X, Y),
     angle(Id, Degree),
     Radian is ((Degree*pi)/(180)),
-    Destination_X is N*sin(Radian),
-    Destination_Y is N*cos(Radian),
+    Destination_X is N*sin(Radian)+X,
+    Destination_Y is N*cos(Radian)+Y,
     nb_getval(pencil, Pencil),
         write('MOVIMENTAÇÃO PARA FRENTE'), nl,
         write('Posição do lápis: '), print(Pencil), nl,
@@ -117,8 +114,8 @@ paratras(Id, N) :-
     xylast(X, Y),
     angle(Id, Degree),
     Radian is ((Degree*pi)/(180)),
-    Destination_X is (N*sin(Radian))*(-1),
-    Destination_Y is (N*cos(Radian))*(-1),
+    Destination_X is (N*sin(Radian))*(-1)+X,
+    Destination_Y is (N*cos(Radian))*(-1)+Y,
     nb_getval(pencil, Pencil),
         write('MOVIMENTAÇÃO PARA TRÁS'), nl,
         write('Posição do lápis: '), print(Pencil), nl,
@@ -156,7 +153,10 @@ giraesquerda(G) :-
     new_angle(_, New_degree).
     %write('Implementar: ge '), writeln(G).
 
-% Use nada (levanta lapis)
+% Use nada (levanta lápis)
+%   Função:
+%       nb_setval(Var, Value)
+%       Armazena o valor de Value em Var.
 usenada :-
     nb_setval(pencil, 0).
     %write('Implementar: un ').
