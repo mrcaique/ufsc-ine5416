@@ -1,6 +1,6 @@
-/*  Caique Rodrigues Marques
-    Gustavo José Carpeggiani
-    Vinícius Couto Biermann
+/*  Caique Rodrigues Marques 13204303
+    Gustavo José Carpeggiani 13103524
+    Vinícius Couto Biermann  13100778
 
    Programacao Logica - Prof. Alexandre G. Silva - UFSC
      Versao inicial     : 30set2015
@@ -66,7 +66,8 @@ tartaruga :-
     retractall(xylast(_,_)),
     retractall(angle(_, _)),
     asserta(xylast(500, 500)),
-    new0(0).
+    commit,
+    new0(0), !.
 
 % Para frente N passos
 %   Funções:
@@ -177,3 +178,13 @@ uselapis :-
                         new0(Final_id);
                 nb_setval(pencil, 1)
     ).
+
+commit :-
+    open('desenhos.pl', write, Stream),
+    telling(Screen),
+    tell(Stream),
+    listing(xylast),
+    listing(xy),
+    listing(angle),
+    tell(Screen),
+    close(Stream).
