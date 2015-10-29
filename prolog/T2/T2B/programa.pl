@@ -40,10 +40,10 @@ new0(Id) :-
                     new(Id, X, Y),
                     retractall(xylast(Id, _, _)),
                     asserta(xylast(Id, X, Y));
-            new_angle(Id, 90),
-            new(Id, 500, 500),
-            asserta(xylast(Id, 500, 500)),
-            true).
+                    new_angle(Id, 90),
+                    new(Id, 500, 500),
+                    asserta(xylast(Id, 500, 500)),
+                    true).
 
 % Checa se há xy no banco de dados.
 check_xy(Id) :-
@@ -60,9 +60,9 @@ new_angle(Id, Angle) :-
 %   - Considera apenas id1
 tartaruga(Id) :-
     retractall(xy(_,_,_)),
-    new(Id, 500, 500),
     retractall(xylast(_,_)),
     retractall(angle(_, _)),
+    new0(Id),
     asserta(xylast(500, 500)).
 
 % Para frente N passos
@@ -99,8 +99,8 @@ parafrente(Id, N) :-
         Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
                         retractall(xylast(_, _)),
                         asserta(xylast(Destination_X, Destination_Y)), !;
-                retractall(xylast(_, _)),
-                asserta(xylast(Destination_X, Destination_Y)), !
+                        retractall(xylast(_, _)),
+                        asserta(xylast(Destination_X, Destination_Y)), !
     ).
     %write('Revisar: pf '), writeln(N),
     %xylast(X, Y),
@@ -128,8 +128,8 @@ paratras(Id, N) :-
         Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
                         retractall(xylast(_, _)),
                         asserta(xylast(Destination_X, Destination_Y)), !;
-                retractall(xylast(_, _)),
-                asserta(xylast(Destination_X, Destination_Y)), !
+                        retractall(xylast(_, _)),
+                        asserta(xylast(Destination_X, Destination_Y)), !
     ).
     %write('Implementar: pt '), writeln(N).
 
