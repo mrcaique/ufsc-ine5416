@@ -26,7 +26,7 @@
 */
 
 :- consult('../T2A/programa.pl').
-:- initialization(new0(id1)).
+:- initialization(new0(0)).
 
 % Coloca tartaruga no centro da tela (de 1000x1000)
 % Implementacao incompleta:
@@ -35,19 +35,22 @@
 new0(Id) :-
     consult('gramatica.pl'),
     load,
-    uselapis,
+    nb_setval(pencil, 1),
     (check_xy(Id) -> xylast(X, Y),
                     new(Id, X, Y),
                     retractall(xylast(Id, _, _)),
                     asserta(xylast(Id, X, Y));
-                    new_angle(Id, 90),
-                    new(Id, 500, 500),
-                    asserta(xylast(Id, 500, 500)),
-                    true).
+            new_angle(Id, 90),
+            new(Id, 500, 500),
+            asserta(xylast(Id, 500, 500)),
+            true).
 
 % Checa se há xy no banco de dados.
 check_xy(Id) :-
     xy(Id, _, _), !.
+
+check_pencil(L) :-
+    nb_getval(pencil, L).
 
 % Cria uma nova posição com o ângulo em relação a X.
 % A medição considerada do ângulo é em graus.
@@ -58,12 +61,12 @@ new_angle(Id, Angle) :-
 % Limpa os desenhos e reinicia no centro da tela (de 1000x1000)
 % Implementacao incompleta:
 %   - Considera apenas id1
-tartaruga(Id) :-
+tartaruga :-
     retractall(xy(_,_,_)),
     retractall(xylast(_,_)),
     retractall(angle(_, _)),
-    new0(Id),
-    asserta(xylast(500, 500)).
+    asserta(xylast(500, 500)),
+    new0(0).
 
 % Para frente N passos
 %   Funções:
@@ -136,21 +139,25 @@ paratras(Id, N) :-
 % Gira a direita G graus
 giradireita(G) :-
     angle(_, Degree),
+    nb_getval(pencil, Pencil),
     New_degree is Degree - G,
     write('GIRANDO À DIREITA'), nl,
+    write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
     write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
-    new_angle(_, New_degree).
+    new_angle(_, New_degree), !.
     %write('Implementar: gd '), writeln(G).
 
 % Gira a esquerda G graus
 giraesquerda(G) :-
     angle(_, Degree),
+    nb_getval(pencil, Pencil),
     New_degree is Degree + G,
     write('GIRANDO À ESQUERDA'), nl,
+    write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
     write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
-    new_angle(_, New_degree).
+    new_angle(_, New_degree), !.
     %write('Implementar: ge '), writeln(G).
 
 % Use nada (levanta lápis)
@@ -159,9 +166,14 @@ giraesquerda(G) :-
 %       Armazena o valor de Value em Var.
 usenada :-
     nb_setval(pencil, 0).
-    %write('Implementar: un ').
 
 % Use lapis
 uselapis :-
-    nb_setval(pencil, 1).
-    %write('Implementar: un ').
+    nb_getval(pencil, Pencil),
+    check_xy(Id),
+    copy_term(Id, New_id),
+    (
+        Pencil =:= 0 -> Final_id is New_id+1,
+                        new0(Final_id);
+                nb_setval(pencil, 1)
+    ).
