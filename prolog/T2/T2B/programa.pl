@@ -35,25 +35,37 @@
 new0(Id) :-
     consult('gramatica.pl'),
     load,
+    nb_setval(actual_id, Id),
     nb_setval(pencil, 1),
-    (check_xy(Id) -> xylast(X, Y),
-                    new(Id, X, Y),
-                    retractall(xylast(Id, _, _)),
-                    asserta(xylast(Id, X, Y));
-            new_angle(Id, 90),
-            new(Id, 500, 500),
-            asserta(xylast(Id, 500, 500)),
-            true).
+    (
+        check_xy(Id) -> xylast(X, Y),
+                        new(Id, X, Y),
+                        retractall(xylast(Id, _, _)),
+                        asserta(xylast(Id, X, Y));
+                new_angle(Id, 90),
+                new(Id, 500, 500),
+                asserta(xylast(Id, 500, 500)),
+                true
+    ).
 
 % Checa se há xy no banco de dados.
+%
+% Id = Identificador do desenho.
 check_xy(Id) :-
     xy(Id, _, _), !.
 
+% Apresenta a atual posição do lápis, ou seja,
+% se o lápis está no papel (1) ou não está (zero).
+%
+% L = Posição do lápis
 check_pencil(L) :-
     nb_getval(pencil, L).
 
-% Cria uma nova posição com o ângulo em relação a X.
+% Cria uma nova posição com o ângulo em relação ao eixo X.
 % A medição considerada do ângulo é em graus.
+%
+% Id = Identificador do atual desenho
+% Angle = Novo ângulo para o desenho com identificador Id
 new_angle(Id, Angle) :-
     retractall(angle(Id, _)),
     asserta(angle(Id, Angle)).
@@ -66,6 +78,7 @@ tartaruga :-
     retractall(xylast(_,_)),
     retractall(angle(_, _)),
     asserta(xylast(500, 500)),
+    assertz(angle(t, 0)),
     commit,
     new0(0), !.
 
@@ -85,16 +98,18 @@ tartaruga :-
 % Implementacao incompleta:
 %   - Considera apenas id1
 %   - Somando apenas em X, ou seja, nao considera a inclinacao da tartaruga
-parafrente(Id, N) :-
+parafrente(N) :-
     xylast(X, Y),
+    nb_getval(actual_id, Id),
     angle(Id, Degree),
     Radian is ((Degree*pi)/(180)),
     Destination_X is N*sin(Radian)+X,
     Destination_Y is N*cos(Radian)+Y,
     nb_getval(pencil, Pencil),
         write('MOVIMENTAÇÃO PARA FRENTE'), nl,
+        write('Id atual: '), print(Id), nl,
         write('Posição do lápis: '), print(Pencil), nl,
-        write('Posição atual (X, Y): '), print(xylast(X, Y)), nl,
+        write('Última posição (X, Y): '), print(xylast(X, Y)), nl,
         write('Ângulo atual (em graus): '), print(Degree), nl,
         write('Ângulo atual (em radianos): '), print(Radian), nl,
         write('Destino (ponto X): '), print(Destination_X), nl,
@@ -103,8 +118,8 @@ parafrente(Id, N) :-
         Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
                         retractall(xylast(_, _)),
                         asserta(xylast(Destination_X, Destination_Y)), !;
-                        retractall(xylast(_, _)),
-                        asserta(xylast(Destination_X, Destination_Y)), !
+                retractall(xylast(_, _)),
+                asserta(xylast(Destination_X, Destination_Y)), !
     ).
     %write('Revisar: pf '), writeln(N),
     %xylast(X, Y),
@@ -114,16 +129,18 @@ parafrente(Id, N) :-
     %asserta(xylast(Xnovo, Y)).
 
 % Para tras N passos
-paratras(Id, N) :-
+paratras(N) :-
     xylast(X, Y),
+    nb_getval(actual_id, Id),
     angle(Id, Degree),
     Radian is ((Degree*pi)/(180)),
     Destination_X is (N*sin(Radian))*(-1)+X,
     Destination_Y is (N*cos(Radian))*(-1)+Y,
     nb_getval(pencil, Pencil),
         write('MOVIMENTAÇÃO PARA TRÁS'), nl,
+        write('Id atual: '), print(Id), nl,
         write('Posição do lápis: '), print(Pencil), nl,
-        write('Posição atual (X, Y): '), print(xylast(X, Y)), nl,
+        write('Última posição (X, Y): '), print(xylast(X, Y)), nl,
         write('Ângulo atual (em graus): '), print(Degree), nl,
         write('Ângulo atual (em radianos): '), print(Radian), nl,
         write('Destino (ponto X): '), print(Destination_X), nl,
@@ -132,8 +149,8 @@ paratras(Id, N) :-
         Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
                         retractall(xylast(_, _)),
                         asserta(xylast(Destination_X, Destination_Y)), !;
-                        retractall(xylast(_, _)),
-                        asserta(xylast(Destination_X, Destination_Y)), !
+                retractall(xylast(_, _)),
+                asserta(xylast(Destination_X, Destination_Y)), !
     ).
     %write('Implementar: pt '), writeln(N).
 
@@ -169,15 +186,32 @@ usenada :-
     nb_setval(pencil, 0).
 
 % Use lapis
+%   Função:
+%       copy_term(Var1, Var2)
+%       Copia o conteúdo de Var1 em Var2, nas linguagens 
+%       imperativas seria algo semelhante a:
+%       Var2 = Var1
 uselapis :-
     nb_getval(pencil, Pencil),
     check_xy(Id),
     copy_term(Id, New_id),
     (
         Pencil =:= 0 -> Final_id is New_id+1,
+                        nb_setval(actual_id, Final_id),
+                        write('Id atual: '), print(Final_id), nl,
                         new0(Final_id);
                 nb_setval(pencil, 1)
     ).
+
+% Repete o comando especificado N vezes
+%
+% N = Número de vezes para repetir o comando
+% Command = Comando desejado
+repita(N, Command) :-
+    consult('gramatica.pl'),
+    between(1, N, _),
+    cmd(Command),
+    false.
 
 commit :-
     open('desenhos.pl', write, Stream),
