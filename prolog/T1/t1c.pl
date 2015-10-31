@@ -12,22 +12,15 @@
 % Mais detalhes das funções na documentação do SWI-Prolog,
 % disponível em: http://www.swi-prolog.org/
 %
-% NOTAS:
+% NOTA:
 % 1) Este arquivo contém a dependência da base de dados.
 % Todas as regras fomuladas aqui são baseadas no arquivo
 % "database.pl".
-% 2) Veja o arquivo "curriculum_grid.pl" que contém as três
-% partes do projeto (database.pl, t1b.pl e t1c.pl) na íntegra.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				DEPENDÊNCIAS				%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 	* database.pl
-% 	--
-%	No terminal do swi-prolog, digite:
-%		?-[database, t1b, t1c].
+:- compile('database.pl').
+:- compile('t1b.pl').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				REGRAS					%
@@ -38,7 +31,9 @@
 %
 % F = Fase desejada.
 % N = Número de disciplinas da fase F.
-num_disciplinas_fase(F, N) :- fase(F, X), length(X, N).
+num_disciplinas_fase(F, N) :-
+		fase(F, X), 
+		length(X, N).
 
 % 2) Número de disciplinas no curso (excluindo optativas)
 %	Funções:

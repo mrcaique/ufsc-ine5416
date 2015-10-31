@@ -19,22 +19,14 @@
 % é possível achar possíveis soluções para uma dada
 % entrada definida em "Cabeça". 
 %
-% NOTAS:
+% NOTA:
 % 1) Este arquivo contém a dependência da base de dados.
 % Todas as regras fomuladas aqui são baseadas no arquivo
 % "database.pl".
-% 2) Veja o arquivo "curriculum_grid.pl" que contém as três
-% partes do projeto (database.pl, t1b.pl e t1c.pl) na íntegra.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%				DEPENDÊNCIAS				%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 	* database.pl
-% 	--
-%	No terminal do swi-prolog, digite:
-%		?-[database, t1b, t1c].
+:- compile('database.pl').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				REGRAS					%
