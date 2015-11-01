@@ -2,24 +2,24 @@
     Gustavo José Carpeggiani 13103524
     Vinícius Couto Biermann  13100778
 
-   Programacao Logica - Prof. Alexandre G. Silva - UFSC
-     Versao inicial     : 30set2015
-     Adicao de gramatica: 15out2015
+   Programação Lógica - Prof. Alexandre G. Silva - UFSC
+     Versão inicial     : 30set2015
+     Adição de gramática: 15out2015
    
-   RECOMENDACOES:
+   RECOMENDAÇÕES:
    
    - O nome deste arquivo deve ser 'programa.pl'
    - O nome do banco de dados deve ser 'desenhos.pl'
-   - O nome do arquivo de gramatica deve ser 'gramatica.pl'
+   - O nome do arquivo de gramática deve ser 'gramatica.pl'
    
-   - Dicas de uso podem ser obtidas na execucação: 
+   - Dicas de uso podem ser obtidas na execução: 
      ?- menu.
      
    - Exemplo de uso:
      ?- load.
      ?- searchAll(id1).
 
-   - Exemplo de uso da gramatica:
+   - Exemplo de uso da gramática:
      ?- comando([repita, '8', '[', pf, '50', gd, '45', ']'], []).
      Ou simplesmente:
      ?- cmd("repita 8[pf 50 gd 45]").
@@ -29,9 +29,6 @@
 :- initialization(new0(0)).
 
 % Coloca tartaruga no centro da tela (de 1000x1000)
-% Implementacao incompleta:
-%   - Considera apenas id1 e efetua new sem verificar sua existencia
-%   - Supoe que ha' o xylast em 'desenhos.pl'
 new0(Id) :-
     consult('gramatica.pl'),
     load,
@@ -70,8 +67,6 @@ new_angle(Angle) :-
     asserta(angle(Angle)).
 
 % Limpa os desenhos e reinicia no centro da tela (de 1000x1000)
-% Implementacao incompleta:
-%   - Considera apenas id1
 tartaruga :-
     retractall(xy(_,_,_)),
     retractall(xylast(_,_)),
@@ -93,10 +88,6 @@ tartaruga :-
 %
 %       nb_getval(Value, Var)
 %       Armazena o valor de Value em Var.
-%
-% Implementacao incompleta:
-%   - Considera apenas id1
-%   - Somando apenas em X, ou seja, nao considera a inclinacao da tartaruga
 parafrente(N) :-
     xylast(X, Y),
     nb_getval(actual_id, Id),
@@ -120,12 +111,6 @@ parafrente(N) :-
                 retractall(xylast(_, _)),
                 asserta(xylast(Destination_X, Destination_Y)), !
     ).
-    %write('Revisar: pf '), writeln(N),
-    %xylast(X, Y),
-    %Xnovo is X + N,
-    %new(Id, Xnovo, Y),
-    %retractall(xylast(_,_)),
-    %asserta(xylast(Xnovo, Y)).
 
 % Para tras N passos
 paratras(N) :-
@@ -151,7 +136,6 @@ paratras(N) :-
                 retractall(xylast(_, _)),
                 asserta(xylast(Destination_X, Destination_Y)), !
     ).
-    %write('Implementar: pt '), writeln(N).
 
 % Gira a direita G graus
 giradireita(G) :-
@@ -163,7 +147,6 @@ giradireita(G) :-
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
     write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
     new_angle(New_degree), !.
-    %write('Implementar: gd '), writeln(G).
 
 % Gira a esquerda G graus
 giraesquerda(G) :-
@@ -175,7 +158,6 @@ giraesquerda(G) :-
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
     write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
     new_angle(New_degree), !.
-    %write('Implementar: ge '), writeln(G).
 
 % Use nada (levanta lápis)
 %   Função:
@@ -184,7 +166,7 @@ giraesquerda(G) :-
 usenada :-
     nb_setval(pencil, 0).
 
-% Use lapis
+% Use lápis
 %   Função:
 %       copy_term(Var1, Var2)
 %       Copia o conteúdo de Var1 em Var2, nas linguagens 
@@ -210,6 +192,15 @@ repita(N, Command) :-
     consult('gramatica.pl'),
     between(1, N, _),
     cmd(Command),
+    false.
+
+% Cria os pontos necessários para uma estrela de 12 pontas de tamanho Size
+%
+% Melga Approves!
+estrela(Size) :-
+    between(1, 11, _),
+    parafrente(Size),
+    giradireita(150),
     false.
 
 commit :-

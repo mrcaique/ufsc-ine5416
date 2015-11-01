@@ -1,32 +1,34 @@
 /*
-   Programacao Logica - Prof. Alexandre G. Silva - UFSC
-     Ultima atualizacao: 15out2015
+   Programação Lógica - Prof. Alexandre G. Silva - UFSC
+     Ultima atualização: 15out2015
    
-   Gramatica para implementacao de um subconjunto de comandos da Linguagem LOGO
+   Gramática para implementação de um subconjunto de comandos da Linguagem LOGO
    
-   Area de teste:
+   Área de teste:
      - https://turtleacademy.com/playground/pt
 
-   Documentacao:
-     - pf numero (ex: pf 50)
-         'para frente' - avanca o numero de passos indicados pelo numero.
-     - pt numero (ex: pt 100)
-         'para tras' - recua o numero de passos indicados pelo numero.
-     - gd numero (ex: gd 90)
-         'gira `a direita' - gira a direita tantos graus quanto indicados.
-     - ge numero (ex: ge 45)
-         'gira `a esquerda' - gira a esquerda tantos graus quanto indicados.
-     - repita numero <comando> (ex: repita 8<pf 50 gd 45>)
-         Repete comando/programa tantas vezes quanto indicadas pelo numero.
+   Documentação:
+     - pf número (ex: pf 50)
+         'para frente' - avança o número de passos indicados pelo número.
+     - pt número (ex: pt 100)
+         'para tras' - recua o número de passos indicados pelo número.
+     - gd número (ex: gd 90)
+         'gira à direita' - gira a direita tantos graus quanto indicados.
+     - ge número (ex: ge 45)
+         'gira à esquerda' - gira a esquerda tantos graus quanto indicados.
+     - repita número <comando> (ex: repita 8<pf 50 gd 45>)
+         Repete comando/programa tantas vezes quanto indicadas pelo número.
      - un
-         'use nada' - levanta o lapis, nao deixando mais traço ao se deslocar.
+         'use nada' - levanta o lápis, não deixando mais traço ao se deslocar.
      - ul
-         'use lapis' - usa o lapis, desenhando/escrevendo ao se deslocar.
+         'use lápis' - usa o lápis, desenhando/escrevendo ao se deslocar.
      - tartaruga
          Limpa os desenhos e reinicia no centro da tela (origem).
+     - estrela número (ex: estrela 100)
+         Cria os pontos para desenhar uma estrela de 12 pontas de tamanho Size.
 
-   Observacao:
-     - Nao tente executar um comando sem antes carregar 'programa.pl'
+   Observação:
+     - Não tente executar um comando sem antes carregar 'programa.pl'
 */
 
 
@@ -45,6 +47,7 @@ comando --> [repita], [N], bloco_inicio, programa, bloco_fim,  { atom_number(N, 
 comando --> [un],  { usenada }.
 comando --> [ul],  { uselapis }.
 comando --> [tartaruga],  { tartaruga }.
+comando --> [estrela], [Size], { estrela }.
 
 
 %---------------------------------------------------
@@ -90,7 +93,7 @@ cmd(Comando) :-
 
 
 %---------------------------------------------------
-% Referencias:
+% Referências:
 % http://www.pathwayslms.com/swipltuts/dcg/
 % https://en.wikibooks.org/wiki/Prolog/Definite_Clause_Grammars
 % http://stackoverflow.com/questions/6392725/using-a-prolog-dcg-to-find-replace-code-review
