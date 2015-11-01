@@ -1,8 +1,15 @@
-:- dynamic xy/3.
 :- dynamic xylast/2.
 
 xylast(500, 500).
 
-:- dynamic angle/2.
+:- dynamic xylast/3.
 
-angle(t, 0).
+xylast(0, 500, 500).
+
+:- dynamic xy/3.
+
+
+:- dynamic angle/1.
+
+angle(90).
+

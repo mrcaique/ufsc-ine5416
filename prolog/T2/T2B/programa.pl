@@ -70,9 +70,11 @@ new_angle(Angle) :-
 tartaruga :-
     retractall(xy(_,_,_)),
     retractall(xylast(_,_)),
+    retractall(xylast(_, _, _)),
     retractall(angle(_)),
     asserta(xylast(500, 500)),
-    assertz(angle(0)),
+    asserta(xylast(0, 500, 500)),
+    assertz(angle(90)),
     commit,
     new0(0), !.
 
@@ -203,6 +205,8 @@ estrela(Size) :-
     giradireita(150),
     false.
 
+% Salva o conteúdo modificado no banco de dados,
+% ou seja, em desenhos.pl
 commit :-
     open('desenhos.pl', write, Stream),
     telling(Screen),
