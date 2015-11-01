@@ -35,21 +35,25 @@ new0(Id) :-
     nb_setval(actual_id, Id),
     nb_setval(pencil, 1),
     (
-        check_xy(Id) -> xylast(X, Y),
+        check_xy_last -> xylast(X, Y),
                         new(Id, X, Y),
-                        retractall(xylast(Id, _, _)),
-                        asserta(xylast(Id, X, Y));
+                        retractall(xylast(_, _)),
+                        asserta(xylast(X, Y));
                 new_angle(90),
                 new(Id, 500, 500),
-                asserta(xylast(Id, 500, 500)),
+                asserta(xylast(500, 500)),
                 true
     ).
 
-% Checa se há xy no banco de dados.
+% Checa o ponto xy no banco de dados.
 %
 % Id = Identificador do desenho.
 check_xy(Id) :-
     xy(Id, _, _), !.
+
+% Checa o último ponto xy
+check_xy_last :-
+    xylast(_, _), !.
 
 % Apresenta a atual posição do lápis, ou seja,
 % se o lápis está no papel (1) ou não está (zero).
@@ -70,10 +74,8 @@ new_angle(Angle) :-
 tartaruga :-
     retractall(xy(_,_,_)),
     retractall(xylast(_,_)),
-    retractall(xylast(_, _, _)),
     retractall(angle(_)),
     asserta(xylast(500, 500)),
-    asserta(xylast(0, 500, 500)),
     assertz(angle(90)),
     commit,
     new0(0), !.
@@ -95,8 +97,10 @@ parafrente(N) :-
     nb_getval(actual_id, Id),
     angle(Degree),
     Radian is ((Degree*pi)/(180)),
-    Destination_X is N*sin(Radian)+X,
-    Destination_Y is N*cos(Radian)+Y,
+    Destination_X is N*sin(Radian),
+    Destination_Y is N*cos(Radian),
+    New_xlast is Destination_X+X,
+    New_ylast is Destination_Y+Y,
     nb_getval(pencil, Pencil),
         write('MOVIMENTAÇÃO PARA FRENTE'), nl,
         write('Id atual: '), print(Id), nl,
@@ -104,14 +108,14 @@ parafrente(N) :-
         write('Última posição (X, Y): '), print(xylast(X, Y)), nl,
         write('Ângulo atual (em graus): '), print(Degree), nl,
         write('Ângulo atual (em radianos): '), print(Radian), nl,
-        write('Destino (ponto X): '), print(Destination_X), nl,
-        write('Destino (ponto Y): '), print(Destination_Y), nl,
+        write('Destino (ponto X): '), print(New_xlast), nl,
+        write('Destino (ponto Y): '), print(New_ylast), nl, nl,
     (
         Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
                         retractall(xylast(_, _)),
-                        asserta(xylast(Destination_X, Destination_Y)), !;
+                        asserta(xylast(New_xlast, New_ylast)), !;
                 retractall(xylast(_, _)),
-                asserta(xylast(Destination_X, Destination_Y)), !
+                asserta(xylast(New_xlast, New_ylast)), !
     ).
 
 % Para tras N passos
@@ -120,8 +124,10 @@ paratras(N) :-
     nb_getval(actual_id, Id),
     angle(Degree),
     Radian is ((Degree*pi)/(180)),
-    Destination_X is (N*sin(Radian))*(-1)+X,
-    Destination_Y is (N*cos(Radian))*(-1)+Y,
+    Destination_X is (N*sin(Radian))*(-1),
+    Destination_Y is (N*cos(Radian))*(-1),
+    New_xlast is Destination_X+X,
+    New_ylast is Destination_Y+Y,
     nb_getval(pencil, Pencil),
         write('MOVIMENTAÇÃO PARA TRÁS'), nl,
         write('Id atual: '), print(Id), nl,
@@ -129,14 +135,14 @@ paratras(N) :-
         write('Última posição (X, Y): '), print(xylast(X, Y)), nl,
         write('Ângulo atual (em graus): '), print(Degree), nl,
         write('Ângulo atual (em radianos): '), print(Radian), nl,
-        write('Destino (ponto X): '), print(Destination_X), nl,
-        write('Destino (ponto Y): '), print(Destination_Y), nl,
+        write('Destino (ponto X): '), print(New_xlast), nl,
+        write('Destino (ponto Y): '), print(New_ylast), nl, nl,
     (
         Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
                         retractall(xylast(_, _)),
-                        asserta(xylast(Destination_X, Destination_Y)), !;
+                        asserta(xylast(New_xlast, New_ylast)), !;
                 retractall(xylast(_, _)),
-                asserta(xylast(Destination_X, Destination_Y)), !
+                asserta(xylast(New_xlast, New_ylast)), !
     ).
 
 % Gira a direita G graus
@@ -147,7 +153,8 @@ giradireita(G) :-
     write('GIRANDO À DIREITA'), nl,
     write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
-    write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
+    write('Posicionamento atual (ângulo em graus): '), print(New_degree), 
+    nl, nl,
     new_angle(New_degree), !.
 
 % Gira a esquerda G graus
@@ -158,7 +165,8 @@ giraesquerda(G) :-
     write('GIRANDO À ESQUERDA'), nl,
     write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
-    write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
+    write('Posicionamento atual (ângulo em graus): '), print(New_degree), 
+    nl, nl,
     new_angle(New_degree), !.
 
 % Use nada (levanta lápis)
@@ -211,8 +219,8 @@ commit :-
     open('desenhos.pl', write, Stream),
     telling(Screen),
     tell(Stream),
-    listing(xylast),
     listing(xy),
     listing(angle),
+    listing(xylast/2),
     tell(Screen),
     close(Stream).
