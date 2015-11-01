@@ -190,8 +190,8 @@ uselapis :-
         Pencil =:= 0 -> Final_id is New_id+1,
                         nb_setval(actual_id, Final_id),
                         write('Id atual: '), print(Final_id), nl,
-                        new0(Final_id);
-                nb_setval(pencil, 1)
+                        new0(Final_id), !;
+                nb_setval(pencil, 1), !
     ).
 
 % Repete o comando especificado N vezes
