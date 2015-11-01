@@ -42,7 +42,7 @@ new0(Id) :-
                         new(Id, X, Y),
                         retractall(xylast(Id, _, _)),
                         asserta(xylast(Id, X, Y));
-                new_angle(Id, 90),
+                new_angle(90),
                 new(Id, 500, 500),
                 asserta(xylast(Id, 500, 500)),
                 true
@@ -64,11 +64,10 @@ check_pencil(L) :-
 % Cria uma nova posição com o ângulo em relação ao eixo X.
 % A medição considerada do ângulo é em graus.
 %
-% Id = Identificador do atual desenho
 % Angle = Novo ângulo para o desenho com identificador Id
-new_angle(Id, Angle) :-
-    retractall(angle(Id, _)),
-    asserta(angle(Id, Angle)).
+new_angle(Angle) :-
+    retractall(angle(_)),
+    asserta(angle(Angle)).
 
 % Limpa os desenhos e reinicia no centro da tela (de 1000x1000)
 % Implementacao incompleta:
@@ -76,9 +75,9 @@ new_angle(Id, Angle) :-
 tartaruga :-
     retractall(xy(_,_,_)),
     retractall(xylast(_,_)),
-    retractall(angle(_, _)),
+    retractall(angle(_)),
     asserta(xylast(500, 500)),
-    assertz(angle(t, 0)),
+    assertz(angle(0)),
     commit,
     new0(0), !.
 
@@ -101,7 +100,7 @@ tartaruga :-
 parafrente(N) :-
     xylast(X, Y),
     nb_getval(actual_id, Id),
-    angle(Id, Degree),
+    angle(Degree),
     Radian is ((Degree*pi)/(180)),
     Destination_X is N*sin(Radian)+X,
     Destination_Y is N*cos(Radian)+Y,
@@ -132,7 +131,7 @@ parafrente(N) :-
 paratras(N) :-
     xylast(X, Y),
     nb_getval(actual_id, Id),
-    angle(Id, Degree),
+    angle(Degree),
     Radian is ((Degree*pi)/(180)),
     Destination_X is (N*sin(Radian))*(-1)+X,
     Destination_Y is (N*cos(Radian))*(-1)+Y,
@@ -156,26 +155,26 @@ paratras(N) :-
 
 % Gira a direita G graus
 giradireita(G) :-
-    angle(_, Degree),
+    angle(Degree),
     nb_getval(pencil, Pencil),
     New_degree is Degree - G,
     write('GIRANDO À DIREITA'), nl,
     write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
     write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
-    new_angle(_, New_degree), !.
+    new_angle(New_degree), !.
     %write('Implementar: gd '), writeln(G).
 
 % Gira a esquerda G graus
 giraesquerda(G) :-
-    angle(_, Degree),
+    angle(Degree),
     nb_getval(pencil, Pencil),
     New_degree is Degree + G,
     write('GIRANDO À ESQUERDA'), nl,
     write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
     write('Posicionamento atual (ângulo em graus): '), print(New_degree), nl,
-    new_angle(_, New_degree), !.
+    new_angle(New_degree), !.
     %write('Implementar: ge '), writeln(G).
 
 % Use nada (levanta lápis)
