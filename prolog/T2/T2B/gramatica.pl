@@ -47,7 +47,7 @@ comando --> [repita], [N], bloco_inicio, programa, bloco_fim,  { atom_number(N, 
 comando --> [un],  { usenada }.
 comando --> [ul],  { uselapis }.
 comando --> [tartaruga],  { tartaruga }.
-comando --> [estrela], [Size], { estrela }.
+comando --> [estrela], [Size], { atom_number(Size, X), estrela(X) }.
 
 
 %---------------------------------------------------
