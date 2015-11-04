@@ -97,8 +97,8 @@ parafrente(N) :-
     nb_getval(actual_id, Id),
     angle(Degree),
     Radian is ((Degree*pi)/(180)),
-    Destination_X is N*sin(Radian),
-    Destination_Y is N*cos(Radian),
+    Destination_X is N*cos(Radian),
+    Destination_Y is N*sin(Radian)*(-1),
     New_xlast is Destination_X+X,
     New_ylast is Destination_Y+Y,
     nb_getval(pencil, Pencil),
@@ -124,8 +124,8 @@ paratras(N) :-
     nb_getval(actual_id, Id),
     angle(Degree),
     Radian is ((Degree*pi)/(180)),
-    Destination_X is (N*sin(Radian))*(-1),
-    Destination_Y is (N*cos(Radian))*(-1),
+    Destination_X is (N*cos(Radian))*(-1),
+    Destination_Y is (N*sin(Radian)),
     New_xlast is Destination_X+X,
     New_ylast is Destination_Y+Y,
     nb_getval(pencil, Pencil),
@@ -149,7 +149,7 @@ paratras(N) :-
 giradireita(G) :-
     angle(Degree),
     nb_getval(pencil, Pencil),
-    New_degree is Degree - G,
+    New_degree is mod(Degree - G, 360),
     write('GIRANDO À DIREITA'), nl,
     write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
@@ -161,7 +161,7 @@ giradireita(G) :-
 giraesquerda(G) :-
     angle(Degree),
     nb_getval(pencil, Pencil),
-    New_degree is Degree + G,
+    New_degree is mod(Degree + G, 360),
     write('GIRANDO À ESQUERDA'), nl,
     write('Posição do lápis: '), print(Pencil), nl,
     write('Posicionamento anterior (ângulo em graus): '), print(Degree), nl,
@@ -208,7 +208,7 @@ repita(N, Command) :-
 %
 % Melga Approves!
 estrela(Size) :-
-    between(1, 11, _),
+    between(1, 12, _),
     parafrente(Size),
     giradireita(150),
     false.
