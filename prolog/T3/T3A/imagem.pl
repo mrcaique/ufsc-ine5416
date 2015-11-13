@@ -131,6 +131,22 @@ neighbor(S, (X,Y,V), E) :-
 n4(S, (X,Y,V), N) :-
     findall(E, neighbor(S, (X,Y,V), E), N).
 
+% For each intensity I in the image, make
+% 255-I in the image output.
+%negative :-
+%    matrix(Matrix),
+%    coord(Matrix, List),
+%    width(List, Size_x),
+%    height(List, Size_y),
+%    between(0, Size_x, Middle_x),
+%        between(0, Size_y, Middle_y),
+%            getPixel(List, (Middle_x, Middle_y, Intensity)),
+%            New_intensity is 255-Intensity,
+%            putPixel((Middle_x, Middle_y, New_intensity), _, New_list),
+%        false,
+%    false,
+%    write('Negative: '), print(New_list).
+
 % TESTS
 % -------------------------
 
