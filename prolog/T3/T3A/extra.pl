@@ -6,6 +6,7 @@
 %    ?- coord2matrix([(0,0,50),(0,1,10),(0,2,30),(1,0,10),(1,1,20),(1,2,40)], M).
 %    M = [[50, 10, 30], [10, 20, 40]].
 
+:- consult('imagem.pl').
 :- consult('pgm.pl').
 
 coord2matrix(S, M) :-
@@ -45,5 +46,21 @@ width(S, W) :-
 
 value([(X,Y,V)|_], (X,Y,V)).
 value([_|St], (X,Y,Z)) :-
-    value(St, (X,Y,Z)).  
+    value(St, (X,Y,Z)).
 
+% For each intensity I in the image, make
+% 255-I in the image output.
+%negative :-
+%    copy_term([], A_list),
+%    matrix(Matrix),
+%    coord(Matrix, List),
+%    width(List, Size_x),
+%    height(List, Size_y),
+%    between(0, Size_x, Middle_x),
+%        between(0, Size_y, Middle_y),
+%            getPixel(List, (Middle_x, Middle_y, Intensity)),
+%            New_intensity is 255-Intensity,
+%            copy_term([(Middle_x, Middle_y, New_intensity)], Var),
+%            append(A_list, Var, Updated),
+%        false,
+%    true.

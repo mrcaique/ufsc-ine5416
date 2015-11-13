@@ -1,8 +1,6 @@
 % Image processing package in Prolog (a initial tentative)
 % Prof. A. G. Silva - UFSC - June 2015
 
-:- consult('extra.pl').
-
 % EXAMPLE OF ARRAY
 % -------------------------
 
@@ -40,6 +38,10 @@ coord2coord([H|T], C, Coord) :-
     append(C,H,Cx),
     coord2coord(T, Cx, Coord).
 
+% Transforms matrix to a coordinates list
+%
+% Mat = Matrix
+% Coord = Coordinates list
 coord(Mat, Coord) :-
     coordAux(Mat, -1, 0, CoordMat),
     coord2coord(CoordMat, [], Coord).
@@ -78,6 +80,11 @@ zeros((H,W), S) :-
 % GET|PUT PIXEL
 % -------------------------
 
+% Gets the pixel (X, Y, I) of the coordinates list
+%
+% [...] = Coordinates list.
+% (X, Y, V) = Coordinate desired with points
+%       in (X, Y) and intensity V.
 getPixel([(A,B,V)|_], (X,Y,V)) :-
     A == X,
     B == Y,
@@ -85,6 +92,13 @@ getPixel([(A,B,V)|_], (X,Y,V)) :-
 getPixel([_|St], (X,Y,Z)) :-
     getPixel(St, (X,Y,Z)).
 
+% Puts the pixel changed in the coordinates list
+%
+% (A,B,V) = Coordinate changed with points in (A,B) 
+%       and intensity V.
+% List1 = Coordinates list with the pixel desired
+%       change.
+% List2 = Coordinates list with the new pixel (A, B, V).
 putPixel(_, [], []) :- 
     !.
 putPixel((A,B,V), [(A,B,_)|T1], [(A,B,V)|T2]) :-
@@ -101,20 +115,40 @@ putPixel((A,B,V), [(Ax,Bx,Vx)|T1], [(Ax,Bx,Vx)|T2]) :-
 % NEIGHBORHOOD
 % -------------------------
 
+% Gets the pixel above of a specific pixel
+%
+% S = Coordinates list
+% (X,Y,_) = Pixel p1 desired 
+% (Xa, Y, V) = Pixel above of p1
 above(S, (X,Y,_), (Xa,Y,V)) :-
     X > 0,
     Xa is X - 1,
     getPixel(S, (Xa,Y,V)).
 
+% Gets the pixel below of a specific pixel
+%
+% S = Coordinates list
+% (X,Y,_) = Pixel p1 desired 
+% (Xa, Y, V) = Pixel below of p1
 below(S, (X,Y,_), (Xa,Y,V)) :-
     Xa is X + 1,
     getPixel(S, (Xa,Y,V)).
 
+% Gets the pixel in the left of a specific pixel
+%
+% S = Coordinates list
+% (X,Y,_) = Pixel p1 desired 
+% (Xa, Y, V) = Pixel in the left of p1
 left(S, (X,Y,_), (X,Ya,V)) :-
     Y > 0,
     Ya is Y - 1,
     getPixel(S, (X,Ya,V)).
 
+% Gets the pixel in the right of a specific pixel
+%
+% S = Coordinates list
+% (X,Y,_) = Pixel p1 desired 
+% (Xa, Y, V) = Pixel in the right of p1
 right(S, (X,Y,_), (X,Ya,V)) :-
     Ya is Y + 1,
     getPixel(S, (X,Ya,V)).
@@ -128,24 +162,15 @@ neighbor(S, (X,Y,V), E) :-
 neighbor(S, (X,Y,V), E) :-
     right(S, (X,Y,V), E).
 
+% Gets the neighbor four of a specific pixel p1, it is, gets
+% the pixels above, below, in the right and in the left of
+% the pixel p1.
+%
+% S = Coordinates list
+% (X, Y, V) = Pixel p1 desired
+% N = List with the neighbor 4 of p1
 n4(S, (X,Y,V), N) :-
-    findall(E, neighbor(S, (X,Y,V), E), N).
-
-% For each intensity I in the image, make
-% 255-I in the image output.
-%negative :-
-%    matrix(Matrix),
-%    coord(Matrix, List),
-%    width(List, Size_x),
-%    height(List, Size_y),
-%    between(0, Size_x, Middle_x),
-%        between(0, Size_y, Middle_y),
-%            getPixel(List, (Middle_x, Middle_y, Intensity)),
-%            New_intensity is 255-Intensity,
-%            putPixel((Middle_x, Middle_y, New_intensity), _, New_list),
-%        false,
-%    false,
-%    write('Negative: '), print(New_list).
+    findall(E, neighbor(S, (X,Y,V), E), N). 
 
 % TESTS
 % -------------------------
