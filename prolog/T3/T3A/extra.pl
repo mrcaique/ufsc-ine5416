@@ -48,19 +48,29 @@ value([(X,Y,V)|_], (X,Y,V)).
 value([_|St], (X,Y,Z)) :-
     value(St, (X,Y,Z)).
 
-% For each intensity I in the image, make
+% Negative: for each intensity I in the image, make
 % 255-I in the image output.
-%negative :-
-%    copy_term([], A_list),
-%    matrix(Matrix),
-%    coord(Matrix, List),
-%    width(List, Size_x),
-%    height(List, Size_y),
-%    between(0, Size_x, Middle_x),
-%        between(0, Size_y, Middle_y),
-%            getPixel(List, (Middle_x, Middle_y, Intensity)),
-%            New_intensity is 255-Intensity,
-%            copy_term([(Middle_x, Middle_y, New_intensity)], Var),
-%            append(A_list, Var, Updated),
-%        false,
-%    true.
+%
+% [(X, Y, I)|T_input] = Input coordinates list
+% [H_output|T_output] = Output coordinates list
+negative([], _) :-
+    !.
+negative([(X, Y, I)|T_input], [H_output|T_output]) :-
+    New_intensity is 255 - I,
+    copy_term((X, Y, New_intensity), H_output),
+    negative(T_input, T_output).
+
+% Mean between images: each pixel of result image it is
+% obtained by the sum of the correspondings pixels of two 
+% input images, with the same dimensions, divided by two
+% (rounded by the nearest integer).
+%
+% [(X1, Y1, I1)|T1] = input coordinates list
+% [(X2, Y2, I2)|T2] = input coordinates list
+% [H_output|T_output] = output coordinates list
+mean([], [], _) :-
+    !.
+mean([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
+    Mean_Intensity is (I1 + I2)/2,
+    copy_term((X, Y, Mean_Intensity), H_output),
+    mean(T1, T2, T_output).
