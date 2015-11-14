@@ -20,6 +20,21 @@ test :-
     writePGM('ufsc_out.pgm', M),
     !.
 
+test_negative :-
+    load('imgs/cameraman.pgm', S),
+    negative(S, M),
+    coord2matrix(M, A),
+    writePGM('tests/cameraman.pgm', A),
+    !.
+
+test_mean :-
+    load('imgs/gull.pgm', L_gull),
+    load('imgs/cameraman.pgm', L_cameraman),
+    mean(L_cameraman, L_gull, L_output),
+    coord2matrix(L_output, M_output),
+    writePGM('tests/mean_cameragull.pgm', M_output),
+    !.
+
 load(FileName, S) :-
     readPGM(FileName, M),
     coord(M, S).
@@ -53,7 +68,7 @@ value([_|St], (X,Y,Z)) :-
 %
 % [(X, Y, I)|T_input] = Input coordinates list
 % [H_output|T_output] = Output coordinates list
-negative([], _) :-
+negative([], []) :-
     !.
 negative([(X, Y, I)|T_input], [H_output|T_output]) :-
     New_intensity is 255 - I,
@@ -68,7 +83,7 @@ negative([(X, Y, I)|T_input], [H_output|T_output]) :-
 % [(X1, Y1, I1)|T1] = input coordinates list
 % [(X2, Y2, I2)|T2] = input coordinates list
 % [H_output|T_output] = output coordinates list
-mean([], [], _) :-
+mean([], [], []) :-
     !.
 mean([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
     Mean_Intensity is (I1 + I2)/2,
