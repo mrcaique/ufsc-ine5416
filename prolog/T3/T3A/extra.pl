@@ -20,19 +20,48 @@ test :-
     writePGM('ufsc_out.pgm', M),
     !.
 
-test_negative :-
-    load('imgs/cameraman.pgm', S),
-    negative(S, M),
-    coord2matrix(M, A),
-    writePGM('tests/cameraman.pgm', A),
+negative(FileName) :-
+    %copy_term('rm ', Remove),
+    %atom_concat(Remove, FileName, Command),
+    %shell(Command, _),
+    atom_concat('imgs/', FileName, Path_file),
+    load(Path_file, C_list),
+    negative_list(C_list, N_list),
+    coord2matrix(N_list, Matrix),
+    atom_string(FileName, String),
+    atomic_list_concat(S_file, '.', String),
+    nth0(0, S_file, Name),
+    atom_concat(Name, '_negative.pgm', NewFileName),
+    writePGM(NewFileName, Matrix),
     !.
 
-test_mean :-
-    load('imgs/gull.pgm', L_gull),
-    load('imgs/cameraman.pgm', L_cameraman),
-    mean(L_cameraman, L_gull, L_output),
+mean(FileName1, FileName2) :-
+    atom_concat('imgs/', FileName1, Path_f1),
+    atom_concat('imgs/', FileName2, Path_f2),
+    load(Path_f1, L1),
+    load(Path_f2, L2),
+    mean_list(L1, L2, L_output),
     coord2matrix(L_output, M_output),
-    writePGM('tests/mean_cameragull.pgm', M_output),
+
+    atom_string(FileName1, String1),
+    atomic_list_concat(S_file1, '.', String1),
+    nth0(0, S_file1, Name1),
+
+    atom_string(FileName2, String2),
+    atomic_list_concat(S_file2, '.', String2),
+    nth0(0, S_file2, Name2),
+
+    atom_concat(Name1, '_', T_name),
+    atom_concat(T_name, Name2, Name_file),
+    atom_concat(Name_file, '_mean.pgm', NewFileName),
+    writePGM(NewFileName, M_output),
+    !.
+
+test_lonely_pixel :-
+    matrix(M),
+    coord(M, L),
+    lonely_pixel(L, O),
+    print(O),
     !.
 
 load(FileName, S) :-
@@ -68,24 +97,53 @@ value([_|St], (X,Y,Z)) :-
 %
 % [(X, Y, I)|T_input] = Input coordinates list
 % [H_output|T_output] = Output coordinates list
-negative([], []) :-
+negative_list([], []) :-
     !.
-negative([(X, Y, I)|T_input], [H_output|T_output]) :-
+negative_list([(X, Y, I)|T_input], [H_output|T_output]) :-
     New_intensity is 255 - I,
     copy_term((X, Y, New_intensity), H_output),
-    negative(T_input, T_output).
+    negative_list(T_input, T_output).
 
 % Mean between images: each pixel of result image it is
 % obtained by the sum of the correspondings pixels of two 
 % input images, with the same dimensions, divided by two
 % (rounded by the nearest integer).
 %
-% [(X1, Y1, I1)|T1] = input coordinates list
-% [(X2, Y2, I2)|T2] = input coordinates list
+% [(X, Y, I1)|T1] = input coordinates list
+% [(_, _, I2)|T2] = input coordinates list
 % [H_output|T_output] = output coordinates list
-mean([], [], []) :-
+mean_list([], [], []) :-
     !.
-mean([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
+mean_list([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
     Mean_Intensity is (I1 + I2)/2,
     copy_term((X, Y, Mean_Intensity), H_output),
-    mean(T1, T2, T_output).
+    mean_list(T1, T2, T_output).
+
+% Isolated pixel detector: a pixel with intensity I is
+% isolated if your 4 neighbors (below, above, right and left)
+% has intensities smallest than I.
+%
+% [(X, Y, I)|Tail] = Input coordinates list.
+% [H_output|T_output] = List with isolated pixels
+%
+% check_n4_intensity: Check if a pixel is isolated.
+%
+% [(X, Y, I)|Tail] = List with 4 neighbors of a pixel.
+% I_intial = Intensity of pixel that will be compared
+%       with the intensities of your 4 neighbors.
+check_n4_intensity([], _) :-
+    true, !.
+check_n4_intensity([(_, _, I)|Tail], I_base) :-
+    I_base > I,
+    check_n4_intensity(Tail, I_base).
+
+lonely_pixel([], []) :-
+    !.
+lonely_pixel([(X, Y, I)|Tail], [H_output|T_output]) :-
+    n4(Tail, (X, Y, I), Four_list),
+    (
+        check_n4_intensity(Four_list, I) -> 
+                copy_term((X, Y, I), H_output),
+                lonely_pixel(Tail, T_output);
+        lonely_pixel(Tail, [H_output|T_output])
+    ).

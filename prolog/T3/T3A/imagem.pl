@@ -210,7 +210,7 @@ test2(M,S,V,X) :-
 % M = Matrix
 % S = Coordinates list
 % V = Intensity
-% X = 4 neighbors of the point (1, 4)
+% X = List with 4 neighbors of the point (1, 4)
 test3(M,S,V,X) :-
     matrix(M),
     coord(M,S),
