@@ -25,8 +25,11 @@ negative(FileName) :-
     %atom_concat(Remove, FileName, Command),
     %shell(Command, _),
     atom_concat('imgs/', FileName, Path_file),
+    print(Path_file), nl, nl,
     load(Path_file, C_list),
+    print(C_list), nl, nl,
     negative_list(C_list, N_list),
+    print(N_list), nl, nl,
     coord2matrix(N_list, Matrix),
     atom_string(FileName, String),
     atomic_list_concat(S_file, '.', String),
@@ -62,6 +65,13 @@ test_lonely_pixel :-
     coord(M, L),
     lonely_pixel(L, O),
     print(O),
+    !.
+
+test_path_pixels :-
+    matrix(M),
+    coord(M, L),
+    path_pixels(L, (0, 1, _), (6, 7, _), List),
+    print(List),
     !.
 
 load(FileName, S) :-
@@ -146,4 +156,61 @@ lonely_pixel([(X, Y, I)|Tail], [H_output|T_output]) :-
                 copy_term((X, Y, I), H_output),
                 lonely_pixel(Tail, T_output);
         lonely_pixel(Tail, [H_output|T_output])
+    ).
+
+% Verification of a path between two pixels: There is
+% a path between two pixels, if has set of adjacents
+% pixels (cosidering the 4 neighbors), all with inten-
+% sities bigger or equal then the intensity of the 
+% start pixel, that can reach the destiny pixel.
+%
+% [(X, Y, I)|Tail] = Input coordinates list.
+% (Xs, Ys, Is) = Start pixel p1.
+% (Xd, Yd, Id) = Destiny pixel p2.
+% [H_output|T_output] = List with path from p1 to p2.
+%
+% get_bigger_intensity: Check the pixel with greater inten-
+% sity from the 4 neighbors.
+%
+% [(X, Y, I)|Tail] = List with 4 neighbors.
+% (Xs, Ys, Is) = Pixel with greater intensity.
+%
+% check_destiny: Check if reached to the destiny pixel.
+%
+% is_equal: Check if two pixels are equal.
+check_destiny((Xs, Ys, _), (Xd, Yd, _)) :-
+    Xs = Xd,
+    Ys = Yd,
+    true.
+
+is_equal((Xs, Ys, _), (Xd, Yd, _)) :-
+    Xs = Xd, Ys = Yd, !.
+
+get_bigger_intensity([], (Xs, Ys, Is), (Xd, Yd, Id)) :-
+    Xd is Xs,
+    Yd is Ys,
+    Id is Is.
+get_bigger_intensity([(X, Y, I)|Tail], (Xs, Ys, Is), Destiny) :-
+    (
+        Is =< I ->  get_bigger_intensity(Tail, (X, Y, I), Destiny);
+            get_bigger_intensity(Tail, (Xs, Ys, Is), Destiny)
+    ).
+
+path_pixels([], _, _, []) :- !.
+path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), [H_output|T_output]) :-
+    getPixel(C_list, (Xs, Ys, Is)),
+    getPixel(C_list, (Xd, Yd, Id)),
+    copy_term((Xs, Ys, Is), H_output),
+    (
+        check_destiny((Xs, Ys, Is), (Xd, Yd, Id)) -> true;
+            n4(C_list, (Xs, Ys, Is), Four_list),
+            get_bigger_intensity(Four_list, (Xs, Ys, Is), Bigger),
+            (
+                is_equal((Xs, Ys, Is), Bigger) ->
+                    writeln('Path not found.'), nl,
+                    write('Actual path: '),
+                    copy_term([], T_output),
+                    nl;
+                path_pixels(C_list, Bigger, (Xd, Yd, Id), T_output)
+            )
     ).
