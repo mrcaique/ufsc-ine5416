@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts} % Uso de fontes para conjuntos como R (reais), Z (inteiros), etc.
+\usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry} % Formatação da página
+
+\begin{document}
+    \begin{center}
+        \section*{INE5416 - Paradigmas da Programação (2015/2)}
+        \textbf{\textit{Relatório 7: Módulos} \\
+        Caique Rodrigues Marques 13204303}
+    \end{center}
+
+O módulo \textit{hyperbolic\_functions.hs} implementado na linguagem de programação Haskell realiza os cálculos das seguintes operações de funções hiperbólicas, sendo $e$ a constante matemática que pode ser calculada pela seguinte série de Taylor $\sum_{n=1}^{\infty}\frac{1}{n!} = \frac{1}{1} + \frac{1}{1.2} + \frac{1}{1.2.3} +...$. \\ \\
+
+\noindent
+$Senh(x) = \frac{e^{x} - e^{-x}}{2}$ \\ \\
+$Cosh(x) = \frac{e^{x} + e^{-x}}{2}$ \\ \\
+$Tanh(x) = \frac{Senh(x)}{Cosh(x)}$ \\ \\
+$Coth(x) = \frac{Cosh(x)}{Senh(x)}$ \\
+    
+No módulo, a determinação da constante $e$ foi estabelecida como $n = 1000$, ou seja, é calculado o somatório da sequência de $1$ até $\frac{1}{1000!}$, devido a esta limitação, a aproximação dos valores tem de a ser menor em comparação às implementações nativas do Haskell, que tem até seis casas de aproximação.
+
+\begin{verbatim}
+    *HyperbolicFunctions> sinh 1
+    1.1752011936438014
+    *HyperbolicFunctions> value (Sinh 1)
+    1.1752012
+\end{verbatim}
+
+As outras funções possíveis de usar são \textit{value(Cosh x)}, \textit{value(Tanh x)} e \textit{value(Coth x)} com $x \in \mathbb{R}$.
+
+\end{document}
