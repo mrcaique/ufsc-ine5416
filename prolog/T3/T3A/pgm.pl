@@ -1,9 +1,14 @@
-% Image processing package in Prolog (a initial tentative)
-% Prof. A. G. Silva - UFSC - October 2015
+% Image processing package in Prolog
+% Credits:
+%   Caique Rodrigues Marques
+%   Gustavo José Carpeggiani
+%   Vinícius Couto Biermann
+%
+% Based on basic implementation by:
+%   Alexandre G. Silva
 %
 % Example: 
 %    ?- readPGM('ufsc.pgm', M), writePGM('ufsc_out.pgm', M).
-
 
 :- use_module(library(pio)).
 
@@ -16,7 +21,7 @@ writePGM(FileName, I) :-
     write(File, 'P2\n'),
     write(File, '# Image Processing in Prolog - UFSC 2015\n'),
     write(File, W), write(File, ' '), write(File, H), write(File, '\n'),
-    write(File, '255\n'),
+    maximum_matrix(I, Max), write(File, Max), write(File, '\n'),
     write_elements(File, I),
     close(File).
 
@@ -37,6 +42,10 @@ dimensions([Ih|It], H, W) :-
     length(Ih, W),
     length(It, H1),
     H is H1 + 1.
+
+maximum_matrix(M, Maximum) :-
+    coord(M, S),
+    maximum(S, Maximum).
 
 %---------------------------------------------------
 % Read a PGM (text mode by line) image file format
@@ -68,11 +77,16 @@ atomic_list_number([], L, Ls) :-
     reverse(L, Ls).
 atomic_list_number([A|Ar], Br, L) :-
     atomic_list_number_aux(A, B),
+    B =\= -1,
     atomic_list_number(Ar, [B|Br], L).
+atomic_list_number([A|Ar], Br, L) :-
+    atomic_list_number_aux(A, B),
+    B == -1,
+    atomic_list_number(Ar, Br, L).
 
 atomic_list_number_aux(A, B) :-
     catch(atom_number(A, B), _, fail).
-atomic_list_number_aux(A, A).
+atomic_list_number_aux(_, -1).
 
 %---------------------------------------------------
 
@@ -98,8 +112,6 @@ remove([H|T],X,[H|L1]) :- remove(T,X,L1).
 
 lines([])           --> call(eos), !.
 lines([Line|Lines]) --> line(Line), lines(Lines).
-
-%eos([], []).
 
 line([])     --> ( "\n" ; call(eos) ), !.
 line([L|Ls]) --> [L], line(Ls).

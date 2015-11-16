@@ -1,5 +1,11 @@
-% Image processing package in Prolog (a initial tentative)
-% Prof. A. G. Silva - UFSC - June 2015
+% Image processing package in Prolog
+% Credits:
+%   Caique Rodrigues Marques
+%   Gustavo José Carpeggiani
+%   Vinícius Couto Biermann
+%
+% Based on basic implementation by:
+%   Alexandre G. Silva
 
 % EXAMPLE OF ARRAY
 % -------------------------
@@ -32,11 +38,20 @@ coordAux([H|T], Lin, Col, [Hm|Tm]) :-
     coordLine(H, Lin1, Col, Hm),
     coordAux(T, Lin1, Col, Tm).
 
-coord2coord([], C, C).
 
+coord2coord([], C, C).
+/*
 coord2coord([H|T], C, Coord) :-
     append(C,H,Cx),
     coord2coord(T, Cx, Coord).
+*/
+coord2coord([H|T], C, Coord) :-
+    coord2coord_aux(H, C, D),
+    coord2coord(T, D, Coord).
+
+coord2coord_aux([], C, C).
+coord2coord_aux([A|B], C, D) :-
+    coord2coord_aux(B, [A|C], D).
 
 % Transforms matrix to a coordinates list
 %
@@ -44,8 +59,56 @@ coord2coord([H|T], C, Coord) :-
 % Coord = Coordinates list
 coord(Mat, Coord) :-
     coordAux(Mat, -1, 0, CoordMat),
-    coord2coord(CoordMat, [], Coord).
+    coord2coord(CoordMat, [], CoordRev),
+    reverse(CoordRev, Coord).
 
+% LIST OF COORDINATES TO ARRAY
+% -------------------------
+% Example: 
+%    ?- coord2matrix([(0,0,50),(0,1,10),(0,2,30),(1,0,10),(1,1,20),(1,2,40)], M).
+%    M = [[50, 10, 30], [10, 20, 40]].
+
+coord2matrix(S, M) :-
+    shape(S, H, W),
+    matrixconstruct(S, H, W, -1, [], M),
+    !.
+
+matrixconstruct(_, H, _, H, [_|Mt], M) :-
+    reverse(Mt, M).
+matrixconstruct(S, H, W, L, Macc, M) :-
+    L1 is L + 1,
+    lineconstruct(S, W, Line, Rest),
+    matrixconstruct(Rest, H, W, L1, [Line|Macc], M).
+
+lineconstruct([], _, [], []).
+lineconstruct(Rest, 0, [], Rest).
+lineconstruct([(_,_,V)|Ta], N, [V|Tb], Rest) :-
+    N1 is N - 1,
+    lineconstruct(Ta, N1, Tb, Rest).
+
+
+% DIMENSIONS, VALUE, AND MAXIMUM
+% -------------------------
+shape(S, H, W) :-
+    height(S, H), width(S, W).
+
+height(S, H) :-
+    findall( L, value(S,(L,0,_)), Ll ),
+    max_list(Ll, H1),
+    H is H1 + 1.
+
+width(S, W) :-
+    findall( C, value(S,(0,C,_)), Lc ),
+    max_list(Lc, W1),
+    W is W1 + 1.
+
+value([(X,Y,V)|_], (X,Y,V)).
+value([_|St], (X,Y,Z)) :-
+    value(St, (X,Y,Z)).  
+
+maximum(S, M) :-  %maximum for list of coordinates
+    findall( V, value(S,(_,_,V)), Lv ),
+    max_list(Lv, M).
 
 % IMAGE OF ZEROS
 % -------------------------
@@ -75,7 +138,6 @@ zerosAuxSet((H,W), Sa, S) :-
 
 zeros((H,W), S) :-
     zerosAuxSet((H,W), [], S).
-
 
 % GET|PUT PIXEL
 % -------------------------
@@ -110,7 +172,6 @@ putPixel((A,B,V), [(Ax,Bx,Vx)|T1], [(Ax,Bx,Vx)|T2]) :-
 putPixel((A,B,V), [(Ax,Bx,Vx)|T1], [(Ax,Bx,Vx)|T2]) :-
     Bx \= B,
     putPixel((A,B,V), T1, T2).
-
 
 % NEIGHBORHOOD
 % -------------------------

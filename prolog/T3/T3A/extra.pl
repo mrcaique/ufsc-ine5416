@@ -1,18 +1,18 @@
-% Image processing package in Prolog (a initial tentative)
-% Prof. A. G. Silva - UFSC - October 2015
+% Image processing package in Prolog
+% Credits:
+%   Caique Rodrigues Marques
+%   Gustavo José Carpeggiani
+%   Vinícius Couto Biermann
 %
-% Extra functions, especially the transformation of coordinates list for matrix notation
+% Based on basic implementation by:
+%   Alexandre G. Silva
+%
 % Example: 
 %    ?- coord2matrix([(0,0,50),(0,1,10),(0,2,30),(1,0,10),(1,1,20),(1,2,40)], M).
 %    M = [[50, 10, 30], [10, 20, 40]].
 
 :- consult('imagem.pl').
 :- consult('pgm.pl').
-
-coord2matrix(S, M) :-
-    height(S, H),
-    matrixconstruct(S, H, -1, [], M),
-    !.
 
 test :-
     load('imgs/ufsc.pgm', S),
@@ -27,9 +27,7 @@ negative(FileName) :-
     atom_concat('imgs/', FileName, Path_file),
     print(Path_file), nl, nl,
     load(Path_file, C_list),
-    print(C_list), nl, nl,
     negative_list(C_list, N_list),
-    print(N_list), nl, nl,
     coord2matrix(N_list, Matrix),
     atom_string(FileName, String),
     atomic_list_concat(S_file, '.', String),
@@ -41,6 +39,8 @@ negative(FileName) :-
 mean(FileName1, FileName2) :-
     atom_concat('imgs/', FileName1, Path_f1),
     atom_concat('imgs/', FileName2, Path_f2),
+    print(Path_f1), nl,
+    print(Path_f2), nl, nl,
     load(Path_f1, L1),
     load(Path_f2, L2),
     mean_list(L1, L2, L_output),
@@ -70,37 +70,13 @@ test_lonely_pixel :-
 test_path_pixels :-
     matrix(M),
     coord(M, L),
-    path_pixels(L, (0, 1, _), (6, 7, _), List),
+    path_pixels(L, (0, 2, _), (0, 3, _), List),
     print(List),
     !.
 
 load(FileName, S) :-
     readPGM(FileName, M),
     coord(M, S).
-
-matrixconstruct(_, H, H, [_|Mt], M) :-
-    reverse(Mt, M).
-matrixconstruct(S, H, L, Macc, M) :-
-    L1 is L + 1,
-    findall( V, value(S,(L1,_,V)), Line ),
-    matrixconstruct(S, H, L1, [Line|Macc], M).
-
-shape(S, H, W) :-
-    height(S, H), width(S, W).
-
-height(S, H) :-
-    findall( L, value(S,(L,0,_)), Ll ),
-    max_list(Ll, H1),
-    H is H1 + 1.
-
-width(S, W) :-
-    findall( C, value(S,(0,C,_)), Lc ),
-    max_list(Lc, W1),
-    W is W1 + 1.
-
-value([(X,Y,V)|_], (X,Y,V)).
-value([_|St], (X,Y,Z)) :-
-    value(St, (X,Y,Z)).
 
 % Negative: for each intensity I in the image, make
 % 255-I in the image output.
@@ -147,8 +123,7 @@ check_n4_intensity([(_, _, I)|Tail], I_base) :-
     I_base > I,
     check_n4_intensity(Tail, I_base).
 
-lonely_pixel([], []) :-
-    !.
+lonely_pixel([], []) :- !.    
 lonely_pixel([(X, Y, I)|Tail], [H_output|T_output]) :-
     n4(Tail, (X, Y, I), Four_list),
     (
@@ -202,15 +177,18 @@ path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), [H_output|T_output]) :-
     getPixel(C_list, (Xd, Yd, Id)),
     copy_term((Xs, Ys, Is), H_output),
     (
-        check_destiny((Xs, Ys, Is), (Xd, Yd, Id)) -> true;
-            n4(C_list, (Xs, Ys, Is), Four_list),
-            get_bigger_intensity(Four_list, (Xs, Ys, Is), Bigger),
-            (
-                is_equal((Xs, Ys, Is), Bigger) ->
-                    writeln('Path not found.'), nl,
-                    write('Actual path: '),
-                    copy_term([], T_output),
-                    nl;
-                path_pixels(C_list, Bigger, (Xd, Yd, Id), T_output)
-            )
+        check_destiny((Xs, Ys, Is), (Xd, Yd, Id)) ->
+            writeln('Path found!'),
+            copy_term([], T_output), 
+            write('Path: '),
+            true;
+        n4(C_list, (Xs, Ys, Is), Four_list),
+        get_bigger_intensity(Four_list, (Xs, Ys, Is), Bigger),
+        (
+            is_equal((Xs, Ys, Is), Bigger) ->
+                writeln('Path not found.'), nl,
+                copy_term([], T_output),
+                write('Actual path: ');
+            path_pixels(C_list, Bigger, (Xd, Yd, Id), T_output)
+        )
     ).
