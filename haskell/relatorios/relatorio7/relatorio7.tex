@@ -16,9 +16,9 @@ O módulo \textit{hyperbolic\_functions.hs} implementado na linguagem de program
 $Senh(x) = \frac{e^{x} - e^{-x}}{2}$ \\ \\
 $Cosh(x) = \frac{e^{x} + e^{-x}}{2}$ \\ \\
 $Tanh(x) = \frac{Senh(x)}{Cosh(x)}$ \\ \\
-$Coth(x) = \frac{Cosh(x)}{Senh(x)}$ \\
+$Coth(x) = \frac{Cosh(x)}{Senh(x)}$ \\ \\
     
-No módulo, a determinação da constante $e$ foi estabelecida como $n = 1000$, ou seja, é calculado o somatório da sequência de $1$ até $\frac{1}{1000!}$, devido a esta limitação, a aproximação dos valores tem de a ser menor em comparação às implementações nativas do Haskell, que tem até seis casas de aproximação.
+No módulo, a determinação da constante $e$ foi estabelecida como $n = 1000$, ou seja, é calculado o somatório da sequência de $1$ até $\frac{1}{1000!}$, devido a esta limitação, a aproximação dos valores tende a ser menor em comparação às implementações nativas do Haskell, que tem até seis casas de aproximação.
 
 \begin{verbatim}
     *HyperbolicFunctions> sinh 1
