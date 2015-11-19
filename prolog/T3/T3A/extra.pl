@@ -63,14 +63,15 @@ mean(FileName1, FileName2) :-
 test_lonely_pixel :-
     matrix(M),
     coord(M, L),
-    lonely_pixel(L, O),
-    print(O),
+    lonely_pixel(L, L, [], A),
+    print(A),
     !.
 
 test_path_pixels :-
-    matrix(M),
-    coord(M, L),
-    path_pixels(L, (0, 2, _), (0, 3, _), List),
+    load('imgs/ufsc.pgm', L),
+    %matrix(M),
+    %coord(M, L),
+    path_pixels(L, (0, 0, _), (3, 1, _), List),
     print(List),
     !.
 
@@ -80,6 +81,7 @@ load(FileName, S) :-
 
 % Negative: for each intensity I in the image, make
 % 255-I in the image output.
+% Native rules: copy_term/2
 %
 % [(X, Y, I)|T_input] = Input coordinates list
 % [H_output|T_output] = Output coordinates list
@@ -108,29 +110,31 @@ mean_list([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
 % Isolated pixel detector: a pixel with intensity I is
 % isolated if your 4 neighbors (below, above, right and left)
 % has intensities smallest than I.
+% Native rules: copy_term/2, reverse/2.
 %
-% [(X, Y, I)|Tail] = Input coordinates list.
-% [H_output|T_output] = List with isolated pixels
+% C_list = input coordinates list
+% [(X, Y, I)|Tail] = Remaining coordinates to evaluate.
+% T_acc = Accumulator, initially, must be an empty list ([]).
+% Output = List with isolated pixels
 %
 % check_n4_intensity: Check if a pixel is isolated.
 %
 % [(X, Y, I)|Tail] = List with 4 neighbors of a pixel.
 % I_intial = Intensity of pixel that will be compared
 %       with the intensities of your 4 neighbors.
-check_n4_intensity([], _) :-
-    true, !.
+check_n4_intensity([], _) :- true, !.
 check_n4_intensity([(_, _, I)|Tail], I_base) :-
     I_base > I,
     check_n4_intensity(Tail, I_base).
 
-lonely_pixel([], []) :- !.    
-lonely_pixel([(X, Y, I)|Tail], [H_output|T_output]) :-
-    n4(Tail, (X, Y, I), Four_list),
+lonely_pixel(_, [], T_acc, Output) :-
+    reverse(T_acc, Output).
+lonely_pixel(C_list, [(X, Y, I)|Tail], T_acc, Output) :-
+    n4(C_list, (X, Y, I), Four_list),
     (
-        check_n4_intensity(Four_list, I) -> 
-                copy_term((X, Y, I), H_output),
-                lonely_pixel(Tail, T_output);
-        lonely_pixel(Tail, [H_output|T_output])
+        check_n4_intensity(Four_list, I) ->
+            lonely_pixel(C_list, Tail, [(X, Y, I)|T_acc], Output);
+        lonely_pixel(C_list, Tail, T_acc, Output)
     ).
 
 % Verification of a path between two pixels: There is
@@ -138,8 +142,9 @@ lonely_pixel([(X, Y, I)|Tail], [H_output|T_output]) :-
 % pixels (cosidering the 4 neighbors), all with inten-
 % sities bigger or equal then the intensity of the 
 % start pixel, that can reach the destiny pixel.
+% Native rules: copy_term/2, writeln/1.
 %
-% [(X, Y, I)|Tail] = Input coordinates list.
+% C_list = Input coordinates list.
 % (Xs, Ys, Is) = Start pixel p1.
 % (Xd, Yd, Id) = Destiny pixel p2.
 % [H_output|T_output] = List with path from p1 to p2.
@@ -167,8 +172,9 @@ get_bigger_intensity([], (Xs, Ys, Is), (Xd, Yd, Id)) :-
     Id is Is.
 get_bigger_intensity([(X, Y, I)|Tail], (Xs, Ys, Is), Destiny) :-
     (
-        Is =< I ->  get_bigger_intensity(Tail, (X, Y, I), Destiny);
-            get_bigger_intensity(Tail, (Xs, Ys, Is), Destiny)
+        Is =< I ->
+            get_bigger_intensity(Tail, (X, Y, I), Destiny);
+        get_bigger_intensity(Tail, (Xs, Ys, Is), Destiny)
     ).
 
 path_pixels([], _, _, []) :- !.
@@ -179,16 +185,14 @@ path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), [H_output|T_output]) :-
     (
         check_destiny((Xs, Ys, Is), (Xd, Yd, Id)) ->
             writeln('Path found!'),
-            copy_term([], T_output), 
-            write('Path: '),
+            copy_term([], T_output),
             true;
         n4(C_list, (Xs, Ys, Is), Four_list),
         get_bigger_intensity(Four_list, (Xs, Ys, Is), Bigger),
         (
             is_equal((Xs, Ys, Is), Bigger) ->
-                writeln('Path not found.'), nl,
-                copy_term([], T_output),
-                write('Actual path: ');
+                writeln('Path not found.'),
+                copy_term([], T_output);
             path_pixels(C_list, Bigger, (Xd, Yd, Id), T_output)
         )
     ).
