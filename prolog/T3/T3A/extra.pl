@@ -67,11 +67,9 @@ test_lonely_pixel :-
     print(A),
     !.
 
-test_path_pixels :-
+test_path_pixels((X1, Y1, _), (X2, Y2)) :-
     load('imgs/ufsc.pgm', L),
-    %matrix(M),
-    %coord(M, L),
-    path_pixels(L, (0, 0, _), (3, 1, _), List),
+    path_pixels(L, (X1, Y1, _), (X2, Y2, _), List),
     print(List),
     !.
 
@@ -221,34 +219,34 @@ path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), [H_output|T_output]) :-
         )
     ).
 
-% Returns the dark pixels of an image. The pixels that are not
+% Returns the clear pixels of an image. The pixels that are not
 % darker are intensifies to show in a image the dark areas.
 %
 % [(X, Y, I)|T_input] = input coordinates list.
 % T_acc = Accumulator, initially, must be an empty list.
 % Dark_list = List with the dark pixels of the image.
-get_dark_pixels_image([], T_acc, Dark_list) :-
+get_clear_pixels_image([], T_acc, Dark_list) :-
     reverse(T_acc, Dark_list).
-get_dark_pixels_image([(X, Y, I)|T_input], T_acc, Dark_list) :-
+get_clear_pixels_image([(X, Y, I)|T_input], T_acc, Dark_list) :-
     (
-        I =< 127 ->
-            get_dark_pixels_image(T_input, [(X,Y,I)|T_acc], Dark_list);
-        get_dark_pixels_image(T_input, [(X,Y,255)|T_acc], Dark_list)
+        I > 127 ->
+            get_clear_pixels_image(T_input, [(X,Y,255)|T_acc], Dark_list);
+        get_clear_pixels_image(T_input, [(X,Y,I)|T_acc], Dark_list)
     ).
 
-% Returns the clear pixels of an image. The pixels that are not
+% Returns the dark pixels of an image. The pixels that are not
 % clear are intensifies to show in a image the clear areas.
 %
 % [(X, Y, I)|T_input] = input coordinates list.
 % T_acc = Accumulator, initially, must be an empty list.
 % Clear_list = List with the clear pixels of the image.
-get_clear_pixels_image([], T_acc, Clear_list) :-
+get_dark_pixels_image([], T_acc, Clear_list) :-
     reverse(T_acc, Clear_list).
-get_clear_pixels_image([(X, Y, I)|T_input], T_acc, Clear_list) :-
+get_dark_pixels_image([(X, Y, I)|T_input], T_acc, Clear_list) :-
     (
-        I > 127 ->
-            get_clear_pixels_image(T_input, [(X,Y,I)|T_acc], Clear_list);
-        get_clear_pixels_image(T_input, [(X,Y,0)|T_acc], Clear_list)
+        I =< 127 ->
+            get_dark_pixels_image(T_input, [(X,Y,0)|T_acc], Clear_list);
+        get_dark_pixels_image(T_input, [(X,Y,I)|T_acc], Clear_list)
     ).
 
 % Returns the dark pixels of an image. The difference between 
