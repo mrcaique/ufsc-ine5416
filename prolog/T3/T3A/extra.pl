@@ -75,6 +75,30 @@ test_path_pixels :-
     print(List),
     !.
 
+dark_pixels(FileName) :-
+    atom_concat('imgs/', FileName, Path_file),
+    print(Path_file), nl, nl,
+    load(Path_file, C_list),
+    get_dark_pixels_image(C_list, [], Dark_list),
+    coord2matrix(Dark_list, Matrix),
+    atom_string(FileName, String),
+    atomic_list_concat(S_file, '.', String),
+    nth0(0, S_file, Name),
+    atom_concat(Name, '_dark.pgm', NewFileName),
+    writePGM(NewFileName, Matrix), !.
+
+clear_pixels(FileName) :-
+    atom_concat('imgs/', FileName, Path_file),
+    print(Path_file), nl, nl,
+    load(Path_file, C_list),
+    get_clear_pixels_image(C_list, [], Clear_list),
+    coord2matrix(Clear_list, Matrix),
+    atom_string(FileName, String),
+    atomic_list_concat(S_file, '.', String),
+    nth0(0, S_file, Name),
+    atom_concat(Name, '_clear.pgm', NewFileName),
+    writePGM(NewFileName, Matrix), !.
+
 load(FileName, S) :-
     readPGM(FileName, M),
     coord(M, S).
@@ -119,8 +143,8 @@ mean_list([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
 %
 % check_n4_intensity: Check if a pixel is isolated.
 %
-% [(X, Y, I)|Tail] = List with 4 neighbors of a pixel.
-% I_intial = Intensity of pixel that will be compared
+% [(_, _, I)|Tail] = List with 4 neighbors of a pixel.
+% I_base = Intensity of pixel that will be compared
 %       with the intensities of your 4 neighbors.
 check_n4_intensity([], _) :- true, !.
 check_n4_intensity([(_, _, I)|Tail], I_base) :-
@@ -157,7 +181,7 @@ lonely_pixel(C_list, [(X, Y, I)|Tail], T_acc, Output) :-
 %
 % check_destiny: Check if reached to the destiny pixel.
 %
-% is_equal: Check if two pixels are equal.
+% is_equal: Check if two pixels are equals.
 check_destiny((Xs, Ys, _), (Xd, Yd, _)) :-
     Xs = Xd,
     Ys = Yd,
@@ -195,4 +219,58 @@ path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), [H_output|T_output]) :-
                 copy_term([], T_output);
             path_pixels(C_list, Bigger, (Xd, Yd, Id), T_output)
         )
+    ).
+
+% Returns the dark pixels of an image. The pixels that are not
+% darker are intensifies to show in a image the dark areas.
+%
+% [(X, Y, I)|T_input] = input coordinates list.
+% T_acc = Accumulator, initially, must be an empty list.
+% Dark_list = List with the dark pixels of the image.
+get_dark_pixels_image([], T_acc, Dark_list) :-
+    reverse(T_acc, Dark_list).
+get_dark_pixels_image([(X, Y, I)|T_input], T_acc, Dark_list) :-
+    (
+        I =< 127 ->
+            get_dark_pixels_image(T_input, [(X,Y,I)|T_acc], Dark_list);
+        get_dark_pixels_image(T_input, [(X,Y,255)|T_acc], Dark_list)
+    ).
+
+% Returns the clear pixels of an image. The pixels that are not
+% clear are intensifies to show in a image the clear areas.
+%
+% [(X, Y, I)|T_input] = input coordinates list.
+% T_acc = Accumulator, initially, must be an empty list.
+% Clear_list = List with the clear pixels of the image.
+get_clear_pixels_image([], T_acc, Clear_list) :-
+    reverse(T_acc, Clear_list).
+get_clear_pixels_image([(X, Y, I)|T_input], T_acc, Clear_list) :-
+    (
+        I > 127 ->
+            get_clear_pixels_image(T_input, [(X,Y,I)|T_acc], Clear_list);
+        get_clear_pixels_image(T_input, [(X,Y,0)|T_acc], Clear_list)
+    ).
+
+% Returns the dark pixels of an image. The difference between 
+% get_dark_pixels_image is in this rule, only the dark pixels
+% are stored in a output list.
+get_dark_pixels_list([], T_acc, Dark_list) :-
+    reverse(T_acc, Dark_list).
+get_dark_pixels_list([(X, Y, I)|T_input], T_acc, Dark_list) :-
+    (
+        I =< 127 ->
+            get_dark_pixels_list(T_input, [(X,Y,I)|T_acc], Dark_list);
+        get_dark_pixels_list(T_input, T_acc, Dark_list)
+    ).
+
+% Returns the clear pixels of an image. The difference between 
+% get_clear_pixels_image is in this rule, only the clear pixels
+% are stored in a output list.
+get_clear_pixels_list([], T_acc, Clear_list) :-
+    reverse(T_acc, Clear_list).
+get_clear_pixels_list([(X, Y, I)|T_input], T_acc, Clear_list) :-
+    (
+        I > 127 ->
+            get_clear_pixels_list(T_input, [(X,Y,I)|T_acc], Clear_list);
+        get_clear_pixels_list(T_input, T_acc, Clear_list)
     ).
