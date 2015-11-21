@@ -20,6 +20,10 @@ test :-
     writePGM('ufsc_out.pgm', M),
     !.
 
+% Returns the negative of an ascii pgm image.
+% see: negative_list/2
+%
+% FileName = ascii pgm image
 negative(FileName) :-
     %copy_term('rm ', Remove),
     %atom_concat(Remove, FileName, Command),
@@ -36,6 +40,9 @@ negative(FileName) :-
     writePGM(NewFileName, Matrix),
     !.
 
+% Returns an image with mean of intensities between
+% two ascii pgm images.
+% see: mean_list/3
 mean(FileName1, FileName2) :-
     atom_concat('imgs/', FileName1, Path_f1),
     atom_concat('imgs/', FileName2, Path_f2),
@@ -60,6 +67,8 @@ mean(FileName1, FileName2) :-
     writePGM(NewFileName, M_output),
     !.
 
+% Test lonely_pixel rule.
+% see: lonely_pixel/4
 test_lonely_pixel :-
     matrix(M),
     coord(M, L),
@@ -67,12 +76,21 @@ test_lonely_pixel :-
     print(A),
     !.
 
-test_path_pixels((X1, Y1, _), (X2, Y2)) :-
+% Test path_pixels rule
+% see: path_pixels/4
+%
+% (X1, Y1, _) = start pixel
+% (X2, Y2, _) = finish pixel
+test_path_pixels((X1, Y1, _), (X2, Y2, _)) :-
     load('imgs/ufsc.pgm', L),
     path_pixels(L, (X1, Y1, _), (X2, Y2, _), List),
     print(List),
     !.
 
+% Intensifies the dark pixels of an image
+% see: get_dark_pixels_image/3
+%
+% FileName = pgm image
 dark_pixels(FileName) :-
     atom_concat('imgs/', FileName, Path_file),
     print(Path_file), nl, nl,
@@ -85,6 +103,10 @@ dark_pixels(FileName) :-
     atom_concat(Name, '_dark.pgm', NewFileName),
     writePGM(NewFileName, Matrix), !.
 
+% Intensifies the clear pixels of an image.
+% see: get_clear_pixels_image/3
+%
+% FileName = pgm image
 clear_pixels(FileName) :-
     atom_concat('imgs/', FileName, Path_file),
     print(Path_file), nl, nl,
@@ -97,6 +119,10 @@ clear_pixels(FileName) :-
     atom_concat(Name, '_clear.pgm', NewFileName),
     writePGM(NewFileName, Matrix), !.
 
+% Transforms an pgm image to a coordinates list
+%
+% FileName = pgm image.
+% S = Coordinates list.
 load(FileName, S) :-
     readPGM(FileName, M),
     coord(M, S).
@@ -219,34 +245,36 @@ path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), [H_output|T_output]) :-
         )
     ).
 
-% Returns the clear pixels of an image. The pixels that are not
-% darker are intensifies to show in a image the dark areas.
+% Returns a list of pixels, where the pixels that are not
+% darker are intensifies to show in a image the clear areas.
 %
 % [(X, Y, I)|T_input] = input coordinates list.
 % T_acc = Accumulator, initially, must be an empty list.
-% Dark_list = List with the dark pixels of the image.
-get_clear_pixels_image([], T_acc, Dark_list) :-
-    reverse(T_acc, Dark_list).
-get_clear_pixels_image([(X, Y, I)|T_input], T_acc, Dark_list) :-
+% Pixel_list = List with pixels, where the clear pixels are
+% more evident.
+get_clear_pixels_image([], T_acc, Pixel_list) :-
+    reverse(T_acc, Pixel_list).
+get_clear_pixels_image([(X, Y, I)|T_input], T_acc, Pixel_list) :-
     (
         I > 127 ->
-            get_clear_pixels_image(T_input, [(X,Y,255)|T_acc], Dark_list);
-        get_clear_pixels_image(T_input, [(X,Y,I)|T_acc], Dark_list)
+            get_clear_pixels_image(T_input, [(X,Y,255)|T_acc], Pixel_list);
+        get_clear_pixels_image(T_input, [(X,Y,I)|T_acc], Pixel_list)
     ).
 
-% Returns the dark pixels of an image. The pixels that are not
-% clear are intensifies to show in a image the clear areas.
+% Returns a list of pixels, where the pixels that are not
+% clear are intensifies to show in a image the dark areas.
 %
 % [(X, Y, I)|T_input] = input coordinates list.
 % T_acc = Accumulator, initially, must be an empty list.
-% Clear_list = List with the clear pixels of the image.
-get_dark_pixels_image([], T_acc, Clear_list) :-
-    reverse(T_acc, Clear_list).
-get_dark_pixels_image([(X, Y, I)|T_input], T_acc, Clear_list) :-
+% Pixel_list = List with pixels, where the dark pixels are
+% more evident.
+get_dark_pixels_image([], T_acc, Pixel_list) :-
+    reverse(T_acc, Pixel_list).
+get_dark_pixels_image([(X, Y, I)|T_input], T_acc, Pixel_list) :-
     (
         I =< 127 ->
-            get_dark_pixels_image(T_input, [(X,Y,0)|T_acc], Clear_list);
-        get_dark_pixels_image(T_input, [(X,Y,I)|T_acc], Clear_list)
+            get_dark_pixels_image(T_input, [(X,Y,0)|T_acc], Pixel_list);
+        get_dark_pixels_image(T_input, [(X,Y,I)|T_acc], Pixel_list)
     ).
 
 % Returns the dark pixels of an image. The difference between 
