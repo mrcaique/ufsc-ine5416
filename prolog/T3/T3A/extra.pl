@@ -10,6 +10,11 @@
 % Example: 
 %    ?- coord2matrix([(0,0,50),(0,1,10),(0,2,30),(1,0,10),(1,1,20),(1,2,40)], M).
 %    M = [[50, 10, 30], [10, 20, 40]].
+%
+% Note:
+%   For more information about the native rules, check
+%   the official documentation for more information at:
+%   http://www.swi-prolog.org/
 
 :- consult('imagem.pl').
 :- consult('pgm.pl').
@@ -83,7 +88,7 @@ test_lonely_pixel :-
 % (X2, Y2, _) = finish pixel
 test_path_pixels((X1, Y1, _), (X2, Y2, _)) :-
     load('imgs/ufsc.pgm', L),
-    path_pixels(L, (X1, Y1, _), (X2, Y2, _), List),
+    path_pixels(L, (X1, Y1, _), (X2, Y2, _), [], List),
     print(List),
     !.
 
@@ -190,12 +195,14 @@ lonely_pixel(C_list, [(X, Y, I)|Tail], T_acc, Output) :-
 % pixels (cosidering the 4 neighbors), all with inten-
 % sities bigger or equal then the intensity of the 
 % start pixel, that can reach the destiny pixel.
-% Native rules: copy_term/2, writeln/1.
+% Native rules: copy_term/2, writeln/1,
+%           intersection/3, subtract/3.
 %
 % C_list = Input coordinates list.
 % (Xs, Ys, Is) = Start pixel p1.
 % (Xd, Yd, Id) = Destiny pixel p2.
-% [H_output|T_output] = List with path from p1 to p2.
+% T_acc = Accumulator, initially, must be an empty list ([]).
+% Output = Output list.
 %
 % get_bigger_intensity: Check the pixel with greater inten-
 % sity from the 4 neighbors.
@@ -205,14 +212,20 @@ lonely_pixel(C_list, [(X, Y, I)|Tail], T_acc, Output) :-
 %
 % check_destiny: Check if reached to the destiny pixel.
 %
-% is_equal: Check if two pixels are equals.
+% check_loop: Check if a pixel has been marked.
+check_loop([], _) :-
+    false.
+check_loop([(X, Y, _)|Tail], (Xs, Ys, _)) :-
+    (
+        X = Xs, Y = Ys ->
+            true;
+        check_loop(Tail, (Xs, Ys, _))
+    ).
+
 check_destiny((Xs, Ys, _), (Xd, Yd, _)) :-
     Xs = Xd,
     Ys = Yd,
     true.
-
-is_equal((Xs, Ys, _), (Xd, Yd, _)) :-
-    Xs = Xd, Ys = Yd, !.
 
 get_bigger_intensity([], (Xs, Ys, Is), (Xd, Yd, Id)) :-
     Xd is Xs,
@@ -225,23 +238,25 @@ get_bigger_intensity([(X, Y, I)|Tail], (Xs, Ys, Is), Destiny) :-
         get_bigger_intensity(Tail, (Xs, Ys, Is), Destiny)
     ).
 
-path_pixels([], _, _, []) :- !.
-path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), [H_output|T_output]) :-
+path_pixels([], _, _, T_acc, Output) :-
+    reverse(T_acc, Output).
+path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), T_acc, Output) :-
     getPixel(C_list, (Xs, Ys, Is)),
     getPixel(C_list, (Xd, Yd, Id)),
-    copy_term((Xs, Ys, Is), H_output),
     (
         check_destiny((Xs, Ys, Is), (Xd, Yd, Id)) ->
             writeln('Path found!'),
-            copy_term([], T_output),
+            reverse([(Xs, Ys, Is)|T_acc], Output),
             true;
         n4(C_list, (Xs, Ys, Is), Four_list),
-        get_bigger_intensity(Four_list, (Xs, Ys, Is), Bigger),
+        intersection(Four_list, T_acc, Intersection),
+        subtract(Four_list, Intersection, New_4list),
+        get_bigger_intensity(New_4list, (Xs, Ys, Is), Bigger),
         (
-            is_equal((Xs, Ys, Is), Bigger) ->
+            check_loop(T_acc, Bigger) ->
                 writeln('Path not found.'),
-                copy_term([], T_output);
-            path_pixels(C_list, Bigger, (Xd, Yd, Id), T_output)
+                reverse([(Xs, Ys, Is)|T_acc], Output);
+            path_pixels(C_list, Bigger, (Xd, Yd, Id), [(Xs, Ys, Is)|T_acc], Output)
         )
     ).
 
