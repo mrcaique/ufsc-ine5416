@@ -1,0 +1,50 @@
+    INE5416 - PARADIGMAS DA PROGRAMAÇÃO (2015/2)
+        Caique Rodrigues Marques - 13204303
+
+O cálculo lambda é um formalismo algébrico para representar a abstração de funções e argumentos na lógica matemática descrito por Alonzo Church com base na lógica combinatória de Schönfinkel e na teoria da recursividade de Stephen Kleene. Este relatório contém as informações coletadas através de estudos sugeridos, dentre eles, o artigo original de Church: An unsolvable problem of elementary number theory.
+
+DEFINIÇÕES
+O cálculo lambda foi desenvolvido por Alonzo Church como solução para o problema da computabilidade proposto por David Hilbert em 1928 que, assim como o artigo de Alan Turing, define as bases para a nova área da matemática, a Ciência da Computação. A solução de Church foi formulada para dar bases formais ao conceito de computação efetiva. O cálculo lambda é formado por uma expressão definida recursivamente.
+
+Uma expressão lambda é composta por:
+    * Variáveis x1, x2, ..., xn, ...
+    * Os símbolos de abstração lambda ("λ") e ponto (".")
+    * Parênteses ()
+O conjunto de expressões lambda, A, pode ser definida indutivamente:
+    1) Se x é uma variável, então x∈A
+    2) Se x é uma variável e M ∈ A, então (λx.M)∈A
+    3) Se M, N∈A, então (M, N)∈A
+Instâncias da segunda regra são chamadas de abstrações e instâncias da terceira regra são chamadas de aplicações. Segue alguns exemplos:
+    * λx.x²+xy+z (3) = 9+3y+z
+    * λx.x
+    * λt.t+2(λy.y²+2y+1 (3)) = λt.t+2 (9+6+1)  = λt.t+2 (16) = 18
+    * λy.sqrt(y) (t) = λt.sqrt(t)
+Uma abstração é definida de forma que, usando o primeiro exemplo, λx corresponde ao lambda-termo e x²+xy+z corresponde à expressão. O (3) corresponde à aplicação na expressão lambda, portanto, a aplicação do número três no lambda-termo, tal qual uma função matemática, onde dada uma função f(x) qualquer, um valor qualquer presente no domínio de f(x) pode ser aplicado em x. O cálculo lambda é a base das linguagens de programação com o paradigma funcional. A seguir, um exemplo em Python, que é uma linguagem multiparadigma. Nota-se que as funções anônimas do Python segue o mesma sintaxe e semântica provinda das definições do cálculo lambda.
+    def sqrt(n):
+        return lambda n: n*n
+A implementação acima, é o mesmo que λn. n² (n), onde "n" corresponde a um número qualquer. Nota-se que cálculo lambda é uma linguagem de programação universial, assim como a máquina de Turing é um hardware universal, o valor de λn corresponde à variável considerada na questão, enquanto (n) corresponde ao argumento que será usado na função, mesmo nome usado em linguagens ao definir a assinatura de uma função (assinatura corresponde a "def sqrt(n)", onde (n) é o argumento).
+
+------------
+
+REDUÇÕES
+Expressões em cálculo lambda também podem sofrer mundaças de comportamento, isto é chamado de redução e há três tipos:
+    * α-conversão, onde se altera o limite das variáveis. Geralmente pode ser usada para alterar o nome da variável, embora as regras precisas não sejam triviais.
+    Exemplo: λx.x (y)
+    * β-redução, onde se aplica funções nos argumentos de uma expressão lambda. 
+    Exemplo: λy.y +2 (3x+2y+7z)
+    * η-conversão, onde captura a noção de extensionalidade. Isto siginifica que, dada duas funções, elas só serão iguais se, e somente se, elas dão o mesmo resultado para todos os argumentos definidos.
+    Exemplo: λx.(f x)
+
+------------
+
+PARTE 2
+Como dito anteriormente, o cálculo lambda é a base das linguagens de programação funcional. Um exemplo a citar é Haskell, onde o λ é substituído por "\" e o ponto "." por "->"
+    * Realizando uma operação modular básica, é possível remover o primeiro elemento divisível por três na lista.
+        Prelude> List.deleteBy(\x y->y `mod` x == 0)3[5..10]
+        [5,7,8,9,10]
+    * De forma semelhante, para filtrar os elementos não divisíveis por quatro na lista.
+        Prelude> List.filter(\x ->x `mod` 4 == 0)[4..19]
+        [4,8,12,16]
+    * O valor da expressão:
+        Prelude> [ x | x <- [1..4], y <- [x..5], (x+y) `mod` 2 == 0 ]
+        [1,1,1,2,2,3,3,4]

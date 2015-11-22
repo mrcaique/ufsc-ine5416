@@ -1,0 +1,19 @@
+    INE5416 - PARADIGMAS DA PROGRAMAÇÃO (2015/2)
+    RELATÓRIO 7: MÓDULOS
+        Caique Rodrigues Marques 13204303
+
+O módulo hyperbolic_functions.hs implementado na linguagem de programação Haskell realiza os cálculos das seguintes operações de funções hiperbólicas, sendo "e" a constante matemática que pode ser calculada pela seguinte série de Taylor sum(n=1)(infinito)1/n! = 1/1 + 1/1.2 + 1/1.2.3 + ...
+
+Senh(x) = (e^x - e^(-x))/2
+Cosh(x) = (e^x + e^(-x))/2
+Tanh(x) = Senh(x)/Cosh(x)
+Coth(x) = Cosh(x)/Senh(x)
+    
+No módulo, a determinação da constante "e" foi estabelecida como n = 1000, ou seja, é calculado o somatório da sequência de 1 até 1/1000!, devido a esta limitação, a aproximação dos valores tende a ser menor em comparação às implementações nativas do Haskell, que tem até seis casas de aproximação.
+
+    *HyperbolicFunctions> sinh 1
+    1.1752011936438014
+    *HyperbolicFunctions> value (Sinh 1)
+    1.1752012
+
+As outras funções possíveis de usar são value(Cosh x), value(Tanh x) e value(Coth x) com x E R.
