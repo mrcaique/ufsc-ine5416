@@ -154,3 +154,32 @@ test :-
     writeln(I5),
     writeln(I6),
     writeln(I7).
+
+%% -------------------------------------------------------------------------------------------------
+
+load :-
+	retractall(img(_, _, _, _, _, _, _, _)),
+	open('imgdatabase.pl', read, Stream),
+	repeat,
+		read(Stream, Data),
+		(Data == end_of_file -> true ; assert(Data), fail),
+		!,
+		close(Stream).
+
+commit :-
+	open('imgdatabase.pl', write, Stream),
+	telling(Screen), 	
+	tell(Stream),
+	listing(img/8),
+	tell(Screen),
+	close(Stream).
+
+new(FileName, Id) :-
+	readPGM(FileName, I),
+	coord(I, Iout),
+	hu(Iout, I1, I2, I3, I4, I5, I6, I7),
+	assertz(img(Id, I1, I2, I3, I4, I5, I6, I7)),
+	!.
+
+searchAll(Id) :-
+	listing(img(Id, _, _, _, _, _, _, _)).
