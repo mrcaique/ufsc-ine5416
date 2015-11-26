@@ -20,7 +20,7 @@
 \end{center}
 
 \section*{Regras}
-    As seguintes regras foram implementadas com a linguagem de programação SWI-Prolog, oferecendo operações a mais em relação à processamento de imagens. As imagens trabalhadas são em formato ascii pgm e em preto e branco, todas as implementações foram trabalhadas usando uma lista de pixels, que pode ser convertido para uma matriz de intensidade e vice-versa.
+    As seguintes regras foram implementadas na linguagem de programação SWI-Prolog, oferecendo operações a mais em relação à processamento de imagens. As imagens trabalhadas são em formato ascii pgm e em preto e branco, todas as implementações foram trabalhadas usando uma lista de pixels, que pode ser convertido para uma matriz de intensidade e vice-versa.
     
     \subsection*{negative}
         A regra faz com que, dada uma lista de pixels com intensidade I, seja retornado uma lista com as intensidades dos pixels sendo como 255-I, ou seja, ela faz com que as regiões mais claras das imagens fiquem mais escuras e as regiões mais escuras fiquem mais claras.
@@ -130,7 +130,7 @@
         
         Se a checagem for verdadeira, ou seja, se o pixel p1 possui intensidade maior que os seus quatro vizinhos, então ele é considerado isolado e é adicionado à cabeça da lista de acumulador e a regra é chamada de novo com o próximo pixel da lista de contagem. Se a checagem for falsa, a regra é chamada novamente, com o acumulador intacto.
 
-        Assim que todos os elementos da lista de contagem forem verificados, se a variável \textit{T\_acc} tiver pixels isolados, eles estarão em ordem do mais distante até o mais próximo do ponto de origem. É realizado uma inversão dos elementos da lista acumulador, com a regra nativa \textit{reverse/2}, e armazenado na lista de saída \textit{Output}.
+        Assim que todos os elementos da lista de contagem forem verificados, se a variável \textit{T\_acc} tiver pixels isolados, eles estarão em ordem do mais distante até o mais próximo do ponto de origem (0,0). É realizado uma inversão dos elementos da lista acumulador, com a regra nativa \textit{reverse/2}, e armazenado na lista de saída \textit{Output}.
 
         \begin{lstlisting}[frame=single]
         check_n4_intensity([], _) :- true, !.
@@ -176,7 +176,7 @@ true.
         
         A regra, mostrada abaixo, recebe uma lista com todos os pixels, o pixel inicial, o pixel destino, um acumulador (sua inicialização tem de ser uma lista vazia) e usará uma segunda lista com o caminho realizado. Primeiramente, as intensidades dos pixels inicial e destino são encontrados.
         
-        Uma condição é checada e será explicada posteriormente, se ela retornar falso, os quatro vizinhos do pixel inicial são encontrados e armazenados em \textit{Four\_list}. Duas regras nativas são usadas para remover possíveis redundâncias em \textit{Four\_list}, ou seja, pontos que já foram passados, evitando loops infinitos; a regra \textit{intersection/3} coloca a interseção dos elementos das duas listas em \textit{Intersection}, que possui os elementos em comum, depois, os elementos desta lista são os mesmos removidos de \textit{Four\_list} e os restantes são adicionados ao \textit{New\_4list}, assim sendo, os elementos que já foram maracados, não são referenciados novamente.
+        Uma condição é checada e será explicada posteriormente, se ela retornar falso, os quatro vizinhos do pixel inicial são encontrados e armazenados em \textit{Four\_list}. Duas regras nativas são usadas para remover possíveis redundâncias em \textit{Four\_list}, ou seja, pontos que já foram passados, evitando loops infinitos; a regra \textit{intersection/3} coloca a interseção dos elementos das duas listas em \textit{Intersection}, que possui os elementos em comum, depois, os elementos desta lista são os mesmos removidos de \textit{Four\_list} e os restantes são adicionados ao \textit{New\_4list}, assim sendo, os elementos que já foram marcados, não são referenciados novamente.
         
         Depois, a regra \textit{get\_bigger\_intensity/3} é chamada enviando a lista e o pixel inicial, nesta regra é checado qual o pixel com intensidade maior ou igual ao inicial, a resposta disto é armazenada no final em \textit{Bigger}.
         
@@ -223,11 +223,11 @@ Path not found.
 
     \newpage
     \subsection*{dark\_pixels e clear\_pixels}
-        As imagens usadas para este projeto são em preto e branco, portanto, o esquema de cores é de 256 cores, onde quando a intensidade estiver mais próxima do zero, a tonalidade da cor tende a ser mais escura até o preto, enquanto intensidade mais próxima de 255, a tonalidade da cor tende a ser mais clara até o branco. As regras \textit{dark\_pixels} e \textit{clear\_pixels} coletam os pixels mais escuros e claros de uma imagem, respectivamente, e o intensificam, de forma que fiquem mais evidentes.
+        As imagens usadas para este projeto são em preto e branco, portanto, o esquema de cores é de 256 cores, quando a intensidade estiver mais próxima do zero, a tonalidade da cor tende a ser mais escura até o preto, enquanto intensidade mais próxima de 255, a tonalidade da cor tende a ser mais clara até o branco. As regras \textit{dark\_pixels} e \textit{clear\_pixels} coletam os pixels mais escuros e claros de uma imagem, respectivamente, e o intensificam, de forma que fiquem mais evidentes.
         
         As duas regras usam uma outra para coletar os pixels, \textit{get\_dark\_pixels\_image} e \textit{get\_clear\_pixels\_image}, que verifica a intensidade de cada pixel e, se a condição imposta não for satisfeita, o pixel é armazenado na lista de saída. Caso contrário, a intensidade é aumentada ou diminuída de forma que na imagem resultante fique evidente as regiões mais claras e escuras de uma imagem.
         
-        Mais uma regra semelhante a estas foi implementada, com a terminação \textit{list} que, ao invés de aumentar ou diminuir a tonalidade, a lista de saída está apenas com os pixels desejados, sem modificar a intensidade.
+        Mais duas regras semelhantes a estas foram implementadas com a terminação \textit{list} tal que, ao invés de aumentar ou diminuir a tonalidade, a lista de saída está apenas com os pixels desejados, sem modificar a intensidade.
         \begin{lstlisting}[frame=single]
     dark_pixels(FileName) :-
         atom_concat('imgs/', FileName, Path_file),
