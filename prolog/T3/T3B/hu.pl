@@ -183,3 +183,45 @@ new(FileName, Id) :-
 
 searchAll(Id) :-
 	listing(img(Id, _, _, _, _, _, _, _)).
+
+
+/*
+	Returns the Euclidian distance between the input image and one image from the database.
+	[Input_Head|Input_Tail] is the input image Hu moments, 
+	[Data_Head|Data_Tail] is the database image Hu moments, 
+	[Output_Head|Output_Tail] is the return list.
+*/
+euclidianDist([], [], []) :- !.
+
+euclidianDist([Input_Head|Input_Tail], [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
+	Bob is Input_Head - Data_Head,
+	Steve is Bob^2,
+	copy_term(Steve, Output_Head),
+	euclidianDist(Input_Tail, Data_Tail, Output_Tail).
+
+/*
+	Compare the input image calculating its Euclidian distance with all the images on the database.
+	I1 to I7 are the Hu moments of the input image,
+	[Data_Head|Data_tail] is the list images of the database,
+	[Output_Head|Output_Tail] is the result of the compare,
+	Gandalf is OP.
+*/
+compareImages(_, _, _, _, _, _, _, [], []) :- !.
+
+compareImages(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
+    img(Data_Head, K1, K2, K3, K4, K5, K6, K7),
+    euclidianDist([I1, I2, I3, I4, I5, I6, I7], [K1, K2, K3, K4, K5, K6, K7], List),
+    sum_list(List, Sum),
+    Gandalf is sqrt(Sum),
+    copy_term(Gandalf, Output_Head),
+    compareImages(I1, I2, I3, I4, I5, I6, I7, Data_Tail, Output_Tail).
+
+/**/
+scan_image(FileName) :-
+	readPGM(FileName, File),
+	coord(File, FileCoord),
+	hu(FileCoord, I1, I2, I3, I4, I5, I6, I7),
+	findall(Data_image, img(Data_image, _, _, _, _, _, _, _), Data_List),
+	compareImages(I1, I2, I3, I4, I5, I6, I7, Data_List, Compare_Out),
+	min_list(Compare_Out, Minimal),
+	write(Minimal).
