@@ -262,9 +262,9 @@ compareImages(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|Ou
 % FileName is the path to the an ascii pgm image.
 %
 %%%%%   Trivia   %%%%%%
-% Padawan is a disciple of a Jedi, from Star Wars saga by George Lucas.
-% First quote after "no" condition (modified) by Aristotle
-% Second quote after "no" condition (modified) by Khalil Gibran
+% - Padawan is a disciple of a Jedi, from Star Wars saga by George Lucas.
+% - First quote after "no" condition (modified) by Aristotle
+% - Second quote after "no" condition (modified) by Khalil Gibran
 scan_image(FileName) :-
     writeln(FileName),
     writeln("Note: Don't forget to end yours answers with a dot (.)"), nl,
@@ -281,23 +281,28 @@ scan_image(FileName) :-
         write('Position: '), print(Index), nl, nl,
         writeln('This is your image, young padawan? [y./n.]'),
     read(X),
-    ((X = 'n' ; X = 'no') ->
-        write('Name thy image: '),
-        read(Name),
-        insert_image(Name, I1, I2, I3, I4, I5, I6, I7),
-        writeln('All men and machine by nature desire knowledge.'),
-        writeln('Wow, perplexity is the beginning of knowledge!'),
-        writeln('Very good!'),
-        commit;
-    !),
-    ((X = 'y' ; X = 'yes') ->
-        ((Minimal =:= 0) ->
-            write('Thy image is already in the database'); !),
-        insert_image(Image, I1, I2, I3, I4, I5, I6, I7),
-        writeln('The same in a new perspective!'),
-        writeln('Good!'),
-        commit,
-        !).
+    (
+        (X = 'n' ; X = 'no') ->
+            write('Name thy image: '),
+            read(Name),
+            insert_image(Name, I1, I2, I3, I4, I5, I6, I7),
+            writeln('All men and machine by nature desire knowledge.'),
+            writeln('Wow, perplexity is the beginning of knowledge!'),
+            writeln('Very good!'),
+            commit, !;
+        !
+    ),
+    (
+        (X = 'y' ; X = 'yes') ->
+            (
+                (Minimal =:= 0) ->
+                    writeln('Thy image is already in the database.'), !;
+                insert_image(Image, I1, I2, I3, I4, I5, I6, I7),
+                writeln('The same in a new perspective!'),
+                writeln('Good!'),
+                commit, !
+            )
+    ).
 
 insert_image(Id, I1, I2, I3, I4, I5, I6, I7) :-
     assertz(img(Id, I1, I2, I3, I4, I5, I6, I7)), !.
