@@ -1,15 +1,11 @@
-/*
-   Image processing package in Prolog (a initial tentative)
-     Prof. A. G. Silva - UFSC
-     Initial version: June 2015
-     Last update: November 2015
-       - 'image.pl', 'extra.pl' and 'pgm.pl' in the same file
-       - The maximum value is now determined in 'writePGM' (12nov2015, 10h)
-       - More efficient implementation of: (15nov2015, 21h)
-           - 'coord' (without 'append')
-           - 'coord2matrix' (without 'findall')
-           - 'maximum_matrix' (using 'maximum')
-*/
+% Image processing package in Prolog
+% Credits:
+%   Caique Rodrigues Marques
+%   Gustavo José Carpeggiani
+%   Vinícius Couto Biermann
+%
+% Implementation by:
+%   Alexandre G. Silva
 
 :- use_module(library(pio)).
 
