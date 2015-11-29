@@ -115,7 +115,6 @@ y_minus_constant([(X,Y,_)|T], C, L) :-
     V1 is Y - C,
     append([(X,Y,V1)], L1, L).
 
-% nao e' usado sum_constant
 sum_constant([], _, []).
 sum_constant([(X,Y,V)|T], C, L) :-
     sum_constant(T, C, L1),
@@ -166,7 +165,7 @@ test :-
     writeln(I6),
     writeln(I7).
 
-%% -------------------------------------------------------------------------------------------------
+%% -------------------------------------------------------------------------------------------
 
 % Loads the database.
 load :-
@@ -208,9 +207,15 @@ searchAll(Id) :-
 % [Input_Head|Input_Tail] is the input image Hu moments, 
 % [Data_Head|Data_Tail] is the database image Hu moments, 
 % [Output_Head|Output_Tail] is the return list.
+%
 %%%%%   Trivia   %%%%%%
 % -Steve lives!
-% -SHAZAM! [⚡BOOOM⚡] 
+% -SHAZAM! [⚡BOOOM⚡]
+%   - Shazam is the alter ego of Billy Batson, a boy who, by speaking the magic
+%     word "Shazam", can transform himself into a costumed adult with the powers
+%     of superhuman strength, speed, flight, and other abilities.
+%       Shazam (before Captain Marvel) is a superhero created by C. C. Beck and 
+%     Bill Parker, first appeared in Whiz Comics #2 (february 1940).
 euclideanDist([], [], []) :- !.
 
 euclideanDist([Input_Head|Input_Tail], [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
@@ -227,8 +232,13 @@ euclideanDist([Input_Head|Input_Tail], [Data_Head|Data_Tail], [Output_Head|Outpu
 % I1 to I7 are the Hu moments of the input image,
 % [Data_Head|Data_tail] is the list images of the database,
 % [Output_Head|Output_Tail] is the result of the compare
+%
 %%%%%   Trivia   %%%%%%
 % Gandalf is OP.
+%   - Gandalf is a Istari (or a messenger) and a mage sent by the Valar to the
+%     Middle-earth to organize and communicate the people to prepare against the
+%     Sauron, the new Dark Lord.
+%     This is from The Lord of the Rings series (1954-1955) by J. R. R. Tolkien.
 compareImages(_, _, _, _, _, _, _, [], []) :- !.
 
 compareImages(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
@@ -239,13 +249,25 @@ compareImages(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|Ou
     copy_term(Gandalf, Output_Head),
     compareImages(I1, I2, I3, I4, I5, I6, I7, Data_Tail, Output_Tail).
 
-% Checks the image receveid. 
+% Checks the image receveid and asks to the user if the conclusion is the
+% of the machine is the correct image. if "no", he asks to the user what
+% is the correct answer and add to your "knowledge base", as if he has
+% learned. If "yes" he checks if is the same image that he seen before,
+% if not, he add it to your "knowledge base" with the same name that he
+% suggested.
+% Native rules: findall/3, min_list/2, nth0/3, write/1, writeln/1,
+%   print/1.
 %
 %%%%% Parameters %%%%%%
 % FileName is the path to the an ascii pgm image.
+%
 %%%%%   Trivia   %%%%%%
-% Padawan is a disciple of a Jedi.
+% Padawan is a disciple of a Jedi, from Star Wars saga by George Lucas.
+% First quote after "no" condition (modified) by Aristotle
+% Second quote after "no" condition (modified) by Khalil Gibran
 scan_image(FileName) :-
+    writeln(FileName),
+    writeln("Note: Don't forget to end yours answers with a dot (.)"), nl,
     readPGM(FileName, File),
     coord(File, FileCoord),
     hu(FileCoord, I1, I2, I3, I4, I5, I6, I7),
@@ -256,20 +278,26 @@ scan_image(FileName) :-
     nth0(Index, Data_List, Image),
         write('Minimal value found: '), print(Minimal), nl,
         write('Image found: '), print(Image), nl,
-        write('Position (base zero): '), print(Index), nl, nl,
-        write('This is your image, young padawan?'),
-        read(X),
-        ((X = 'n') -> 
-                write('Name thy image: '), 
-                read(Name),
-                insertImage(Name, I1, I2, I3, I4, I5, I6, I7),
-                commit; 
-                !),
-        ((X = 'y') -> 
-                ((Minimal =:= 0) -> write('Thy image is already in the database'); !),
-                insertImage(Image, I1, I2, I3, I4, I5, I6, I7),
-                commit, 
-                !).
+        write('Position: '), print(Index), nl, nl,
+        writeln('This is your image, young padawan? [y./n.]'),
+    read(X),
+    ((X = 'n' ; X = 'no') ->
+        write('Name thy image: '),
+        read(Name),
+        insert_image(Name, I1, I2, I3, I4, I5, I6, I7),
+        writeln('All men and machine by nature desire knowledge.'),
+        writeln('Wow, perplexity is the beginning of knowledge!'),
+        writeln('Very good!'),
+        commit;
+    !),
+    ((X = 'y' ; X = 'yes') ->
+        ((Minimal =:= 0) ->
+            write('Thy image is already in the database'); !),
+        insert_image(Image, I1, I2, I3, I4, I5, I6, I7),
+        writeln('The same in a new perspective!'),
+        writeln('Good!'),
+        commit,
+        !).
 
-insertImage(Id, I1, I2, I3, I4, I5, I6, I7) :-
+insert_image(Id, I1, I2, I3, I4, I5, I6, I7) :-
     assertz(img(Id, I1, I2, I3, I4, I5, I6, I7)), !.
