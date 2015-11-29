@@ -257,4 +257,19 @@ scan_image(FileName) :-
         write('Minimal value found: '), print(Minimal), nl,
         write('Image found: '), print(Image), nl,
         write('Position (base zero): '), print(Index), nl, nl,
-        write('This is your image, young padawan?').
+        write('This is your image, young padawan?'),
+        read(X),
+        ((X = 'n') -> 
+                write('Name thy image: '), 
+                read(Name),
+                insertImage(Name, I1, I2, I3, I4, I5, I6, I7),
+                commit; 
+                !),
+        ((X = 'y') -> 
+                ((Minimal =:= 0) -> write('Thy image is already in the database'); !),
+                insertImage(Image, I1, I2, I3, I4, I5, I6, I7),
+                commit, 
+                !).
+
+insertImage(Id, I1, I2, I3, I4, I5, I6, I7) :-
+    assertz(img(Id, I1, I2, I3, I4, I5, I6, I7)), !.
