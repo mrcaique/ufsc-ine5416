@@ -196,7 +196,7 @@ new(FileName, Id) :-
     !.
 
 % List the current contents of the database.
-searchAll(Id) :-
+search_all(Id) :-
     listing(img(Id, _, _, _, _, _, _, _)).
 
 
@@ -216,13 +216,13 @@ searchAll(Id) :-
 %     of superhuman strength, speed, flight, and other abilities.
 %       Shazam (before Captain Marvel) is a superhero created by C. C. Beck and 
 %     Bill Parker, first appeared in Whiz Comics #2 (february 1940).
-euclideanDist([], [], []) :- !.
+euclidean_dist([], [], []) :- !.
 
-euclideanDist([Input_Head|Input_Tail], [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
+euclidean_dist([Input_Head|Input_Tail], [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
     Shazam is Input_Head - Data_Head,
     Steve is Shazam^2,
     copy_term(Steve, Output_Head),
-    euclideanDist(Input_Tail, Data_Tail, Output_Tail).
+    euclidean_dist(Input_Tail, Data_Tail, Output_Tail).
 
 % Compare the input image with all the images on the database by calculating its 
 % Euclidean distance.
@@ -239,15 +239,24 @@ euclideanDist([Input_Head|Input_Tail], [Data_Head|Data_Tail], [Output_Head|Outpu
 %     Middle-earth to organize and communicate the people to prepare against the
 %     Sauron, the new Dark Lord.
 %     This is from The Lord of the Rings series (1954-1955) by J. R. R. Tolkien.
-compareImages(_, _, _, _, _, _, _, [], []) :- !.
+compare_images(_, _, _, _, _, _, _, [], []) :- !.
 
-compareImages(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
-    img(Data_Head, K1, K2, K3, K4, K5, K6, K7),
-    euclideanDist([I1, I2, I3, I4, I5, I6, I7], [K1, K2, K3, K4, K5, K6, K7], List),
+compare_images(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|Output_Tail]) :-
+    nth0(0, Data_Head, Data_Class),
+    nth0(1, Data_Head, K1),
+    nth0(2, Data_Head, K2),
+    nth0(3, Data_Head, K3),
+    nth0(4, Data_Head, K4),
+    nth0(5, Data_Head, K5),
+    nth0(6, Data_Head, K6),
+    nth0(7, Data_Head, K7),
+    img(Data_Class, K1, K2, K3, K4, K5, K6, K7),
+    euclidean_dist([I1, I2, I3, I4, I5, I6, I7], [K1, K2, K3, K4, K5, K6, K7], List),
     sum_list(List, Sum),
-    Gandalf is sqrt(Sum),
+    OP is sqrt(Sum),
+    Gandalf is OP,
     copy_term(Gandalf, Output_Head),
-    compareImages(I1, I2, I3, I4, I5, I6, I7, Data_Tail, Output_Tail).
+    compare_images(I1, I2, I3, I4, I5, I6, I7, Data_Tail, Output_Tail).
 
 % Checks the image receveid and asks to the user if the conclusion is the
 % of the machine is the correct image. if "no", he asks to the user what
@@ -267,17 +276,18 @@ compareImages(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|Ou
 % - Second quote after "no" condition (modified) by Khalil Gibran
 scan_image(FileName) :-
     writeln(FileName),
-    writeln("Note: Don't forget to end yours answers with a dot (.)"), nl,
+    writeln('Note: Don\'t forget to end yours answers with a dot (.)'), nl,
     readPGM(FileName, File),
     coord(File, FileCoord),
     hu(FileCoord, I1, I2, I3, I4, I5, I6, I7),
-    findall(Data_image, img(Data_image, _, _, _, _, _, _, _), Data_List),
-    compareImages(I1, I2, I3, I4, I5, I6, I7, Data_List, Compare_Out),
+    findall([Data_image, K1, K2, K3, K4, K5, K6, K7], img(Data_image, K1, K2, K3, K4, K5, K6, K7), Data_List),
+    compare_images(I1, I2, I3, I4, I5, I6, I7, Data_List, Compare_Out),
     min_list(Compare_Out, Minimal),
     nth0(Index, Compare_Out, Minimal),
     nth0(Index, Data_List, Image),
+    nth0(0, Image, Image_Print),
         write('Minimal value found: '), print(Minimal), nl,
-        write('Image found: '), print(Image), nl,
+        write('Image found: '), print(Image_Print), nl,
         write('Position: '), print(Index), nl, nl,
         writeln('This is your image, young padawan? [y./n.]'),
     read(X),
@@ -297,7 +307,7 @@ scan_image(FileName) :-
             (
                 (Minimal =:= 0) ->
                     writeln('Thy image is already in the database.'), !;
-                insert_image(Image, I1, I2, I3, I4, I5, I6, I7),
+                insert_image(Image_Print, I1, I2, I3, I4, I5, I6, I7),
                 writeln('The same in a new perspective!'),
                 writeln('Good!'),
                 commit, !
