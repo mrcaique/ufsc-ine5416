@@ -12,7 +12,7 @@
 %
 % Note:
 %   For more information about the native rules, check
-%   the official documentation for more information at:
+%   the official documentation at:
 %   http://www.swi-prolog.org/
 
 :- consult('img.pl').
@@ -235,7 +235,7 @@ euclidean_dist([Input_Head|Input_Tail], [Data_Head|Data_Tail], [Output_Head|Outp
 %
 %%%%%   Trivia   %%%%%%
 % Gandalf is OP.
-%   - Gandalf is a Istari (or a messenger) and a mage sent by the Valar to the
+%   - Gandalf is a Istari (or a wizard) sent as emissary by the Valar to the
 %     Middle-earth to organize and communicate the people to prepare against the
 %     Sauron, the new Dark Lord.
 %     This is from The Lord of the Rings series (1954-1955) by J. R. R. Tolkien.
@@ -258,7 +258,7 @@ compare_images(I1, I2, I3, I4, I5, I6, I7, [Data_Head|Data_Tail], [Output_Head|O
     copy_term(Gandalf, Output_Head),
     compare_images(I1, I2, I3, I4, I5, I6, I7, Data_Tail, Output_Tail).
 
-% Checks the image receveid and asks to the user if the conclusion is the
+% Checks the image received and asks to the user if the conclusion is the
 % of the machine is the correct image. if "no", he asks to the user what
 % is the correct answer and add to your "knowledge base", as if he has
 % learned. If "yes" he checks if is the same image that he seen before,
@@ -280,7 +280,11 @@ scan_image(FileName) :-
     readPGM(FileName, File),
     coord(File, FileCoord),
     hu(FileCoord, I1, I2, I3, I4, I5, I6, I7),
-    findall([Data_image, K1, K2, K3, K4, K5, K6, K7], img(Data_image, K1, K2, K3, K4, K5, K6, K7), Data_List),
+    findall(
+                [Data_image, K1, K2, K3, K4, K5, K6, K7],
+                img(Data_image, K1, K2, K3, K4, K5, K6, K7),
+                Data_List
+            ),
     compare_images(I1, I2, I3, I4, I5, I6, I7, Data_List, Compare_Out),
     min_list(Compare_Out, Minimal),
     nth0(Index, Compare_Out, Minimal),

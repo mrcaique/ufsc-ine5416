@@ -13,7 +13,7 @@
 %
 % Note:
 %   For more information about the native rules, check
-%   the official documentation for more information at:
+%   the official documentation at:
 %   http://www.swi-prolog.org/
 
 :- consult('imagem.pl').
@@ -28,11 +28,9 @@ test :-
 % Returns the negative of an ascii pgm image.
 % see: negative_list/2
 %
-% FileName = ascii pgm image
+%%%%% Parameters %%%%%%
+% - FileName = ascii pgm image
 negative(FileName) :-
-    %copy_term('rm ', Remove),
-    %atom_concat(Remove, FileName, Command),
-    %shell(Command, _),
     atom_concat('imgs/', FileName, Path_file),
     print(Path_file), nl, nl,
     load(Path_file, C_list),
@@ -84,8 +82,9 @@ test_lonely_pixel :-
 % Test path_pixels rule
 % see: path_pixels/4
 %
-% (X1, Y1, _) = start pixel
-% (X2, Y2, _) = finish pixel
+%%%%% Parameters %%%%%%
+% - (X1, Y1, _) = start pixel
+% - (X2, Y2, _) = finish pixel
 test_path_pixels((X1, Y1, _), (X2, Y2, _)) :-
     load('imgs/ufsc.pgm', L),
     path_pixels(L, (X1, Y1, _), (X2, Y2, _), [], List),
@@ -95,7 +94,8 @@ test_path_pixels((X1, Y1, _), (X2, Y2, _)) :-
 % Intensifies the dark pixels of an image
 % see: get_dark_pixels_image/3
 %
-% FileName = pgm image
+%%%%% Parameters %%%%%%
+% - FileName = pgm image
 dark_pixels(FileName) :-
     atom_concat('imgs/', FileName, Path_file),
     print(Path_file), nl, nl,
@@ -111,7 +111,8 @@ dark_pixels(FileName) :-
 % Intensifies the clear pixels of an image.
 % see: get_clear_pixels_image/3
 %
-% FileName = pgm image
+%%%%% Parameters %%%%%%
+% - FileName = pgm image
 clear_pixels(FileName) :-
     atom_concat('imgs/', FileName, Path_file),
     print(Path_file), nl, nl,
@@ -126,8 +127,9 @@ clear_pixels(FileName) :-
 
 % Transforms an pgm image to a coordinates list
 %
-% FileName = pgm image.
-% S = Coordinates list.
+%%%%% Parameters %%%%%%
+% - FileName = pgm image.
+% - S = Coordinates list.
 load(FileName, S) :-
     readPGM(FileName, M),
     coord(M, S).
@@ -136,8 +138,9 @@ load(FileName, S) :-
 % 255-I in the image output.
 % Native rules: copy_term/2
 %
-% [(X, Y, I)|T_input] = Input coordinates list
-% [H_output|T_output] = Output coordinates list
+%%%%% Parameters %%%%%%
+% - [(X, Y, I)|T_input] = Input coordinates list
+% - [H_output|T_output] = Output coordinates list
 negative_list([], []) :-
     !.
 negative_list([(X, Y, I)|T_input], [H_output|T_output]) :-
@@ -150,9 +153,10 @@ negative_list([(X, Y, I)|T_input], [H_output|T_output]) :-
 % input images, with the same dimensions, divided by two
 % (rounded by the nearest integer).
 %
-% [(X, Y, I1)|T1] = input coordinates list
-% [(_, _, I2)|T2] = input coordinates list
-% [H_output|T_output] = output coordinates list
+%%%%% Parameters %%%%%%
+% - [(X, Y, I1)|T1] = input coordinates list
+% - [(_, _, I2)|T2] = input coordinates list
+% - [H_output|T_output] = output coordinates list
 mean_list([], [], []) :-
     !.
 mean_list([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
@@ -160,26 +164,27 @@ mean_list([(X, Y, I1)|T1], [(_, _, I2)|T2], [H_output|T_output]) :-
     copy_term((X, Y, Mean_Intensity), H_output),
     mean_list(T1, T2, T_output).
 
-% Isolated pixel detector: a pixel with intensity I is
-% isolated if your 4 neighbors (below, above, right and left)
-% has intensities smallest than I.
-% Native rules: copy_term/2, reverse/2.
-%
-% C_list = input coordinates list
-% [(X, Y, I)|Tail] = Remaining coordinates to evaluate.
-% T_acc = Accumulator, initially, must be an empty list ([]).
-% Output = List with isolated pixels
-%
 % check_n4_intensity: Check if a pixel is isolated.
 %
-% [(_, _, I)|Tail] = List with 4 neighbors of a pixel.
-% I_base = Intensity of pixel that will be compared
+%%%%% Parameters %%%%%%
+% - [(_, _, I)|Tail] = List with 4 neighbors of a pixel.
+% - I_base = Intensity of pixel that will be compared
 %       with the intensities of your 4 neighbors.
 check_n4_intensity([], _) :- true, !.
 check_n4_intensity([(_, _, I)|Tail], I_base) :-
     I_base > I,
     check_n4_intensity(Tail, I_base).
 
+% Isolated pixel detector: a pixel with intensity I is
+% isolated if your 4 neighbors (below, above, right and left)
+% has intensities smallest than I.
+% Native rules: copy_term/2, reverse/2.
+%
+%%%%% Parameters %%%%%%
+% - C_list = input coordinates list
+% - [(X, Y, I)|Tail] = Remaining coordinates to evaluate.
+% - T_acc = Accumulator, initially, must be an empty list ([]).
+% - Output = List with isolated pixels
 lonely_pixel(_, [], T_acc, Output) :-
     reverse(T_acc, Output).
 lonely_pixel(C_list, [(X, Y, I)|Tail], T_acc, Output) :-
@@ -190,28 +195,6 @@ lonely_pixel(C_list, [(X, Y, I)|Tail], T_acc, Output) :-
         lonely_pixel(C_list, Tail, T_acc, Output)
     ).
 
-% Verification of a path between two pixels: There is
-% a path between two pixels, if has set of adjacents
-% pixels (cosidering the 4 neighbors), all with inten-
-% sities bigger or equal then the intensity of the 
-% start pixel, that can reach the destiny pixel.
-% Native rules: copy_term/2, writeln/1,
-%           intersection/3, subtract/3.
-%
-% C_list = Input coordinates list.
-% (Xs, Ys, Is) = Start pixel p1.
-% (Xd, Yd, Id) = Destiny pixel p2.
-% T_acc = Accumulator, initially, must be an empty list ([]).
-% Output = Output list.
-%
-% get_bigger_intensity: Check the pixel with greater inten-
-% sity from the 4 neighbors.
-%
-% [(X, Y, I)|Tail] = List with 4 neighbors.
-% (Xs, Ys, Is) = Pixel with greater intensity.
-%
-% check_destiny: Check if reached to the destiny pixel.
-%
 % check_loop: Check if a pixel has been marked.
 check_loop([], _) :-
     false.
@@ -222,11 +205,18 @@ check_loop([(X, Y, _)|Tail], (Xs, Ys, _)) :-
         check_loop(Tail, (Xs, Ys, _))
     ).
 
+% check_destiny: Check if reached to the destiny pixel.
 check_destiny((Xs, Ys, _), (Xd, Yd, _)) :-
     Xs = Xd,
     Ys = Yd,
     true.
 
+% get_bigger_intensity: Check the pixel with greater inten-
+% sity from the 4 neighbors.
+%
+%%%%% Parameters %%%%%%
+% - [(X, Y, I)|Tail] = List with 4 neighbors.
+% - (Xs, Ys, Is) = Pixel with greater intensity.
 get_bigger_intensity([], (Xs, Ys, Is), (Xd, Yd, Id)) :-
     Xd is Xs,
     Yd is Ys,
@@ -238,6 +228,20 @@ get_bigger_intensity([(X, Y, I)|Tail], (Xs, Ys, Is), Destiny) :-
         get_bigger_intensity(Tail, (Xs, Ys, Is), Destiny)
     ).
 
+% Verification of a path between two pixels: There is
+% a path between two pixels, if has set of adjacents
+% pixels (cosidering the 4 neighbors), all with inten-
+% sities bigger or equal then the intensity of the
+% start pixel, that can reach the destiny pixel.
+% Native rules: copy_term/2, writeln/1,
+%           intersection/3, subtract/3.
+%
+%%%%% Parameters %%%%%%
+% - C_list = Input coordinates list.
+% - (Xs, Ys, _) = Start pixel p1.
+% - (Xd, Yd, _) = Destiny pixel p2.
+% - T_acc = Accumulator, initially, must be an empty list ([]).
+% - Output = Output list.
 path_pixels([], _, _, T_acc, Output) :-
     reverse(T_acc, Output).
 path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), T_acc, Output) :-
@@ -263,10 +267,11 @@ path_pixels(C_list, (Xs, Ys, _), (Xd, Yd, _), T_acc, Output) :-
 % Returns a list of pixels, where the pixels that are not
 % darker are intensifies to show in a image the clear areas.
 %
-% [(X, Y, I)|T_input] = input coordinates list.
-% T_acc = Accumulator, initially, must be an empty list.
-% Pixel_list = List with pixels, where the clear pixels are
-% more evident.
+%%%%% Parameters %%%%%%
+% - [(X, Y, I)|T_input] = input coordinates list.
+% - T_acc = Accumulator, initially, must be an empty list.
+% - Pixel_list = List with pixels, where the clear pixels are
+%       more evident.
 get_clear_pixels_image([], T_acc, Pixel_list) :-
     reverse(T_acc, Pixel_list).
 get_clear_pixels_image([(X, Y, I)|T_input], T_acc, Pixel_list) :-
@@ -279,10 +284,11 @@ get_clear_pixels_image([(X, Y, I)|T_input], T_acc, Pixel_list) :-
 % Returns a list of pixels, where the pixels that are not
 % clear are intensifies to show in a image the dark areas.
 %
-% [(X, Y, I)|T_input] = input coordinates list.
-% T_acc = Accumulator, initially, must be an empty list.
-% Pixel_list = List with pixels, where the dark pixels are
-% more evident.
+%%%%% Parameters %%%%%%
+% - [(X, Y, I)|T_input] = input coordinates list.
+% - T_acc = Accumulator, initially, must be an empty list.
+% - Pixel_list = List with pixels, where the dark pixels are
+%       more evident.
 get_dark_pixels_image([], T_acc, Pixel_list) :-
     reverse(T_acc, Pixel_list).
 get_dark_pixels_image([(X, Y, I)|T_input], T_acc, Pixel_list) :-
