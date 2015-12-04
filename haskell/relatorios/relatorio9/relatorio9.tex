@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts} % Uso de fontes para conjuntos como R (reais), Z (inteiros), etc.
+\usepackage{mathtools} % Uso do gather, referenciar operadores matemáticos sem usar "$"
+\usepackage[a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry} % Formatação da página
+
+\begin{document}
+    \begin{center}
+        \section*{INE5416 - Paradigmas da Programação (2015/2)}
+        \textbf{\textit{Relatório 9: Listas em Haskell} \\
+        Caique Rodrigues Marques 13204303}
+    \end{center}
+    
+    \section*{Parte 1}
+        \begin{itemize}
+            \item \textit{Lazy evaluation} ou avaliação preguiçosa é uma técnica onde se avalia uma dada
+            expressão apenas quando ela for necessária, evitando possíveis erros futuros ou computações
+            desnecessárias. Esta técnica também acaba sendo útil para a construção de estruturas de dados
+            infinitas, por exemplo usando \texttt{[1,2,..]} onde se vai alocando espaço até não ter mais
+            memória. Em linguagens de programação funcionais, como Haskell e Miranda, implementam
+            \textit{lazy evaluation} por padrão, enquanto em outras linguagens existem formas para
+            providenciar a técnica.
+            
+            \item Várias linguagens de programação implementam a função \textit{map}, a função de
+            mapeamento,
+            que dada uma função, se uma lista de operações for mapeada para esta função, ela retorna uma
+            lista com as respostas. Funções auxiliares podem ser usadas para complementar o mapeamento,
+            como
+            \texttt{list} e \texttt{filter}. Em Python temos os exemplos:
+            \begin{itemize}
+                \item \texttt{list(map(lambda x: x+1, range(10)))}: Mapeia uma função simples de soma para
+                uma lista com elementos com inteiros de $0$ a $9$, a saída será uma lista com cada elemento
+                somado a 1.
+                
+                \item \texttt{list(map(chr, range(65, 91)))}: Função que mapeia cada caractere ao seu
+                correspondente em ASCII e depois as listando as letras do alfabeto maiúsculas, de
+                'A' (65) a 'Z' (91).
+            \end{itemize}
+            
+            \item O módulo Data.List do Haskell provém uma série de operações a serem realizadas com listas,
+            como por exemplo, coletar o primeiro elemento, coletar o tamanho da lista, coletar a lista
+            reversa, concatenar listas, replicar listas e entre outras coisas.
+        \end{itemize}
+
+    \section*{Parte 2}
+        \begin{itemize}
+            \item Para o cálculo de soma de termos de uma progressão aritmética, primeiro uma simples
+            função é encontrada para achar a razão. A fórmula de uma PA pode ser implementada com mais
+            facilidade usando as funções nativas do Haskell, para coletar o tamanho da lista (o número de
+            termos) e o operador \texttt{div} garante uma divisão inteira.
+            \begin{verbatim}
+            ratio n = n!!1 - head(n)
+            sum_ap n = 
+                ( (length n) * (2*head(n) + ((length n - 1) * ratio n)) ) `div` 2
+            \end{verbatim}
+            
+            \item A implementação do cálculo de produto de termos de uma PA foi considerada que para um $n$
+            qualquer é tal que $n \in \mathbb{Z^{+}}$, logo, a determinação do valor na função
+            gama é da seguinte forma:
+            \begin{gather*}
+            P_{n} = r^{n}\frac{\Gamma(\frac{a_{1}}{r} + n)}{\Gamma(\frac{a_{1}}{r})} \qquad 
+            \Gamma(n) = (n-1)!
+            \end{gather*}
+            Em Haskell é necessário especificar a função \texttt{fromIntegral} para converter um valor
+            inteiro para um valor em ponto flutuante (\texttt{length} sempre retorna inteiro). Visto a
+            limitação computacional, o cálculo do fatorial na função gama é dado de um valor máximo de
+            1000.
+            \begin{verbatim}
+            gamma n = sum([product[1..n-1]])
+            prod_ap n = (ratio n)** fromIntegral (length n) *
+                ( (gamma ( (head(n) / ratio n) + fromIntegral (length n) ))
+                / gamma (head(n) / ratio n) )
+            \end{verbatim}
+            
+        \end{itemize}
+\end{document}
