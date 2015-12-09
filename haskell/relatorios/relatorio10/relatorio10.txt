@@ -1,5 +1,5 @@
     INE5416 - PARADIGMAS DA PROGRAMAÇÃO (2015/2)
-    RELATÓRIO 7: MÓDULOS
+    RELATÓRIO 10: MÔNADAS
         Caique Rodrigues Marques 13204303
 
 PARTE 1
