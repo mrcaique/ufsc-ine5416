@@ -8,3 +8,6 @@ Each report corresponds to a class, is a list of topics presented:
 * **Report 5:** Lexical Analysis: Syntax
 * **Report 6:** Classes and Types
 * **Report 7:** Modules
+* **Report 8:** Lists and array
+* **Report 9:** Lists in Haskell
+* **Report 10:** Monads
