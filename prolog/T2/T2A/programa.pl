@@ -1,19 +1,18 @@
-/*  Caique Rodrigues Marques
-    Gustavo José Carpeggiani
-    Vinícius Couto Biermann
-
-   Programação Lógica - Prof. Alexandre G. Silva - 30set2015
-
-   RECOMENDAÇÕES:
-   - O nome deste arquivo deve ser 'programa.pl'
-   - O nome do banco de dados deve ser 'desenhos.pl'
-   - Dicas de uso podem ser obtidas na execução: 
-     ?- menu.
-     
-   - Exemplo de uso:
-     ?- load.
-     ?- searchAll(id1).
-*/
+%   Caique Rodrigues Marques
+%   Gustavo José Carpeggiani
+%   Vinícius Couto Biermann
+%
+%   Programação Lógica - Prof. Alexandre G. Silva - 30set2015
+%
+%   RECOMENDAÇÕES:
+%   - O nome deste arquivo deve ser 'programa.pl'
+%   - O nome do banco de dados deve ser 'desenhos.pl'
+%   - Dicas de uso podem ser obtidas na execução: 
+%     ?- menu.
+%     
+%   - Exemplo de uso:
+%     ?- load.
+%     ?- searchAll(id1).
 
 % Apaga os predicados 'xy' da memória e carrega os desenhos a partir de um arquivo de banco de dados
 load :-
@@ -136,8 +135,11 @@ change(Id, X, Y, Xnew, Ynew) :-
     nth0(0, Element, NewId),
     nth0(1, Element, ElemX),
     nth0(2, Element, ElemY),
-    (Id = NewId, X = ElemX , Y = ElemY ->  new(Id, Xnew, Ynew);
-                                           new(NewId, ElemX, ElemY)), false);
+    (
+        Id = NewId, X = ElemX , Y = ElemY ->
+            new(Id, Xnew, Ynew);
+        new(NewId, ElemX, ElemY)), false
+    );
     true.
 
 % Altera o primeiro elemento da lista.
@@ -241,8 +243,11 @@ replicaAux(Id, K, Dx, Dy) :-
     atom_concat(IdAux, K, IdFinal),
     XFinal is XNew + (Dx * K),
     YFinal is YNew + (Dy * K),
-    ((Middle =:= 0) -> new(IdFinal, XFinal, YFinal) ; 
-                       new(IdFinal, XNew, YNew)),
+    (
+        (Middle =:= 0) -> 
+            new(IdFinal, XFinal, YFinal); 
+        new(IdFinal, XNew, YNew)
+    ),
     false.
 
 % Exibe menu principal

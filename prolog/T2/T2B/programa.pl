@@ -1,29 +1,28 @@
-/*  Caique Rodrigues Marques 13204303
-    Gustavo José Carpeggiani 13103524
-    Vinícius Couto Biermann  13100778
-
-   Programação Lógica - Prof. Alexandre G. Silva - UFSC
-     Versão inicial     : 30set2015
-     Adição de gramática: 15out2015
-   
-   RECOMENDAÇÕES:
-   
-   - O nome deste arquivo deve ser 'programa.pl'
-   - O nome do banco de dados deve ser 'desenhos.pl'
-   - O nome do arquivo de gramática deve ser 'gramatica.pl'
-   
-   - Dicas de uso podem ser obtidas na execução: 
-     ?- menu.
-     
-   - Exemplo de uso:
-     ?- load.
-     ?- searchAll(id1).
-
-   - Exemplo de uso da gramática:
-     ?- comando([repita, '8', '[', pf, '50', gd, '45', ']'], []).
-     Ou simplesmente:
-     ?- cmd("repita 8[pf 50 gd 45]").
-*/
+%   Caique Rodrigues Marques 13204303
+%   Gustavo José Carpeggiani 13103524
+%   Vinícius Couto Biermann  13100778
+%
+%   Programação Lógica - Prof. Alexandre G. Silva - UFSC
+%     Versão inicial     : 30set2015
+%     Adição de gramática: 15out2015
+%   
+%   RECOMENDAÇÕES:
+%   
+%   - O nome deste arquivo deve ser 'programa.pl'
+%   - O nome do banco de dados deve ser 'desenhos.pl'
+%   - O nome do arquivo de gramática deve ser 'gramatica.pl'
+%   
+%   - Dicas de uso podem ser obtidas na execução: 
+%     ?- menu.
+%     
+%   - Exemplo de uso:
+%     ?- load.
+%     ?- searchAll(id1).
+%
+%   - Exemplo de uso da gramática:
+%     ?- comando([repita, '8', '[', pf, '50', gd, '45', ']'], []).
+%     Ou simplesmente:
+%     ?- cmd("repita 8[pf 50 gd 45]").
 
 :- consult('../T2A/programa.pl').
 :- initialization(new0(0)).
@@ -35,14 +34,15 @@ new0(Id) :-
     nb_setval(actual_id, Id),
     nb_setval(pencil, 1),
     (
-        check_xy_last -> xylast(X, Y),
-                        new(Id, X, Y),
-                        retractall(xylast(_, _)),
-                        asserta(xylast(X, Y));
-                new_angle(90),
-                new(Id, 500, 500),
-                asserta(xylast(500, 500)),
-                true
+        check_xy_last ->
+            xylast(X, Y),
+            new(Id, X, Y),
+            retractall(xylast(_, _)),
+            asserta(xylast(X, Y));
+        new_angle(90),
+        new(Id, 500, 500),
+        asserta(xylast(500, 500)),
+        true
     ).
 
 % Checa o ponto xy no banco de dados.
@@ -111,11 +111,12 @@ parafrente(N) :-
         write('Destino (ponto X): '), print(New_xlast), nl,
         write('Destino (ponto Y): '), print(New_ylast), nl, nl,
     (
-        Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
-                        retractall(xylast(_, _)),
-                        asserta(xylast(New_xlast, New_ylast)), !;
-                retractall(xylast(_, _)),
-                asserta(xylast(New_xlast, New_ylast)), !
+        Pencil =:= 1 ->
+            new(Id, Destination_X, Destination_Y),
+            retractall(xylast(_, _)),
+            asserta(xylast(New_xlast, New_ylast)), !;
+        retractall(xylast(_, _)),
+        asserta(xylast(New_xlast, New_ylast)), !
     ).
 
 % Para tras N passos
@@ -138,11 +139,12 @@ paratras(N) :-
         write('Destino (ponto X): '), print(New_xlast), nl,
         write('Destino (ponto Y): '), print(New_ylast), nl, nl,
     (
-        Pencil =:= 1 -> new(Id, Destination_X, Destination_Y),
-                        retractall(xylast(_, _)),
-                        asserta(xylast(New_xlast, New_ylast)), !;
-                retractall(xylast(_, _)),
-                asserta(xylast(New_xlast, New_ylast)), !
+        Pencil =:= 1 -> 
+            new(Id, Destination_X, Destination_Y),
+            retractall(xylast(_, _)),
+            asserta(xylast(New_xlast, New_ylast)), !;
+        retractall(xylast(_, _)),
+        asserta(xylast(New_xlast, New_ylast)), !
     ).
 
 % Gira a direita G graus
@@ -187,11 +189,12 @@ uselapis :-
     check_xy(Id),
     copy_term(Id, New_id),
     (
-        Pencil =:= 0 -> Final_id is New_id+1,
-                        nb_setval(actual_id, Final_id),
-                        write('Id atual: '), print(Final_id), nl,
-                        new0(Final_id), !;
-                nb_setval(pencil, 1), !
+        Pencil =:= 0 -> 
+            Final_id is New_id+1,
+            nb_setval(actual_id, Final_id),
+            write('Id atual: '), print(Final_id), nl,
+            new0(Final_id), !;
+        nb_setval(pencil, 1), !
     ).
 
 % Repete o comando especificado N vezes
@@ -206,7 +209,7 @@ repita(N, Command) :-
 
 % Cria os pontos necessários para uma estrela de 12 pontas de tamanho Size
 %
-% Melga Approves!
+% Melga approves!
 estrela(Size) :-
     between(1, 12, _),
     parafrente(Size),
