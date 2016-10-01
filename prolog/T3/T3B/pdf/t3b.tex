@@ -21,10 +21,20 @@
 \end{center}
 
 \section*{Regras}
-    As seguintes regras foram implementadas na linguagem de programação Prolog, as funções de cada uma são executadas em imagens em formato ascii PGM. No banco de dados, as imagens estão referenciadas por um rótulo (nome) e sete momentos de HU, isto são representações da imagem, a partir disto que a máquina se baseia para classificar qual a silhueta presente na imagem. A cada novo aprendizado, a máquina pergunta ao usuário qual a real imagem e armazena ao seu banco de dados ou "base de conhecimento". A cada vez que o programa é executado, é esperado que a máquina reconheça os diversos tipos de silhueta.
+    As seguintes regras foram implementadas na linguagem de programação Prolog,
+    as funções de cada uma são executadas em imagens em formato ascii PGM. No
+    banco de dados, as imagens estão referenciadas por um rótulo (nome) e sete
+    momentos de HU, isto são representações da imagem, a partir disto que a
+    máquina se baseia para classificar qual a silhueta presente na imagem. A
+    cada novo aprendizado, a máquina pergunta ao usuário qual a real imagem e
+    armazena ao seu banco de dados ou "base de conhecimento". A cada vez que o
+    programa é executado, é esperado que a máquina reconheça os diversos tipos
+    de silhueta.
     
     \subsection*{Regras básicas}
-        Operações básicas foram implementadas para a administração do banco de dados, de forma em que possa verificar e adicionar elementos, por exemplo, a seguir, as operações implementadas:
+        Operações básicas foram implementadas para a administração do banco de
+        dados, de forma em que possa verificar e adicionar elementos, por
+        exemplo, a seguir, as operações implementadas:
         \begin{lstlisting}[frame=single] % Trecho de código prolog
         
         load :-
@@ -56,30 +66,81 @@
         \end{lstlisting}
         
         \begin{itemize}
-            \item \textit{load/0}: o usuário utiliza esta regra para carregar o banco de dados de imagens do sistema.
+            \item \textit{load/0}: o usuário utiliza esta regra para carregar o
+                banco de dados de imagens do sistema.
             
-            \item \textit{commit/0}: esta regra, quando executada salva as modificações feitas pelo usuário no banco de dados.
+            \item \textit{commit/0}: esta regra, quando executada salva as
+                modificações feitas pelo usuário no banco de dados.
             
-            \item \textit{new/2}: usada para carregar um arquivo de imagem externo e guardá-lo no banco de dados, o diretório do arquivo é especificado no parâmetro \textit{FileName}. O sistema irá associar o valor do parâmetro \textit{Id} com o arquivo de imagem no banco de dados.
+            \item \textit{new/2}: usada para carregar um arquivo de imagem
+                externo e guardá-lo no banco de dados, o diretório do arquivo é
+                especificado no parâmetro \textit{FileName}. O sistema irá
+                associar o valor do parâmetro \textit{Id} com o arquivo de
+                imagem no banco de dados.
             
-            \item \textit{search\_all/1}: lista todos os elementos do banco de dados. O parâmetro \textit{Id} corresponde a um nome da imagem registrada que será entendido como um nome genérico, logo, é mostrado todos os elementos presentes no banco de dados.
+            \item \textit{search\_all/1}: lista todos os elementos do banco de
+                dados. O parâmetro \textit{Id} corresponde a um nome da imagem
+                registrada que será entendido como um nome genérico, logo, é
+                mostrado todos os elementos presentes no banco de dados.
         \end{itemize}
         
     \newpage
     \subsection*{euclidean\_dist}
-        Realiza o cálculo da distância euclidiana entre a imagem de entrada e uma outra imagem, de uma lista com o conteúdo do banco de dados. Esta regra é usada pela máquina para fazer as aproximações das imagens recebidas, de forma que ele consiga deduzir algo partindo dos seus "conhecimentos" (conteúdo do banco de dados) e comparando com a imagem recebida.
+        Realiza o cálculo da distância euclidiana entre a imagem de entrada e
+        uma outra imagem, de uma lista com o conteúdo do banco de dados. Esta
+        regra é usada pela máquina para fazer as aproximações das imagens
+        recebidas, de forma que ele consiga deduzir algo partindo dos seus
+        "conhecimentos" (conteúdo do banco de dados) e comparando com a imagem
+        recebida.
     
     \subsection*{compare\_images}
-        Compara as imagens do banco de dados com os sete momentos de HU recebidos, onde, através da regra que calcula a distância euclidiana, a máquina coleta os menores momentos de HU de todas essas imagens. A regra armazena os resultados na lista de saída \textit{Output}, isto serve, posteriormente ao coletar o menor elemento desta lista, fazer uma sugestão de qual seria a imagem que foi sugerida pelo usuário de início.
+        Compara as imagens do banco de dados com os sete momentos de HU
+        recebidos, onde, através da regra que calcula a distância euclidiana, a
+        máquina coleta os menores momentos de HU de todas essas imagens. A
+        regra armazena os resultados na lista de saída \textit{Output}, isto
+        serve, posteriormente ao coletar o menor elemento desta lista, fazer
+        uma sugestão de qual seria a imagem que foi sugerida pelo usuário de
+        início.
     
     \subsection*{scan\_image}
-        Nesta regra é que a máquina começará a verificar a imagem e citar uma sugestão do que seria baseando em seus conhecimentos, no caso, o conteúdo armazenado em seu banco de dados (no arquivo imgdatabase.pl). A regra começa com recebimento de uma imagem como parâmetro, a regra \textit{readPGM/2} transforma a imagem PGM em uma matriz de coordenadas, depois, é convertido em uma lista de coordenadas, que está na variável \textit{FileCoord}. A regra \textit{hu/8} coleta os sete momentos de HU de uma lista de coordenadas, em seguida, a regra nativa \textit{findall/3} coleta o conteúdo do banco de dados e armazena na variável \textit{Data\_List}.
+        Nesta regra é que a máquina começará a verificar a imagem e citar uma
+        sugestão do que seria baseando em seus conhecimentos, no caso, o
+        conteúdo armazenado em seu banco de dados (no arquivo imgdatabase.pl).
+        A regra começa com recebimento de uma imagem como parâmetro, a regra
+        \textit{readPGM/2} transforma a imagem PGM em uma matriz de
+        coordenadas, depois, é convertido em uma lista de coordenadas, que está
+        na variável \textit{FileCoord}. A regra \textit{hu/8} coleta os sete
+        momentos de HU de uma lista de coordenadas, em seguida, a regra nativa
+        \textit{findall/3} coleta o conteúdo do banco de dados e armazena na
+        variável \textit{Data\_List}.
         
-        \textit{compare\_images} verifica os momentos de HU da imagem com os momentos das imagens no banco de dados, a resposta está armazenada numa lista chamada de \textit{Compare\_Out}, o menor elemento desta é armazenado em \textit{Minimal} e sua posição em \textit{Index}. A mesma posição do elemento com o menor valor de HU, \textit{Minimal}, tem a posição correspondente com a lista \textit{Data\_List} que possui o nome e os momentos dos elementos no banco de dados, portanto, as informações são armazenadas em \textit{Image}, uma tupla com o nome e os sete momentos e será a conclusão que a máquina chegou. O último uso da regra \textit{nth0/3} serve para coletar apenas o primeiro elemento de \textit{Image}, ou seja, o nome.
+        \textit{compare\_images} verifica os momentos de HU da imagem com os
+        momentos das imagens no banco de dados, a resposta está armazenada numa
+        lista chamada de \textit{Compare\_Out}, o menor elemento desta é
+        armazenado em \textit{Minimal} e sua posição em \textit{Index}. A mesma
+        posição do elemento com o menor valor de HU, \textit{Minimal}, tem a
+        posição correspondente com a lista \textit{Data\_List} que possui o
+        nome e os momentos dos elementos no banco de dados, portanto, as
+        informações são armazenadas em \textit{Image}, uma tupla com o nome e
+        os sete momentos e será a conclusão que a máquina chegou. O último uso
+        da regra \textit{nth0/3} serve para coletar apenas o primeiro elemento
+        de \textit{Image}, ou seja, o nome.
         
-        Por fim a regra lê a entrada do usuário após perguntar se a imagem que ele concluiu é a mesma que o foi especificada de entrada. Se sim ("y" ou "yes"), a máquina verifica se a imagem já estava no banco de dados, senão ele adiciona a imagem com uma nova perspectiva (por exemplo, a máquina já tinha "bat-6" em seu banco de dados, a imagem de entrada foi "bat-2", logo ele adiciona banco de dados esta nova perspectiva). Se não ("n" ou "no"), a máquina pergunta qual foi a imagem de entrada e adiciona a informação ao seu banco de dados, junto com os seus sete momentos de HU.
+        Por fim a regra lê a entrada do usuário após perguntar se a imagem que
+        ele concluiu é a mesma que o foi especificada de entrada. Se sim ("y"
+        ou "yes"), a máquina verifica se a imagem já estava no banco de dados,
+        senão ele adiciona a imagem com uma nova perspectiva (por exemplo, a
+        máquina já tinha "bat-6" em seu banco de dados, a imagem de entrada foi
+        "bat-2", logo ele adiciona banco de dados esta nova perspectiva). Se
+        não ("n" ou "no"), a máquina pergunta qual foi a imagem de entrada e
+        adiciona a informação ao seu banco de dados, junto com os seus sete
+        momentos de HU.
         
-        A seguir, alguns exemplos de reconhecimento das imagens, de início, a máquina só possui uma imagem em seu banco de dados, chamada de "Pockety", que é a silhueta de um relógio de bolso. Depois do usuário instruir à máquina a imagem de um morcego (\textit{bat image}), ela passa a reconhecer quando o usuário referencia a um morcego.
+        A seguir, alguns exemplos de reconhecimento das imagens, de início, a
+        máquina só possui uma imagem em seu banco de dados, chamada de
+        "Pockety", que é a silhueta de um relógio de bolso. Depois do usuário
+        instruir à máquina a imagem de um morcego (\textit{bat image}), ela
+        passa a reconhecer quando o usuário referencia a um morcego.
         
         \begin{verbatim}
 ?- scan_image('pgm/bat-6.pgm').
