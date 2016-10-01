@@ -3,19 +3,35 @@
 
 	RELATÓRIO 3: ESTRUTURA DAS LINGUAGENS
 
-A linguagem Python é uma linguagem interpretada, mas com algumas características bem interessantes. Primeiro, porque tem interface com muitas linguagens como C e Haskell e, em segundo lugar, porque suporta o paradigma procedimental e o paradigma procedural.
+A linguagem Python é uma linguagem interpretada, mas com algumas
+características bem interessantes. Primeiro, porque tem interface com muitas
+linguagens como C e Haskell e, em segundo lugar, porque suporta o paradigma
+procedimental e o paradigma procedural.
 
-Neste relatório há a apresentação de dois programas escritos na linguagem Python: bitcoin.py que possui os paradigmas funcional e procedural e apod.py que possui o paradigma procedural.
+Neste relatório há a apresentação de dois programas escritos na linguagem
+Python: bitcoin.py que possui os paradigmas funcional e procedural e apod.py
+que possui o paradigma procedural.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %			bitcoin.py					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-O programa bitcoin.py foi descrito apenas para fornecer o preço de um Bitcoin nas mais variadas moedas disponíveis pelo mundo. A Bitcoin Price Index API, que foi usada para fornecer os valores, é provinda pelo CoinDesk (http://www.coindesk.com/api/). Mais informações podem ser encontradas no link.
+O programa bitcoin.py foi descrito apenas para fornecer o preço de um Bitcoin
+nas mais variadas moedas disponíveis pelo mundo. A Bitcoin Price Index API, que
+foi usada para fornecer os valores, é provinda pelo CoinDesk
+(http://www.coindesk.com/api/). Mais informações podem ser encontradas no link.
 
-Rapidamente apresentando, o Bitcoin é uma criptomoeda baseada na rede peer-to-peer (P2P) sem interferência de terceiros ou governos, é totalmente open-source, assim sendo, seu valor em dinheiro é instável e sempre varia. Isto é o que define o paradigma procedural do programa, pois, a cada momento em que ele for executado, sempre retornará um valor diferente, independete da moeda escolhida.
+Rapidamente apresentando, o Bitcoin é uma criptomoeda baseada na rede
+peer-to-peer (P2P) sem interferência de terceiros ou governos, é totalmente
+open-source, assim sendo, seu valor em dinheiro é instável e sempre varia. Isto
+é o que define o paradigma procedural do programa, pois, a cada momento em que
+ele for executado, sempre retornará um valor diferente, independete da moeda
+escolhida.
 
-Há três funções que definem o programa: help(), get_country() e default(), além do main, onde acontece a execução do programa:
-    * A função default() apenas retorna o preço de um Bitcoin nas três moedas definidas na API padrão do Bitcoin Price Index: o Dólar estadunidense, a Libra inglesa e o Euro.
+Há três funções que definem o programa: help(), get_country() e default(), além
+do main, onde acontece a execução do programa:
+    * A função default() apenas retorna o preço de um Bitcoin nas três moedas
+      definidas na API padrão do Bitcoin Price Index: o Dólar estadunidense, a
+      Libra inglesa e o Euro.
 
 		caique@marvin:~$ python3 bitcoin.py 
 		Bitcoin price in Sep 13, 2015 20:08:00 UTC
@@ -23,7 +39,9 @@ Há três funções que definem o programa: help(), get_country() e default(), a
 		[GBP] £148.6140 - British Pound Sterling
 		[EUR] €202.2431 - Euro
 	    
-    * A função get_country() retorna o preço do Bitcoin em outras moedas definidas como argumento na compilação do programa, incluindo as três usadas no padrão default.
+    * A função get_country() retorna o preço do Bitcoin em outras moedas
+      definidas como argumento na compilação do programa, incluindo as três
+      usadas no padrão default.
 	
 		caique@marvin:~$ python3 bitcoin.py brl jpy cny
 		Bitcoin price in Sep 13, 2015 20:22:00 UTC
@@ -31,7 +49,10 @@ Há três funções que definem o programa: help(), get_country() e default(), a
 		[JPY] $27,664.6011 - Japanese Yen
 		[CNY] $1,473.3050 - Chinese Yuan
 	        
-    * A função help() retorna a lista de moedas disponíveis onde o preço de um Bitcoin pode ser visto. Esta função é o que define o paradigma funcional do programa, pois, usando o argumento "help" na compilação do programa, ela retornará a lista com as moedas e os respectivos países que a adotam.
+    * A função help() retorna a lista de moedas disponíveis onde o preço de um
+      Bitcoin pode ser visto. Esta função é o que define o paradigma funcional
+      do programa, pois, usando o argumento "help" na compilação do programa,
+      ela retornará a lista com as moedas e os respectivos países que a adotam.
 
 		caique@marvin:~$ python3 bitcoin.py help
 		AED - United Arab Emirates Dirham
@@ -46,23 +67,46 @@ Há três funções que definem o programa: help(), get_country() e default(), a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				apod.py					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-O programa apod.py é baseado na iniciativa da NASA, Astronomy Picture of the Day (http://apod.nasa.gov/apod/astropix.html), onde cada dia é mostrada uma imagem retirada por um astrônomo e ele a descreve. A API usada para o programa pode ser encontrada no Portal de Dados da NASA (https://data.nasa.gov/developer).
+O programa apod.py é baseado na iniciativa da NASA, Astronomy Picture of the
+Day (http://apod.nasa.gov/apod/astropix.html), onde cada dia é mostrada uma
+imagem retirada por um astrônomo e ele a descreve. A API usada para o programa
+pode ser encontrada no Portal de Dados da NASA
+(https://data.nasa.gov/developer).
 
-O programa tem a mesma funcionalidade da ferramenta provinda pela NASA, mostrar uma imagem de astronomia a cada dia. Isto faz com que o programa seja totalmente procedural, pois, a cada entrada num dia, pode retornar uma resposta diferente e, inclusive, o algoritmo foi montado de forma em que ele apenas siga uma sequência de passos (procedures), sem o uso de funções.
+O programa tem a mesma funcionalidade da ferramenta provinda pela NASA, mostrar
+uma imagem de astronomia a cada dia. Isto faz com que o programa seja
+totalmente procedural, pois, a cada entrada num dia, pode retornar uma resposta
+diferente e, inclusive, o algoritmo foi montado de forma em que ele apenas siga
+uma sequência de passos (procedures), sem o uso de funções.
 
 	caique@marvin:~$ python3 apod.py 
 
 	ASTRONOMY PICTURE OF THE DAY
 	A Partial Solar Eclipse over Texas
 	http://apod.nasa.gov/apod/image/1509/TexasEclipse_Westlake_1080.jpg
-	It was a typical Texas sunset except that most of the Sun was missing. The location of the missing piece of the Sun was not a mystery -- it was behind the Moon. Featured here is one of the more interesting images taken of a partial solar eclipse that occurred in 2012, capturing a temporarily crescent Sun setting in a reddened sky behind brush and a windmill. The image was taken about 20 miles west of Sundown, Texas, USA, just after the ring of fire effect was broken by the Moon moving away from the center of the Sun. Today a new partial solar eclipse of the Sun will be visible from Earth. Unfortunately for people who live in Texas, today's eclipse can only be seen from southern Africa and Antarctica.
+    It was a typical Texas sunset except that most of the Sun was missing. The
+    location of the missing piece of the Sun was not a mystery -- it was behind
+    the Moon. Featured here is one of the more interesting images taken of a
+    partial solar eclipse that occurred in 2012, capturing a temporarily
+    crescent Sun setting in a reddened sky behind brush and a windmill. The
+    image was taken about 20 miles west of Sundown, Texas, USA, just after the
+    ring of fire effect was broken by the Moon moving away from the center of
+    the Sun. Today a new partial solar eclipse of the Sun will be visible from
+    Earth. Unfortunately for people who live in Texas, today's eclipse can only
+    be seen from southern Africa and Antarctica.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %				eratosthenes.py				%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-O programa é um algoritmo simples para achar todos os primos até um dado número máximo. Para determinar se um número é primo, divide-o por todos os números a partir de dois até a sua raiz quadrada, se esse número não for divisível por todos os números do intervalo, ele é primo.
+O programa é um algoritmo simples para achar todos os primos até um dado número
+máximo. Para determinar se um número é primo, divide-o por todos os números a
+partir de dois até a sua raiz quadrada, se esse número não for divisível por
+todos os números do intervalo, ele é primo.
 
-Esta técnica é chamada de Crivo de Eratóstenes e foi criada pelo matemático grego Eratóstenes de Cirene, que viveu entre 285-194 a.C.. O programa possui o paradigma funcional porque, sempre que um número máximo qualquer for especificado, ele sempre vai retornar a mesma sequência referente ao número.
+Esta técnica é chamada de Crivo de Eratóstenes e foi criada pelo matemático
+grego Eratóstenes de Cirene, que viveu entre 285-194 a.C.. O programa possui o
+paradigma funcional porque, sempre que um número máximo qualquer for
+especificado, ele sempre vai retornar a mesma sequência referente ao número.
     caique@marvin:~$ python3 eratosthenes.py 1000
     
     2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 101 103 107 109 

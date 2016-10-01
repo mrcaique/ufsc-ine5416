@@ -1,28 +1,53 @@
-1) Todas as operações em cálculo lambda são expressos em SKI numa árvore binária, cujas folhas são os símbolos S, K e I (chamados de combinadores).
+1) Todas as operações em cálculo lambda são expressos em SKI numa árvore
+binária, cujas folhas são os símbolos S, K e I (chamados de combinadores).
 
 -----------
-2) A tese de Church-Turing foi formulada para resolver um dos problemas propostos por David Hilbert em 1919, Entscheidungsproblem. A solução proposta por Alonzo Church e Alan Turing mostravam a premissa de um algoritmo.
+2) A tese de Church-Turing foi formulada para resolver um dos problemas
+propostos por David Hilbert em 1919, Entscheidungsproblem. A solução proposta
+por Alonzo Church e Alan Turing mostravam a premissa de um algoritmo.
 
-Ao definir como um algoritmo, uma sequência de passos finitos, as teses mostravam com algo pode ser computável ou por uma Máquina de Turing que a computasse ou por cálculo lambda.
-
------------
-3) Paradigma lógico: baseado em lógica formal, cada sentença é construída a partir de fatos e regras de um problema. Exemplos: PROLOG e ASP.
-
-Paradigma orientado a objetos: baseando-se no conceito de 'objetos'. Cada estrutura de dados montada corresponde a um objeto, que contém dados (aributos) e funções (métodos). Exemplos: Java, C++ e Python.
-
-Paradigma procedural: os programas Programas compostos por procedures, ou seja, métodos ou funções ou rotinas definem uma sequência de passos computacionais a se seguir. Exemplos: C, Fortran, GO e BASIC.
+Ao definir como um algoritmo, uma sequência de passos finitos, as teses
+mostravam com algo pode ser computável ou por uma Máquina de Turing que a
+computasse ou por cálculo lambda.
 
 -----------
-4) Lei de Moore foi um conceito proposto por Gordon Moore, da Intel, que dizia que a capacidade de processamento dos computadores em geral dobraria a cada dezoito a vinte e quatro meses. Com o passar do tempo a sua ideia foi se realizando com o aumento de transistores e diminuição do tamanho dos chips, porém, se suspeitava se ela iria perpetuar.
+3) Paradigma lógico: baseado em lógica formal, cada sentença é construída a
+partir de fatos e regras de um problema. Exemplos: PROLOG e ASP.
 
-A lei está ameaçada pela própria Intel que, recentemente, adiou o lançamento de processadores de 10nm e lançando a família Skylake 14nm no final de 2015 (os atuais são os da família Broadway, de 14nm). Por outro lado, a IBM afirmou estar trabalhando na fabricação de processadores de 7nm.
+Paradigma orientado a objetos: baseando-se no conceito de 'objetos'. Cada
+estrutura de dados montada corresponde a um objeto, que contém dados (aributos)
+e funções (métodos). Exemplos: Java, C++ e Python.
+
+Paradigma procedural: os programas Programas compostos por procedures, ou seja,
+métodos ou funções ou rotinas definem uma sequência de passos computacionais a
+se seguir. Exemplos: C, Fortran, GO e BASIC.
+
+-----------
+4) Lei de Moore foi um conceito proposto por Gordon Moore, da Intel, que dizia
+que a capacidade de processamento dos computadores em geral dobraria a cada
+dezoito a vinte e quatro meses. Com o passar do tempo a sua ideia foi se
+realizando com o aumento de transistores e diminuição do tamanho dos chips,
+porém, se suspeitava se ela iria perpetuar.
+
+A lei está ameaçada pela própria Intel que, recentemente, adiou o lançamento de
+processadores de 10nm e lançando a família Skylake 14nm no final de 2015 (os
+atuais são os da família Broadway, de 14nm). Por outro lado, a IBM afirmou
+estar trabalhando na fabricação de processadores de 7nm.
 -
-Em 1959, Richard Feynman palestrou sobre o controle da manipulação da metéria em escala atômica, segundo ele, não existe percalços a construção de elementos pequenos compostos por elementos ainda menores, no limite atômico, dando a ideia da possibilidade da nanotecnologia e computação quântica.
+Em 1959, Richard Feynman palestrou sobre o controle da manipulação da metéria
+em escala atômica, segundo ele, não existe percalços a construção de elementos
+pequenos compostos por elementos ainda menores, no limite atômico, dando a
+ideia da possibilidade da nanotecnologia e computação quântica.
 -
-Peter Shor foi responsável pelo algoritmo de Shor, um algoritmo que é capaz de fatorar inteiros exponencialmente mais rápido em um computador quântico do que em um computador clássico, o que levantou a questão da possibilidade de criptografia em computadores quânticos.
+Peter Shor foi responsável pelo algoritmo de Shor, um algoritmo que é capaz de
+fatorar inteiros exponencialmente mais rápido em um computador quântico do que
+em um computador clássico, o que levantou a questão da possibilidade de
+criptografia em computadores quânticos.
 
 -----------
-5) Um Qubit é um bit quântico, ele pode ter três estados, zero, um e um intermediário, que é um e zero ao mesmo tempo.
+5) Um Qubit é um bit quântico, ele pode ter três estados, zero, um e um
+intermediário, que é um e zero ao mesmo tempo.
 
 -----------
-6) D-Wave e uma empresa canadense que foca em computação quântica e afirma ter produzido o primeiro computador quântico comercial, de 128 qubits.
+6) D-Wave e uma empresa canadense que foca em computação quântica e afirma ter
+produzido o primeiro computador quântico comercial, de 128 qubits.
